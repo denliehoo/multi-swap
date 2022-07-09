@@ -1,0 +1,1 @@
+ganache-cli --fork wss://speedy-nodes-nyc.moralis.io/6a8709ed50ad0de3888dfb79/fantom/mainnet/ws
