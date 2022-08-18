@@ -9,7 +9,7 @@ module.exports = async function (deployer) {
     const poolAddress = ['0x04068DA6C83AFCFA0e13ba15A6696662335D5B75', '0x8D11eC38a3EB5E956B052f67Da8Bdc9bef8Abf3E']
     const percentForEachToken = ['5000', '5000']
     // 20 ftm value
-    const receipt = await instance.swapEthForMultipleTokensByPercent(poolAddress, percentForEachToken, { value: '20000000000000000000' }).call()
+    const receipt = await instance.swapEthForMultipleTokensByPercent(poolAddress, percentForEachToken, { value: '20000000000000000000' })
     const amounts = await instance.getAmountsArray()
     console.log(amounts)
 
