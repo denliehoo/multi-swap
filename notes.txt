@@ -1,1 +1,1 @@
-ganache-cli --fork wss://speedy-nodes-nyc.moralis.io/6a8709ed50ad0de3888dfb79/fantom/mainnet/ws
+ganache-cli --fork wss://autumn-still-wind.fantom.discover.quiknode.pro/864ae65bedb65040f0049c11997d14ae2eb9ab3a/

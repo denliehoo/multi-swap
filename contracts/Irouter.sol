@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: UNLICENSED
+
 pragma solidity ^0.8.0;
 
 interface Irouter {
@@ -8,12 +10,7 @@ interface Irouter {
         address[] calldata path,
         address to,
         uint256 deadline
-    )
-        external
-        virtual
-        override
-        ensure(deadline)
-        returns (uint256[] memory amounts);
+    ) external returns (uint256[] memory amounts);
 
     // token to token
     function swapTokensForExactTokens(
@@ -22,12 +19,7 @@ interface Irouter {
         address[] calldata path,
         address to,
         uint256 deadline
-    )
-        external
-        virtual
-        override
-        ensure(deadline)
-        returns (uint256[] memory amounts);
+    ) external returns (uint256[] memory amounts);
 
     // ETH to token
     function swapExactETHForTokens(
@@ -35,13 +27,7 @@ interface Irouter {
         address[] calldata path,
         address to,
         uint256 deadline
-    )
-        external
-        payable
-        virtual
-        override
-        ensure(deadline)
-        returns (uint256[] memory amounts);
+    ) external payable returns (uint256[] memory amounts);
 
     // token to ETH
     function swapTokensForExactETH(
@@ -50,12 +36,7 @@ interface Irouter {
         address[] calldata path,
         address to,
         uint256 deadline
-    )
-        external
-        virtual
-        override
-        ensure(deadline)
-        returns (uint256[] memory amounts);
+    ) external returns (uint256[] memory amounts);
 
     // token to ETH
     function swapExactTokensForETH(
@@ -64,12 +45,7 @@ interface Irouter {
         address[] calldata path,
         address to,
         uint256 deadline
-    )
-        external
-        virtual
-        override
-        ensure(deadline)
-        returns (uint256[] memory amounts);
+    ) external returns (uint256[] memory amounts);
 
     // ETH to token
     function swapETHForExactTokens(
@@ -77,11 +53,5 @@ interface Irouter {
         address[] calldata path,
         address to,
         uint256 deadline
-    )
-        external
-        payable
-        virtual
-        override
-        ensure(deadline)
-        returns (uint256[] memory amounts);
+    ) external payable returns (uint256[] memory amounts);
 }
