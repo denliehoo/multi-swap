@@ -8,6 +8,9 @@ truffle migrate --reset
 OR
 truffle test
 
+to start frontend:
+npm start
+
 Roadmap:
 -do swap by %
 -do swap by specifying amount of token in the array

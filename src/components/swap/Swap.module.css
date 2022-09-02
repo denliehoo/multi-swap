@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.card {
+    background-color: lightgray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+    border-radius: 20px;
+    padding: 20px
+}
+
+.buySellContainer {
+    background-color: red;
+    padding: 20px;
+    /* padding-bottom: 0px; */
+    border-radius: 20px;
+    width: 100%;
+}
+
+.buyContainer {
+    background-color: green;
+}
+
+.cryptoSwapItem {
+    background-color: lightblue;
+    padding: 10px;
+    margin: 10px;
+}
