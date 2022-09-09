@@ -1,10 +1,16 @@
 import classes from "./Swap.module.css";
 import { Row, Col } from "antd/lib/grid";
 import { Button } from 'antd'
-import { DownCircleOutlined, PlusCircleOutlined, DownOutlined } from '@ant-design/icons';
+import { DownCircleOutlined, PlusCircleOutlined, DownOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { useState } from "react";
+import CryptoSwapItem from "./CryptoSwapItem";
+import SelectAsset from "./SelectAsset";
 
 
 const Swap = () => {
+    const [fromAssets, setFromAssets] = useState([{ amount: 0, selectedAsset: "Select An Asset" }])
+    const [toAssets, setToAssets] = useState([{ amount: 0, selectedAsset: "Select An Asset" }])
+
 
     const cryptoSwapItem = <div className={classes.cryptoSwapItem}>
         <Row justify="space-between" align="middle">
@@ -31,12 +37,16 @@ const Swap = () => {
                     <Col>Settings</Col>
                 </Row>
 
-                <Row >You Sell</Row>
+                <Row >You Sell - Swapping assets</Row>
                 <div className={classes.buySellContainer}>
-                    {cryptoSwapItem}
-                    {cryptoSwapItem}
-                    <Row justify="center" align="top" style={{ position: 'relative', top: '5px' }}>
-                        <PlusCircleOutlined style={{ fontSize: '200%' }} />
+                    {
+                        fromAssets.map((i) => <CryptoSwapItem amount={i.amount} />)
+                        // fromAssets.map((i) => console.log(i))
+                    }
+                    <Row justify="center" align="middle" style={{ position: 'relative', top: '5px' }}>
+                        <Button block shape="round" icon={<PlusCircleOutlined />} onClick={() => {
+                            setFromAssets([...fromAssets, { amount: 0 }])
+                        }} />
                     </Row>
 
 
@@ -46,15 +56,27 @@ const Swap = () => {
                 </div>
                 <Row>You Get</Row>
                 <div className={classes.buySellContainer}>
-                    {cryptoSwapItem}
+                    {/* {cryptoSwapItem} */}
+                    {
+                        toAssets.map((i) => <CryptoSwapItem amount={i.amount} />)
+                    }
+
+
+                    <Row justify="center" align="middle" style={{ position: 'relative', top: '5px' }}>
+                        <Button block shape="round" icon={<PlusCircleOutlined />} onClick={() => {
+                            setToAssets([...toAssets, { amount: 0 }])
+                        }} />
+                    </Row>
                 </div>
-                <div>
-                    Swap info (e.g. 1 USC = 0.00006 ETH ($1.000)) | Gas fees w/ dropdown
+                <div style={{ width: '100%' }}>
+                    {/* need do this for each asset being swapped */}
+                    <div><InfoCircleOutlined /> 1 BOT = 23.012 TOP</div>
+                    <div><InfoCircleOutlined /> 1 BOT = 23.012 TOP</div>
                 </div>
 
-                <div>
-                    Connect Wallet / Swap
-                </div>
+                <Row style={{ width: '100%' }}>
+                    <Button size="large" block shape="round" onClick={() => { console.log("hello world") }}>Swap</Button>
+                </Row>
             </div>
         </div >
     );
