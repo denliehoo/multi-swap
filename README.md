@@ -1,22 +1,89 @@
 # multi-swap
 
-Instructions:
+# Instructions:
 for smart contract:
-to run the contract on a fork:
-ganache-cli --fork NODEURLHERE
-truffle migrate --reset
-OR
-truffle test
+* to run the contract on a fork:
+    * ganache-cli --fork NODEURLHERE
+    * truffle migrate --reset
+    * OR
+    * truffle test
 
-to start frontend:
-npm start
+* to start frontend:
+* npm start
 
 Roadmap:
--do swap by %
--do swap by specifying amount of token in the array
--do a proxy setup
--do multiple routers (and find the one which gives the best exchange)
--allow for customisation of slippage
+* do swap by %
+* do swap by specifying amount of token in the array
+* do a proxy setup
+* do multiple routers (and find the one which gives the best exchange)
+* allow for customisation of slippage
 
 Global dependencies required:
-npm i -g truffle ganache-cli 
+* npm i -g truffle ganache-cli 
+
+---
+
+https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20cb7cbcd6f
+# To do list / Progress:
+## To do
+* Finish drop downlist for select an asset (hardcode common assets)
+* Add custom token; do checks that it is a legit token address
+* Store custom addresses in local storage
+* Find a way to pass state from the different components to the "swap" button in Swap.js
+    * maybe use redux and place in global state
+    * e.g. maybe clicking swap maybe pass an object:
+        ```Javascript
+        const swapDetails = {
+            from:[
+                {asset: 'ETH', amount: 0.10 },{....}
+            ],
+            to:[
+                {...},{...}
+            ]
+        }
+        // note: array cause we want it to be iterable
+        ```
+*  Add a minus button for each cryptoSwapItem 
+    * ensure that there is always at least 1 to and from
+    * remove the state upon minus        
+* Price API to display price
+* Balance API to display balance
+    * validation to ensure swapping amount is  balance
+* work on 1 BOT = 23.012 TOP info
+* Metamask connect
+    * use redux and store the wallet address in global store
+    * maybe use redux persist storage to ensure wallet address is not deleed
+    * refactor custom token addresses into redux persist (maybe)
+    * Note: diff between the wallet address and custom token is that wallet address uses a reducer ; custom token doesn't but, both will still be store in local storage
+* connect smart contract to frontend (start with ropsten)
+    * ensure swap ETH (single asset) for multiple assets (e.g. USDC and USDT) is functional
+* touch up on front end (css)
+* refactor CSS code properly
+* refactor any other code properly
+
+* work on smart contract; possible scenario:
+    1. ETH * ERC20(s) coded previously
+    2. ERC20(s) * ERC20(s)
+    3. ERC20(s) * ETH + ERC20(s)
+    4. ETH + ERC20 * ERC20(s)
+* write tests for it to ensure it works properly
+
+* add approve button (for ERC20 tokens) to frontend
+    * find out how to allow ERC20 tokens to be approved on frontend
+    through metamask before swapping
+* connect the new swap types to the frontend and ensure it is working
+
+* create similar smart contracts for other chains (e.g. ftm testnet / kovan)
+
+* allow for multiple chains to be connected (e.g. ftm testnet/kovan) on the frontend
+* hardcode common assets for the new chain
+* allow for adding of custom tokens
+    * ensure to seprate custom tokens for diff chains
+* ensure swap functionalities are working
+
+* work on setting for swaps
+    * e.g. slippage (need control on smartcontracts too)
+* work on light mode dark mode css theme
+
+# Done:
+* (DONE) General swap component structure
