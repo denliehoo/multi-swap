@@ -26,7 +26,6 @@ Global dependencies required:
 https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20cb7cbcd6f
 # To do list / Progress:
 ## To do
-* Finish drop downlist for select an asset (hardcode common assets)
 * Add custom token; do checks that it is a legit token address
 * Store custom addresses in local storage
 * Find a way to pass state from the different components to the "swap" button in Swap.js
@@ -62,10 +61,10 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 * refactor any other code properly
 
 * work on smart contract; possible scenario:
-    1. ETH * ERC20(s) coded previously
-    2. ERC20(s) * ERC20(s)
-    3. ERC20(s) * ETH + ERC20(s)
-    4. ETH + ERC20 * ERC20(s)
+    1. ETH -> ERC20(s) coded previously
+    2. ERC20(s) -> ERC20(s)
+    3. ERC20(s) -> ETH + ERC20(s)
+    4. ETH + ERC20 -> ERC20(s)
 * write tests for it to ensure it works properly
 
 * add approve button (for ERC20 tokens) to frontend
@@ -86,4 +85,8 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 * work on light mode dark mode css theme
 
 # Done:
-* (DONE) General swap component structure
+* 9/7/22: Code smart contract for ETH -> Multiple assets
+* 2/9/22: General swap component structure
+* 16/9/22: Drop downlist for select an asset (hardcode common assets) [pass state properly in the future]
+* 
+

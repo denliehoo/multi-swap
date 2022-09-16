@@ -1,0 +1,4 @@
+.selectAssetItemContainer:hover {
+    background-color: lightgrey;
+    cursor: pointer;
+}

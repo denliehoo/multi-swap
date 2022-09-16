@@ -2,7 +2,7 @@ import classes from "./CryptoSwapItem.module.css";
 import { Row, Col } from "antd/lib/grid";
 import { DownCircleOutlined, PlusCircleOutlined, DownOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Button } from 'antd'
-import SelectAsset from "./SelectAsset";
+import SelectAssetModal from "./SelectAssetModal";
 
 const CryptoSwapItem = (props) => {
     return (
@@ -14,7 +14,7 @@ const CryptoSwapItem = (props) => {
                     {/* get a list of ERC20 token address and its pic etc
                 maybe hard code this
                 Future: add token option which saves into local storage */}
-                    <SelectAsset />
+                    <SelectAssetModal />
                     {/* <Button>
                         Select an asset<DownOutlined />
                     </Button> */}

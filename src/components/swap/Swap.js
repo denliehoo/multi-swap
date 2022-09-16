@@ -4,7 +4,6 @@ import { Button } from 'antd'
 import { DownCircleOutlined, PlusCircleOutlined, DownOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { useState } from "react";
 import CryptoSwapItem from "./CryptoSwapItem";
-import SelectAsset from "./SelectAsset";
 
 
 const Swap = () => {
