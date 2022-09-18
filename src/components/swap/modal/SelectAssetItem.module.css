@@ -1,3 +1,7 @@
+/* .selectAssetItemContainer {
+    margin: 10px;
+} */
+
 .selectAssetItemContainer:hover {
     background-color: lightgrey;
     cursor: pointer;

@@ -1,8 +1,6 @@
 import classes from "./CryptoSwapItem.module.css";
 import { Row, Col } from "antd/lib/grid";
-import { DownCircleOutlined, PlusCircleOutlined, DownOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Button } from 'antd'
-import SelectAssetModal from "./SelectAssetModal";
+import SelectAssetModal from "./modal/SelectAssetModal";
 
 const CryptoSwapItem = (props) => {
     return (

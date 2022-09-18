@@ -26,10 +26,10 @@ Global dependencies required:
 https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20cb7cbcd6f
 # To do list / Progress:
 ## To do
-* Add custom token; do checks that it is a legit token address
-* Store custom addresses in local storage
+* Store custom addresses in local storage using redux persist
 * Find a way to pass state from the different components to the "swap" button in Swap.js
-    * maybe use redux and place in global state
+    * For now, just need to ensure that all the correct state is there for the swap and do a console.log() to test. Connect to smart contract in the future. 
+    * use redux and place in global state
     * e.g. maybe clicking swap maybe pass an object:
         ```Javascript
         const swapDetails = {
@@ -53,7 +53,8 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
     * use redux and store the wallet address in global store
     * maybe use redux persist storage to ensure wallet address is not deleed
     * refactor custom token addresses into redux persist (maybe)
-    * Note: diff between the wallet address and custom token is that wallet address uses a reducer ; custom token doesn't but, both will still be store in local storage
+* Get User Balances in select a token modal and display in swap component; use an API for this [https://docs.moralis.io/reference/getwallettokenbalances]
+    *Update the swap button to ensure that balances in also sent
 * connect smart contract to frontend (start with ropsten)
     * ensure swap ETH (single asset) for multiple assets (e.g. USDC and USDT) is functional
 * touch up on front end (css)
@@ -87,6 +88,7 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 # Done:
 * 9/7/22: Code smart contract for ETH -> Multiple assets
 * 2/9/22: General swap component structure
-* 16/9/22: Drop downlist for select an asset (hardcode common assets) [pass state properly in the future]
+* 16/9/22: UI for Drop drop modal for select an asset (hardcode common assets) [pass state properly in the future]
+* 18/9/22: UI Add custom token; do checks that it is a legit token address & fetch the token metadata (i.e. name) [https://docs.moralis.io/reference/gettokenmetadata]
 * 
 

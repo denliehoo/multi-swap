@@ -1,0 +1,12 @@
+.manageCustomTokenItemContainer {
+    padding: 10px;
+}
+
+.manageCustomTokenItemContainer:hover {
+    background-color: lightgrey;
+}
+
+.icon:hover {
+    cursor: pointer;
+
+}
