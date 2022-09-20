@@ -26,7 +26,6 @@ Global dependencies required:
 https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20cb7cbcd6f
 # To do list / Progress:
 ## To do
-* Store custom addresses in local storage using redux persist
 * Find a way to pass state from the different components to the "swap" button in Swap.js
     * For now, just need to ensure that all the correct state is there for the swap and do a console.log() to test. Connect to smart contract in the future. 
     * use redux and place in global state
@@ -90,5 +89,6 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 * 2/9/22: General swap component structure
 * 16/9/22: UI for Drop drop modal for select an asset (hardcode common assets) [pass state properly in the future]
 * 18/9/22: UI Add custom token; do checks that it is a legit token address & fetch the token metadata (i.e. name) [https://docs.moralis.io/reference/gettokenmetadata]
+* 20/9/22: Store custom addresses in local storage using redux persist
 * 
 

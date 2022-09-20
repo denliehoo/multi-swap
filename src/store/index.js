@@ -1,5 +1,22 @@
-import { createStore } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import { customTokenReducer } from "../reducers/customTokenReducer";
 
-const store = createStore(reducer)
+const persistConfig = {
+    key: "root",
+    storage, // ??
+    whitelist: ["customTokenReducer"] // only state for counterReducer will be whitelisted
+};
 
-export default store
+const rootReducer = combineReducers({
+    customTokenReducer: customTokenReducer,
+
+});
+const reducer = persistReducer(persistConfig, rootReducer);
+
+let store = createStore(reducer, applyMiddleware(thunk));
+const persistor = persistStore(store);
+
+export { store, persistor };
