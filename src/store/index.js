@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { customTokenReducer } from "../reducers/customTokenReducer";
+import { swapReducer } from "../reducers/swapReducer";
 
 const persistConfig = {
     key: "root",
@@ -12,6 +13,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
     customTokenReducer: customTokenReducer,
+    swapReducer: swapReducer
 
 });
 const reducer = persistReducer(persistConfig, rootReducer);

@@ -135,7 +135,7 @@ const ManageCustomToken = ({ ethCustomTokens, addCustomToken, removeAllCustomTok
                 {
                     getCustomTokens('eth').length ?
                         (<Row justify="space-between">
-                            <Col>You have {getCustomTokens.length} custom tokens</Col>
+                            <Col>You have {getCustomTokens('eth').length} custom tokens</Col>
                             <Col><Button onClick={deleteAllHandler}>Clear All</Button></Col>
                         </Row>)
                         :

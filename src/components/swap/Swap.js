@@ -5,26 +5,15 @@ import { DownCircleOutlined, PlusCircleOutlined, DownOutlined, InfoCircleOutline
 import { useState } from "react";
 import CryptoSwapItem from "./CryptoSwapItem";
 
+import { connect } from "react-redux";
+import { addSwapFrom, removeSwapFrom, addSwapTo, removeSwapTo } from "../../reducers/swapReducer";
 
-const Swap = () => {
+
+// Swap > CryptoSwapItem > SelectAssetModal > SelectAssetItem
+
+const Swap = ({ addSwapFrom, removeSwapFrom, addSwapTo, removeSwapTo, swapFrom, swapTo }) => {
     const [fromAssets, setFromAssets] = useState([{ amount: 0, selectedAsset: "Select An Asset" }])
     const [toAssets, setToAssets] = useState([{ amount: 0, selectedAsset: "Select An Asset" }])
-
-
-    const cryptoSwapItem = <div className={classes.cryptoSwapItem}>
-        <Row justify="space-between" align="middle">
-            <Col style={{ fontSize: '2em' }}>2</Col>
-            <Col>
-                <Button>
-                    Icon + ETH <DownOutlined />
-                </Button>
-            </Col>
-        </Row>
-        <Row justify="space-between">
-            <Col>$4,000</Col>
-            <Col>Balanace: 12</Col>
-        </Row>
-    </div>
 
 
     return (
@@ -39,7 +28,7 @@ const Swap = () => {
                 <Row >You Sell - Swapping assets</Row>
                 <div className={classes.buySellContainer}>
                     {
-                        fromAssets.map((i) => <CryptoSwapItem amount={i.amount} />)
+                        fromAssets.map((i, index) => <CryptoSwapItem amount={i.amount} key={`fromAsset${index}`} index={index} type={'from'} />)
                         // fromAssets.map((i) => console.log(i))
                     }
                     <Row justify="center" align="middle" style={{ position: 'relative', top: '5px' }}>
@@ -55,9 +44,8 @@ const Swap = () => {
                 </div>
                 <Row>You Get</Row>
                 <div className={classes.buySellContainer}>
-                    {/* {cryptoSwapItem} */}
                     {
-                        toAssets.map((i) => <CryptoSwapItem amount={i.amount} />)
+                        toAssets.map((i, index) => <CryptoSwapItem amount={i.amount} key={`toAsset${index}`} index={index} type={'to'} />)
                     }
 
 
@@ -74,11 +62,28 @@ const Swap = () => {
                 </div>
 
                 <Row style={{ width: '100%' }}>
-                    <Button size="large" block shape="round" onClick={() => { console.log("hello world") }}>Swap</Button>
+                    <Button size="large" block shape="round" onClick={() => {
+                        // console.log(`${swapFrom} and also ${swapTo}`) 
+                        console.log(swapFrom)
+                    }}>Swap</Button>
                 </Row>
             </div>
         </div >
     );
 };
 
-export default Swap;
+
+const mapStateToProps = ({ swapReducer }) => ({
+    swapFrom: swapReducer.swapFrom,
+    swapTo: swapReducer.swapTo
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    addSwapFrom: (payload) => dispatch(addSwapFrom(payload)),
+    removeSwapFrom: (payload) => dispatch(removeSwapFrom(payload)),
+    addSwapTo: (payload) => dispatch(addSwapTo(payload)),
+    removeSwapTo: (payload) => dispatch(removeSwapTo(payload)),
+
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Swap);

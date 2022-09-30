@@ -21,6 +21,11 @@ Roadmap:
 Global dependencies required:
 * npm i -g truffle ganache-cli 
 
+Environmental Values:
+```Javascript
+REACT_APP_MORALIS_API_KEY=XXXXX
+```
+
 ---
 
 https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20cb7cbcd6f
@@ -43,7 +48,8 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
         ```
 *  Add a minus button for each cryptoSwapItem 
     * ensure that there is always at least 1 to and from
-    * remove the state upon minus        
+    * remove the state upon minus    
+* Remove button for manage custom token    
 * Price API to display price
 * Balance API to display balance
     * validation to ensure swapping amount is  balance
@@ -53,7 +59,8 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
     * maybe use redux persist storage to ensure wallet address is not deleed
     * refactor custom token addresses into redux persist (maybe)
 * Get User Balances in select a token modal and display in swap component; use an API for this [https://docs.moralis.io/reference/getwallettokenbalances]
-    *Update the swap button to ensure that balances in also sent
+    * get balance should be in the SelectAssetModal component which passes the balance around the other components
+    * Update the swap button to ensure that balances in also sent
 * connect smart contract to frontend (start with ropsten)
     * ensure swap ETH (single asset) for multiple assets (e.g. USDC and USDT) is functional
 * touch up on front end (css)

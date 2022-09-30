@@ -3,3 +3,12 @@
     padding: 10px;
     margin: 10px;
 }
+
+
+
+.inputBox,
+.inputBox:focus {
+    background: transparent;
+    border: none;
+    outline-width: 0;
+}
