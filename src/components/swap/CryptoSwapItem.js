@@ -1,83 +1,121 @@
-import classes from "./CryptoSwapItem.module.css";
-import { Row, Col } from "antd/lib/grid";
-import SelectAssetModal from "./modal/SelectAssetModal";
-import { useState } from "react";
+import classes from './CryptoSwapItem.module.css'
+import { Row, Col } from 'antd/lib/grid'
+import SelectAssetModal from './modal/SelectAssetModal'
+import { useState, useEffect } from 'react'
 
-import { connect } from "react-redux";
-import { addSwapFrom, removeSwapFrom, addSwapTo, removeSwapTo } from "../../reducers/swapReducer";
+import { connect } from 'react-redux'
+import {
+  addSwapFrom,
+  removeSwapFrom,
+  addSwapTo,
+  removeSwapTo,
+} from '../../reducers/swapReducer'
 
-const CryptoSwapItem = ({ props, addSwapFrom, addSwapTo, swapFrom, swapTo }) => {
+const CryptoSwapItem = ({
+  props,
+  addSwapFrom,
+  addSwapTo,
+  swapFrom,
+  swapTo,
+}) => {
+  const [balance, setBalance] = useState('')
+  const [assetIsChosen, setAssetIsChosen] = useState(false)
+  const [amount, setAmount] = useState(0)
 
-    const [balance, setBalance] = useState("")
-    const [assetIsChosen, setAssetIsChosen] = useState(false)
-    const [amount, setAmount] = useState(0)
+  const getBalanceFromChild = (bal) => {
+    setBalance(bal)
+    setAssetIsChosen(true)
+  }
 
-    const getBalanceFromChild = (bal) => {
-        setBalance(bal)
-        setAssetIsChosen(true)
+  const changeAmountInputHandler = (e) => {
+    setAmount(e.target.value)
+
+    if (assetIsChosen) {
+      if (props.type === 'from') {
+        let newSwapFrom = [...swapFrom]
+        newSwapFrom[props.index].amount = e.target.value
+        addSwapFrom(newSwapFrom)
+      } else if (props.type === 'to') {
+        let newSwapTo = [...swapTo]
+        newSwapTo[props.index].amount = e.target.value
+        addSwapTo(newSwapTo)
+      }
+    }
+  }
+
+  useEffect(() => {
+    const newAssetDetails = {
+      index: props.index,
+      symbol: '',
+      address: '',
+      balance: 0,
+      amount: 0,
     }
 
-    const changeAmountInputHandler = (e) => {
-        setAmount(e.target.value)
-
-        if (assetIsChosen) {
-            if (props.type == 'from') {
-                let newSwapFrom = [...swapFrom]
-                newSwapFrom[props.index].amount = e.target.value
-                addSwapFrom(newSwapFrom)
-            }
-
-            else if (props.type == 'to') {
-                let newSwapTo = [...swapTo]
-                newSwapTo[props.index].amount = e.target.value
-                addSwapTo(newSwapTo)
-            }
-        }
+    if (props.type === 'from') {
+      if (!swapFrom[props.index]) {
+        let newSwapFrom = [...swapFrom]
+        newSwapFrom.push(newAssetDetails)
+        addSwapFrom(newSwapFrom)
+      }
+    } else if (props.type === 'to') {
+      if (!swapTo[props.index]) {
+        let newSwapTo = [...swapTo]
+        newSwapTo.push(newAssetDetails)
+        addSwapTo(newSwapTo)
+      }
     }
+  }, [])
 
-
-    return (
-        <div className={classes.cryptoSwapItem}>
-            <Row justify="space-between" align="middle">
-                {/* push amount to store somehow; also do validation to ensure amount less than balance. can do this in the swap button in Swap.js*/}
-                {/* <Col style={{ fontSize: '2em' }}>{props.amount}</Col> */}
-                <Col style={{ fontSize: '2em' }}>
-                    <input className={classes.inputBox} onChange={changeAmountInputHandler} placeholder={'0.0'} />
-                </Col>
-                <Col>
-                    <SelectAssetModal index={props.index} type={props.type} amount={amount} passBalanceToParent={getBalanceFromChild} />
-                    {/* <Button>
+  return (
+    <div className={classes.cryptoSwapItem}>
+      <Row justify="space-between" align="middle">
+        {/* push amount to store somehow; also do validation to ensure amount less than balance. can do this in the swap button in Swap.js*/}
+        {/* <Col style={{ fontSize: '2em' }}>{props.amount}</Col> */}
+        <Col style={{ fontSize: '2em' }}>
+          <input
+            className={classes.inputBox}
+            onChange={changeAmountInputHandler}
+            placeholder={'0.0'}
+          />
+        </Col>
+        <Col>
+          <SelectAssetModal
+            index={props.index}
+            type={props.type}
+            amount={amount}
+            passBalanceToParent={getBalanceFromChild}
+          />
+          {/* <Button>
                         Select an asset<DownOutlined />
                     </Button> */}
-                </Col>
-            </Row>
-            <Row justify="space-between">
-                {/* use an api to get the dollar value of an asset
+        </Col>
+      </Row>
+      <Row justify="space-between">
+        {/* use an api to get the dollar value of an asset
                 and then multiply it by amount */}
-                <Col>${4000}</Col>
+        <Col>${4000}</Col>
 
-                <Col>Balanace: {balance}</Col>
-            </Row>
-        </div>
-    );
-};
-
+        <Col>Balanace: {balance}</Col>
+      </Row>
+    </div>
+  )
+}
 
 const mapStateToProps = ({ swapReducer }, ownProps) => ({
-    swapFrom: swapReducer.swapFrom,
-    swapTo: swapReducer.swapTo,
-    props: ownProps
-});
+  swapFrom: swapReducer.swapFrom,
+  swapTo: swapReducer.swapTo,
+  props: ownProps,
+})
 
 const mapDispatchToProps = (dispatch) => ({
-    addSwapFrom: (payload) => dispatch(addSwapFrom(payload)),
-    removeSwapFrom: (payload) => dispatch(removeSwapFrom(payload)),
-    addSwapTo: (payload) => dispatch(addSwapTo(payload)),
-    removeSwapTo: (payload) => dispatch(removeSwapTo(payload)),
+  addSwapFrom: (payload) => dispatch(addSwapFrom(payload)),
+  removeSwapFrom: (payload) => dispatch(removeSwapFrom(payload)),
+  addSwapTo: (payload) => dispatch(addSwapTo(payload)),
+  removeSwapTo: (payload) => dispatch(removeSwapTo(payload)),
+})
 
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CryptoSwapItem);
+export default connect(mapStateToProps, mapDispatchToProps)(CryptoSwapItem)
 
 /*
 Current problems:
