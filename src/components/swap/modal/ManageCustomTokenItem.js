@@ -1,75 +1,90 @@
 import classes from "./ManageCustomTokenItem.module.css";
-import { Row, Col } from 'antd'
+import { Row, Col } from "antd";
 import IconComponent from "../shared/IconComponent";
-import { DeleteOutlined, ScanOutlined } from '@ant-design/icons';
+import { DeleteOutlined, ScanOutlined } from "@ant-design/icons";
 
 import { connect } from "react-redux";
 import { removeCustomToken } from "../../../reducers/customTokenReducer";
 
-const ManageCustomTokenItem = ({ props, ethCustomTokens, removeCustomToken }) => {
-    const getCustomTokens = (chain) => {
-        if (chain == "eth") {
-            return ethCustomTokens
-        }
+const ManageCustomTokenItem = ({
+  props,
+  ethCustomTokens,
+  removeCustomToken,
+}) => {
+  const getCustomTokens = (chain) => {
+    if (chain == "eth") {
+      return ethCustomTokens;
     }
-    const deleteHandler = () => {
-        const customTokens = getCustomTokens("eth")
-        const customTokenSymbols = customTokens.map((i) => i.symbol)
-        const indexOfAsset = customTokenSymbols.indexOf(props.symbol)
-        customTokens.splice(indexOfAsset, 1) // remove the entire {asset} from the customTokens array
-        removeCustomToken(customTokens)
-        // props.onClickDeleteHandler(customTokens)
-        props.onClickDelete()
+  };
+  const deleteHandler = () => {
+    const customTokens = getCustomTokens("eth");
+    const customTokenSymbols = customTokens.map((i) => i.symbol);
+    const indexOfAsset = customTokenSymbols.indexOf(props.symbol);
+    customTokens.splice(indexOfAsset, 1); // remove the entire {asset} from the customTokens array
+    removeCustomToken(customTokens);
+    // props.onClickDeleteHandler(customTokens)
+    props.onClickDelete();
 
+    // find the array index of the props.symbol -> remove this from the custom token array
+    // -> call removeCustomToken and return the new array
+  };
 
-        // find the array index of the props.symbol -> remove this from the custom token array
-        // -> call removeCustomToken and return the new array
-    }
-
-    const tokenContractWebsiteHandler = () => {
-        if (props.chain == "eth") {
-            return (<a href={`https://etherscan.io/address/${props.address}`} target="_blank">
-                <ScanOutlined className={classes.icon} />
-            </a>)
-        }
-        // if (props.chain == "...") {
-        //     return (<a href={`https://etherscan.io/address/${props.address}`} target="_blank">
-        //         <ScanOutlined className={classes.icon} />
-        //     </a>)
-        // }
-
-
-    }
-    return (
-        <Row align="middle" justify='space-evenly'
-            className={classes.manageCustomTokenItemContainer}
+  const tokenContractWebsiteHandler = () => {
+    if (props.chain == "eth") {
+      return (
+        <a
+          href={`https://etherscan.io/address/${props.address}`}
+          target="_blank"
         >
-            <Col span={2}><IconComponent imgUrl={props.icon} /></Col>
-            <Col span={18}>
-                <Row>{props.symbol} {props.name}</Row>
-            </Col>
-            <Col span={2}>
-                <Row justify="end"><DeleteOutlined className={classes.icon} onClick={deleteHandler} /></Row>
-            </Col>
-            <Col span={2}>
-                <Row justify="end">
-                    {tokenContractWebsiteHandler()}
-                </Row>
-            </Col>
+          <ScanOutlined className={classes.icon} />
+        </a>
+      );
+    }
+    // if (props.chain == "...") {
+    //     return (<a href={`https://etherscan.io/address/${props.address}`} target="_blank">
+    //         <ScanOutlined className={classes.icon} />
+    //     </a>)
+    // }
+  };
+  return (
+    <Row
+      align="middle"
+      justify="space-evenly"
+      className={classes.manageCustomTokenItemContainer}
+    >
+      <Col span={2}>
+        <IconComponent imgUrl={props.icon} />
+      </Col>
+      <Col span={18}>
+        <Row>
+          {props.symbol} {props.name}
         </Row>
-    );
+      </Col>
+      <Col span={2}>
+        <Row justify="end">
+          <DeleteOutlined className={classes.icon} onClick={deleteHandler} />
+        </Row>
+      </Col>
+      <Col span={2}>
+        <Row justify="end">{tokenContractWebsiteHandler()}</Row>
+      </Col>
+    </Row>
+  );
 };
 
 const mapStateToProps = ({ customTokenReducer }, ownProps) => ({
-    ethCustomTokens: customTokenReducer.eth,
-    props: ownProps
+  ethCustomTokens: customTokenReducer.eth,
+  props: ownProps,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    removeCustomToken: (payload) => dispatch(removeCustomToken(payload)),
+  removeCustomToken: (payload) => dispatch(removeCustomToken(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManageCustomTokenItem);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ManageCustomTokenItem);
 
 /*
 Note: if a component have it's own props we also need to put ownProps as a 2nd param
