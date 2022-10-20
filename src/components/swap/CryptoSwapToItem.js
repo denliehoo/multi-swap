@@ -2,6 +2,7 @@ import classes from './CryptoSwapToItem.module.css'
 import { Row, Col } from 'antd/lib/grid'
 import SelectAssetModal from './modal/SelectAssetModal'
 import { useState, useEffect } from 'react'
+import { MinusCircleOutlined } from '@ant-design/icons'
 
 import { connect } from 'react-redux'
 import {
@@ -17,11 +18,12 @@ const CryptoSwapToItem = ({
   addSwapTo,
   swapFrom,
   swapTo,
+  removeSwapTo,
 }) => {
   const [balance, setBalance] = useState('')
   const [assetIsChosen, setAssetIsChosen] = useState(false)
   // const [amount, setAmount] = useState(100)
-  const [percentInput, setPercentInput] = useState(100)
+  const [percentInput, setPercentInput] = useState(props.percent)
 
   const getBalanceFromChild = (bal) => {
     setBalance(bal)
@@ -46,35 +48,37 @@ const CryptoSwapToItem = ({
     }
   }
 
+  const minusHandler = () => {
+    let newSwapTo = [...swapTo]
+    let index = props.index
+    newSwapTo.splice(index, 1)
+    for (let i = index; i < newSwapTo.length; i++) {
+      newSwapTo[i].index -= 1
+    }
+    console.log(newSwapTo)
+    removeSwapTo(newSwapTo)
+    props.assetHasBeenSelected()
+    props.changePercentageFromMinus(props.index)
+    setPercentInput(newSwapTo[index].amount)
+  }
+
   useEffect(() => {
     setPercentInput(props.percent)
-
-    const newAssetDetails = {
-      index: props.index,
-      symbol: '',
-      address: '',
-      balance: 0,
-      amount: 100,
-    }
-
-    if (props.type === 'from') {
-      if (!swapFrom[props.index]) {
-        let newSwapFrom = [...swapFrom]
-        newSwapFrom.push(newAssetDetails)
-        addSwapFrom(newSwapFrom)
-      }
-    } else if (props.type === 'to') {
-      if (!swapTo[props.index]) {
-        let newSwapTo = [...swapTo]
-        newSwapTo.push(newAssetDetails)
-        addSwapTo(newSwapTo)
-      }
-    }
   }, [])
 
   return (
     <div className={classes.cryptoSwapItem}>
-      <Row>Input the percentage</Row>
+      <Row justify="space-between">
+        <Col>Percentage To Receive</Col>
+        <Col>
+          {swapTo.length > 1 && (
+            <MinusCircleOutlined
+              className={classes.minus}
+              onClick={minusHandler}
+            />
+          )}
+        </Col>
+      </Row>
       <Row justify="space-between" align="middle">
         {/* push amount to store somehow; also do validation to ensure amount less than balance. can do this in the swap button in Swap.js*/}
         {/* <Col style={{ fontSize: '2em' }}>{props.amount}</Col> */}
@@ -88,7 +92,6 @@ const CryptoSwapToItem = ({
               type={'number'}
               min={'0'}
               max={'100'}
-              inputMode={'numeric'}
             />
             %
           </span>
@@ -100,6 +103,7 @@ const CryptoSwapToItem = ({
             amount={percentInput}
             passBalanceToParent={getBalanceFromChild}
             assetHasBeenSelected={props.assetHasBeenSelected}
+            asset={props.asset}
           />
         </Col>
       </Row>
@@ -133,12 +137,3 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CryptoSwapToItem)
-
-/*
-Current problems:
-- if add 3 assets, if edit the 2nd one and then 3rd then 1st, gives errors. maybe check selectassetitem.js to fix
-or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo, but keep it with empty values except for index:
-e.g. {index: 0, amount: 0, asset: "", ...} then, in selectassetitem, we change the details accordingly. 
-This ensures that the list is ordered; but what about when remove assets? maybe we re-order? does the key for the cryptoswapitem change when remove to?
-TBC
-*/

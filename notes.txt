@@ -1,0 +1,3 @@
+Current Bug:
+-minus works fine if asset is selected
+-however, if asset is not selected, when we minus, the amount doesnt follow to the next

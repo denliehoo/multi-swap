@@ -1,7 +1,8 @@
 import classes from './CryptoSwapItem.module.css'
 import { Row, Col } from 'antd/lib/grid'
 import SelectAssetModal from './modal/SelectAssetModal'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { MinusCircleOutlined } from '@ant-design/icons'
 
 import { connect } from 'react-redux'
 import {
@@ -17,10 +18,11 @@ const CryptoSwapItem = ({
   addSwapTo,
   swapFrom,
   swapTo,
+  removeSwapFrom,
 }) => {
   const [balance, setBalance] = useState('')
   const [assetIsChosen, setAssetIsChosen] = useState(false)
-  const [amount, setAmount] = useState(0)
+  const [amount, setAmount] = useState(props.amount)
 
   const getBalanceFromChild = (bal) => {
     setBalance(bal)
@@ -43,32 +45,31 @@ const CryptoSwapItem = ({
     }
   }
 
-  useEffect(() => {
-    const newAssetDetails = {
-      index: props.index,
-      symbol: '',
-      address: '',
-      balance: 0,
-      amount: 0,
+  const minusHandler = () => {
+    let newSwapFrom = [...swapFrom]
+    let index = props.index
+    newSwapFrom.splice(index, 1)
+    for (let i = index; i < newSwapFrom.length; i++) {
+      newSwapFrom[i].index -= 1
     }
-
-    if (props.type === 'from') {
-      if (!swapFrom[props.index]) {
-        let newSwapFrom = [...swapFrom]
-        newSwapFrom.push(newAssetDetails)
-        addSwapFrom(newSwapFrom)
-      }
-    } else if (props.type === 'to') {
-      if (!swapTo[props.index]) {
-        let newSwapTo = [...swapTo]
-        newSwapTo.push(newAssetDetails)
-        addSwapTo(newSwapTo)
-      }
-    }
-  }, [])
+    console.log(newSwapFrom)
+    removeSwapFrom(newSwapFrom)
+    setAmount(newSwapFrom[index].amount)
+    props.assetHasBeenSelected()
+  }
 
   return (
     <div className={classes.cryptoSwapItem}>
+      <Row>Amount To Swap</Row>
+      <Col>
+        {swapFrom.length > 1 && (
+          <MinusCircleOutlined
+            className={classes.minus}
+            onClick={minusHandler}
+          />
+        )}
+      </Col>
+
       <Row justify="space-between" align="middle">
         {/* push amount to store somehow; also do validation to ensure amount less than balance. can do this in the swap button in Swap.js*/}
         {/* <Col style={{ fontSize: '2em' }}>{props.amount}</Col> */}
@@ -76,7 +77,9 @@ const CryptoSwapItem = ({
           <input
             className={classes.inputBox}
             onChange={changeAmountInputHandler}
+            value={amount}
             placeholder={'0.0'}
+            type={'number'}
           />
         </Col>
         <Col>
@@ -86,6 +89,7 @@ const CryptoSwapItem = ({
             amount={amount}
             passBalanceToParent={getBalanceFromChild}
             assetHasBeenSelected={props.assetHasBeenSelected}
+            asset={props.asset}
           />
           {/* <Button>
                         Select an asset<DownOutlined />

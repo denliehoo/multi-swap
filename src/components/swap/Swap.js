@@ -30,8 +30,8 @@ const Swap = ({
   swapFrom,
   swapTo,
 }) => {
-  const [fromAssets, setFromAssets] = useState([{ amount: 0 }])
-  const [toAssets, setToAssets] = useState([{ percent: 100 }])
+  const [swapToPercentages, setSwapToPercentages] = useState([100])
+
   const [showPercentageError, setShowPercentageError] = useState(false)
   const [showTokenNotSelectedError, setShowTokenNotSelectedError] = useState(
     false,
@@ -63,7 +63,6 @@ const Swap = ({
   }
 
   // in basis points; i.e. 10,000 = 100% ; 5000 = 50%, etc...
-  const [swapToPercentages, setSwapToPercentages] = useState([100])
 
   const validatePercentageArray = () => {
     const arrayHasZero = swapToPercentages.includes(0)
@@ -100,11 +99,36 @@ const Swap = ({
 
   const toggleAssetSelectedState = () => {
     setToggleAssetSelected(!toggleAssetSelected)
+    console.log('Look here swap to')
+    console.log(swapTo)
   }
 
   const amountHasChanged = () => {
     setShowAmountError(false)
   }
+
+  const changePercentageFromMinus = (index) => {
+    let newSwapToPercentage = [...swapToPercentages]
+    newSwapToPercentage.splice(index, 1)
+    setSwapToPercentages(newSwapToPercentage)
+  }
+
+  const addSwapState = (type, index, newAssetDetails) => {
+    if (type === 'from') {
+      if (!swapFrom[index]) {
+        let newSwapFrom = [...swapFrom]
+        newSwapFrom.push(newAssetDetails)
+        addSwapFrom(newSwapFrom)
+      }
+    } else if (type === 'to') {
+      if (!swapTo[index]) {
+        let newSwapTo = [...swapTo]
+        newSwapTo.push(newAssetDetails)
+        addSwapTo(newSwapTo)
+      }
+    }
+  }
+  //
 
   useEffect(() => {
     if (showTokenNotSelectedError) {
@@ -121,21 +145,19 @@ const Swap = ({
           <Col>Settings</Col>
         </Row>
 
-        <Row>You Sell - Swapping assets</Row>
+        <Row>You Give</Row>
         <div className={classes.buySellContainer}>
-          {
-            fromAssets.map((i, index) => (
-              <CryptoSwapItem
-                amount={i.amount}
-                key={`fromAsset${index}`}
-                index={index}
-                type={'from'}
-                assetHasBeenSelected={toggleAssetSelectedState}
-                amountHasChanged={amountHasChanged}
-              />
-            ))
-            // fromAssets.map((i) => console.log(i))
-          }
+          {swapFrom.map((i, index) => (
+            <CryptoSwapItem
+              amount={i.amount}
+              key={`fromAsset${index}`}
+              index={index}
+              type={'from'}
+              assetHasBeenSelected={toggleAssetSelectedState}
+              amountHasChanged={amountHasChanged}
+              asset={i.symbol}
+            />
+          ))}
           <Row
             justify="center"
             align="middle"
@@ -146,7 +168,14 @@ const Swap = ({
               shape="round"
               icon={<PlusCircleOutlined />}
               onClick={() => {
-                setFromAssets([...fromAssets, { amount: 0 }])
+                // setFromAssets([...fromAssets, { amount: 0 }])
+                addSwapState('from', swapFrom.length, {
+                  index: swapFrom.length,
+                  symbol: '',
+                  address: '',
+                  balance: 0,
+                  amount: '',
+                })
               }}
             />
           </Row>
@@ -157,14 +186,16 @@ const Swap = ({
         {/* Swap to portion */}
         <Row>You Get</Row>
         <div className={classes.buySellContainer}>
-          {toAssets.map((i, index) => (
+          {swapTo.map((i, index) => (
             <CryptoSwapToItem
-              percent={i.percent}
+              percent={i.amount}
               key={`toAssets${index}`}
               index={index}
               type={'to'}
               changeSwapToPercent={changeSwapToPercentHandler}
               assetHasBeenSelected={toggleAssetSelectedState}
+              asset={i.symbol}
+              changePercentageFromMinus={changePercentageFromMinus}
             />
           ))}
 
@@ -178,22 +209,19 @@ const Swap = ({
               shape="round"
               icon={<PlusCircleOutlined />}
               onClick={() => {
-                setToAssets([...toAssets, { percent: 100 }])
+                addSwapState('to', swapTo.length, {
+                  index: swapTo.length,
+                  symbol: '',
+                  address: '',
+                  balance: 0,
+                  amount: 100,
+                })
                 let newSwapToPercentages = [...swapToPercentages]
                 newSwapToPercentages.push(100)
                 setSwapToPercentages(newSwapToPercentages)
               }}
             />
           </Row>
-        </div>
-        <div style={{ width: '100%' }}>
-          {/* need do this for each asset being swapped */}
-          <div>
-            <InfoCircleOutlined /> 1 BOT = 23.012 TOP
-          </div>
-          <div>
-            <InfoCircleOutlined /> 1 BOT = 23.012 TOP
-          </div>
         </div>
 
         <div>
@@ -208,9 +236,8 @@ const Swap = ({
             block
             shape="round"
             onClick={() => {
-              console.log('swap from: ')
+              console.log(swapToPercentages)
               console.log(swapFrom)
-              console.log('swap to: ')
               console.log(swapTo)
               const validPercentages = validatePercentageArray()
               const tokensSelected = validateTokenSelected()

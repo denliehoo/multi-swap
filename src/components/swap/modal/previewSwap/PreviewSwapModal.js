@@ -56,20 +56,20 @@ const PreviewSwapModal = ({ props, swapFrom, swapTo }) => {
         <div>
           <div style={{ overflow: 'auto', height: '50vh' }}>
             <Row>You Give</Row>
-            {swapFromDetails.map((i) => (
+            {swapFromDetails.map((i, index) => (
               <PreviewSwapItem
                 amount={i.amount}
                 symbol={i.symbol}
-                key={`${i}previewSwapFrom`}
+                key={`${index}previewSwapFrom`}
               />
             ))}
             <Row>You Get</Row>
             {!isLoading &&
-              swapToDetails.map((i) => (
+              swapToDetails.map((i, index) => (
                 <PreviewSwapItem
                   amount={i.amount}
                   symbol={i.symbol}
-                  key={`${i}previewSwapTo`}
+                  key={`${index}previewSwapTo`}
                 />
               ))}
           </div>

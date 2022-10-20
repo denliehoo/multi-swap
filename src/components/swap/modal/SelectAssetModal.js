@@ -161,7 +161,8 @@ const SelectAssetModal = ({ props, ethCustomTokens }) => {
   return (
     <>
       <Button onClick={showModal}>
-        {selectedAsset ? selectedAsset : <span>Select A Token</span>}
+        {/* {selectedAsset ? selectedAsset : <span>Select A Token</span>} */}
+        {props.asset ? props.asset : <span>Select A Token</span>}
         <DownOutlined />
       </Button>
       <Modal

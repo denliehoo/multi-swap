@@ -46,7 +46,6 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 - Price API to display price
 - Balance API to display balance
   - validation to ensure swapping amount is balance
-- work on 1 BOT = 23.012 TOP info
 - Metamask connect
   - use redux and store the wallet address in global store
   - maybe use redux persist storage to ensure wallet address is not deleted
