@@ -40,26 +40,6 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 
 ## To do
 
-- Find a way to pass state from the different components to the "swap" button in Swap.js
-  - For now, just need to ensure that all the correct state is there for the swap and do a console.log() to test. Connect to smart contract in the future.
-  - use redux and place in global state
-  - e.g. maybe clicking swap maybe pass an object:
-    ```Javascript
-    const swapDetails = {
-        from:[
-            {asset: 'ETH', amount: 0.10 },{....}
-        ],
-        to:[
-            {...},{...}
-        ]
-    }
-    // note: array cause we want it to be iterable
-    ```
-- Add percentage to each cryptoSwapItem (for to) and ensure sum of is always equal 100%
-  - Maybe put a percentage array at the top of the swapTo container which asks for the percentages
-  - It then ensures that sum is 100% and the amount of % inputs is equal to the amount of to cryptoswapitems
-  - upon entering the %, auto change the amounts
-  - OR maybe do change "SWAP" to "PREVIEW SWAP" which shows approximately what the user gets
 - Add a minus button for each cryptoSwapItem
   - ensure that there is always at least 1 to and from
   - remove the state upon minus
@@ -69,13 +49,17 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 - work on 1 BOT = 23.012 TOP info
 - Metamask connect
   - use redux and store the wallet address in global store
-  - maybe use redux persist storage to ensure wallet address is not deleed
+  - maybe use redux persist storage to ensure wallet address is not deleted
   - refactor custom token addresses into redux persist (maybe)
 - Get User Balances in select a token modal and display in swap component; use an API for this [https://deep-index.moralis.io/api-docs/#/account/getTokenBalances][https://docs.moralis.io/reference/getwallettokenbalances]
   - get balance should be in the SelectAssetModal component which passes the balance around the other components
   - Update the swap button to ensure that balances in also sent
+- Add getAmountOut function in smart contract to display how many ERC20/ETH can be receive from the swap
 - connect smart contract to frontend (start with ropsten)
   - ensure swap ETH (single asset) for multiple assets (e.g. USDC and USDT) is functional
+  - change the function in PreviewSwapModal.js; need to display getAmountOut and connect the swap function properly
+- Add events to smart contract (so that can detect when swap is pending and finished)
+  - Add pending spinner after swap and popup notification when swap is completed to frontend
 - touch up on front end (css)
 - refactor CSS code properly
 - refactor any other code properly
@@ -111,4 +95,21 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 - 16/9/22: UI for Drop drop modal for select an asset (hardcode common assets) [pass state properly in the future]
 - 18/9/22: UI Add custom token; do checks that it is a legit token address & fetch the token metadata (i.e. name) [https://docs.moralis.io/reference/gettokenmetadata]
 - 20/9/22: Store custom addresses in local storage using redux persist
--
+- 20/10/22: Find a way to pass state from the different components to the "swap" button in Swap.js
+  - For now, just need to ensure that all the correct state is there for the swap and do a console.log() to test. Connect to smart contract in the future.
+  - use redux and place in global state
+  - e.g. maybe clicking swap maybe pass an object:
+    ```Javascript
+    const swapDetails = {
+        from:[
+            {asset: 'ETH', amount: 0.10 },{....}
+        ],
+        to:[
+            {...},{...}
+        ]
+    }
+    // note: array cause we want it to be iterable
+    ```
+- 20/10/22: Add percentage to each cryptoSwapItem (for to) and ensure sum of is always equal 100%
+- 20/10/22: Validation for swap (ensure percentages sums to 100%, tokens are selected and amounts are al zero)
+- 20/10/22: Upon clicking "PREVIEW SWAP", show prview swap modal which shows approximately what the user gets

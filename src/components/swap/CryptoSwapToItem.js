@@ -1,4 +1,4 @@
-import classes from './CryptoSwapItem.module.css'
+import classes from './CryptoSwapToItem.module.css'
 import { Row, Col } from 'antd/lib/grid'
 import SelectAssetModal from './modal/SelectAssetModal'
 import { useState, useEffect } from 'react'
@@ -11,7 +11,7 @@ import {
   removeSwapTo,
 } from '../../reducers/swapReducer'
 
-const CryptoSwapItem = ({
+const CryptoSwapToItem = ({
   props,
   addSwapFrom,
   addSwapTo,
@@ -20,7 +20,8 @@ const CryptoSwapItem = ({
 }) => {
   const [balance, setBalance] = useState('')
   const [assetIsChosen, setAssetIsChosen] = useState(false)
-  const [amount, setAmount] = useState(0)
+  // const [amount, setAmount] = useState(100)
+  const [percentInput, setPercentInput] = useState(100)
 
   const getBalanceFromChild = (bal) => {
     setBalance(bal)
@@ -28,28 +29,32 @@ const CryptoSwapItem = ({
   }
 
   const changeAmountInputHandler = (e) => {
-    setAmount(e.target.value)
-    props.amountHasChanged()
+    const inputValue = parseInt(e.target.value)
+    setPercentInput(inputValue)
+    props.changeSwapToPercent(props.index, inputValue)
+
     if (assetIsChosen) {
       if (props.type === 'from') {
         let newSwapFrom = [...swapFrom]
-        newSwapFrom[props.index].amount = e.target.value
+        newSwapFrom[props.index].amount = inputValue
         addSwapFrom(newSwapFrom)
       } else if (props.type === 'to') {
         let newSwapTo = [...swapTo]
-        newSwapTo[props.index].amount = e.target.value
+        newSwapTo[props.index].amount = inputValue
         addSwapTo(newSwapTo)
       }
     }
   }
 
   useEffect(() => {
+    setPercentInput(props.percent)
+
     const newAssetDetails = {
       index: props.index,
       symbol: '',
       address: '',
       balance: 0,
-      amount: 0,
+      amount: 100,
     }
 
     if (props.type === 'from') {
@@ -69,35 +74,46 @@ const CryptoSwapItem = ({
 
   return (
     <div className={classes.cryptoSwapItem}>
+      <Row>Input the percentage</Row>
       <Row justify="space-between" align="middle">
         {/* push amount to store somehow; also do validation to ensure amount less than balance. can do this in the swap button in Swap.js*/}
         {/* <Col style={{ fontSize: '2em' }}>{props.amount}</Col> */}
         <Col style={{ fontSize: '2em' }}>
-          <input
-            className={classes.inputBox}
-            onChange={changeAmountInputHandler}
-            placeholder={'0.0'}
-          />
+          <span>
+            <input
+              className={classes.inputBox}
+              onChange={changeAmountInputHandler}
+              placeholder={0}
+              value={percentInput}
+              type={'number'}
+              min={'0'}
+              max={'100'}
+              inputMode={'numeric'}
+            />
+            %
+          </span>
         </Col>
         <Col>
           <SelectAssetModal
             index={props.index}
             type={props.type}
-            amount={amount}
+            amount={percentInput}
             passBalanceToParent={getBalanceFromChild}
             assetHasBeenSelected={props.assetHasBeenSelected}
           />
-          {/* <Button>
-                        Select an asset<DownOutlined />
-                    </Button> */}
         </Col>
       </Row>
-      <Row justify="space-between">
-        {/* use an api to get the dollar value of an asset
-                and then multiply it by amount */}
-        <Col>${4000}</Col>
-
-        <Col>Balanace: {balance}</Col>
+      <Row>
+        <input
+          type="range"
+          id="points"
+          name="points"
+          min="0"
+          max="100"
+          step="5"
+          value={percentInput}
+          onChange={changeAmountInputHandler}
+        />
       </Row>
     </div>
   )
@@ -116,7 +132,7 @@ const mapDispatchToProps = (dispatch) => ({
   removeSwapTo: (payload) => dispatch(removeSwapTo(payload)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(CryptoSwapItem)
+export default connect(mapStateToProps, mapDispatchToProps)(CryptoSwapToItem)
 
 /*
 Current problems:

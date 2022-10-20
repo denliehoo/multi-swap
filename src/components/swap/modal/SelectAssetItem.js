@@ -25,6 +25,7 @@ const SelectAssetItem = ({
       amount: props.amount,
     }
     if (type === 'from') {
+      // if they are the same index, we change the details
       if (props.index == swapFrom[props.index].index) {
         let newSwapFrom = [...swapFrom]
         newSwapFrom[props.index] = newAssetDetails

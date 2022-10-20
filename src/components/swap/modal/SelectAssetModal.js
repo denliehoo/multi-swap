@@ -129,6 +129,7 @@ const SelectAssetModal = ({ props, ethCustomTokens }) => {
     setSelectedAsset(symbol)
 
     // pass balance to parent
+    props.assetHasBeenSelected()
     props.passBalanceToParent(getBalances())
 
     // closes the modal
