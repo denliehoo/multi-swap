@@ -40,9 +40,6 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 
 ## To do
 
-- Add a minus button for each cryptoSwapItem
-  - ensure that there is always at least 1 to and from
-  - remove the state upon minus
 - Price API to display price
 - Balance API to display balance
   - validation to ensure swapping amount is balance
@@ -112,3 +109,6 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 - 20/10/22: Add percentage to each cryptoSwapItem (for to) and ensure sum of is always equal 100%
 - 20/10/22: Validation for swap (ensure percentages sums to 100%, tokens are selected and amounts are al zero)
 - 20/10/22: Upon clicking "PREVIEW SWAP", show prview swap modal which shows approximately what the user gets
+- 20/10/22: Add a minus button for each cryptoSwapItem
+  - ensure that there is always at least 1 to and from
+  - remove the state upon minus
