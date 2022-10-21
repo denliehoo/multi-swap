@@ -97,10 +97,22 @@ const Swap = ({
     return valid
   }
 
+  // const validateAmountLesserThanBalance = () => {
+  //   const swapFromAmount = swapFrom.map((i) => i.amount)
+  //   const swapFromBalance = swapFrom.map((i) => i.balance)
+  //   let valid = true
+  //   for (let i in swapFrom.length) {
+  //     if (swapFromAmount[i] > swapFromBalance) {
+  //       valid = false
+  //       // error message
+  //       break
+  //     }
+  //   }
+  //   return valid
+  // }
+
   const toggleAssetSelectedState = () => {
     setToggleAssetSelected(!toggleAssetSelected)
-    console.log('Look here swap to')
-    console.log(swapTo)
   }
 
   const amountHasChanged = () => {
@@ -242,7 +254,13 @@ const Swap = ({
               const validPercentages = validatePercentageArray()
               const tokensSelected = validateTokenSelected()
               const validAmount = validateAmount()
-              if (validPercentages && tokensSelected && validAmount) {
+              // const amountLesserThanBalance = validateAmountLesserThanBalance()
+              if (
+                validPercentages &&
+                tokensSelected &&
+                validAmount
+                // amountLesserThanBalance
+              ) {
                 setShowPreviewSwapModal(true)
               }
             }}

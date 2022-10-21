@@ -1,7 +1,7 @@
 import classes from './CryptoSwapItem.module.css'
 import { Row, Col } from 'antd/lib/grid'
 import SelectAssetModal from './modal/SelectAssetModal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MinusCircleOutlined } from '@ant-design/icons'
 
 import { connect } from 'react-redux'
@@ -21,27 +21,23 @@ const CryptoSwapItem = ({
   removeSwapFrom,
 }) => {
   const [balance, setBalance] = useState('')
-  const [assetIsChosen, setAssetIsChosen] = useState(false)
   const [amount, setAmount] = useState(props.amount)
 
   const getBalanceFromChild = (bal) => {
     setBalance(bal)
-    setAssetIsChosen(true)
   }
 
   const changeAmountInputHandler = (e) => {
     setAmount(e.target.value)
     props.amountHasChanged()
-    if (assetIsChosen) {
-      if (props.type === 'from') {
-        let newSwapFrom = [...swapFrom]
-        newSwapFrom[props.index].amount = e.target.value
-        addSwapFrom(newSwapFrom)
-      } else if (props.type === 'to') {
-        let newSwapTo = [...swapTo]
-        newSwapTo[props.index].amount = e.target.value
-        addSwapTo(newSwapTo)
-      }
+    if (props.type === 'from') {
+      let newSwapFrom = [...swapFrom]
+      newSwapFrom[props.index].amount = parseInt(e.target.value)
+      addSwapFrom(newSwapFrom)
+    } else if (props.type === 'to') {
+      let newSwapTo = [...swapTo]
+      newSwapTo[props.index].amount = e.target.value
+      addSwapTo(newSwapTo)
     }
   }
 
@@ -52,11 +48,14 @@ const CryptoSwapItem = ({
     for (let i = index; i < newSwapFrom.length; i++) {
       newSwapFrom[i].index -= 1
     }
-    console.log(newSwapFrom)
     removeSwapFrom(newSwapFrom)
     setAmount(newSwapFrom[index].amount)
     props.assetHasBeenSelected()
   }
+
+  useEffect(() => {
+    setAmount(props.amount)
+  }, [props.amount])
 
   return (
     <div className={classes.cryptoSwapItem}>

@@ -20,31 +20,21 @@ const CryptoSwapToItem = ({
   swapTo,
   removeSwapTo,
 }) => {
-  const [balance, setBalance] = useState('')
-  const [assetIsChosen, setAssetIsChosen] = useState(false)
-  // const [amount, setAmount] = useState(100)
   const [percentInput, setPercentInput] = useState(props.percent)
-
-  const getBalanceFromChild = (bal) => {
-    setBalance(bal)
-    setAssetIsChosen(true)
-  }
 
   const changeAmountInputHandler = (e) => {
     const inputValue = parseInt(e.target.value)
     setPercentInput(inputValue)
     props.changeSwapToPercent(props.index, inputValue)
 
-    if (assetIsChosen) {
-      if (props.type === 'from') {
-        let newSwapFrom = [...swapFrom]
-        newSwapFrom[props.index].amount = inputValue
-        addSwapFrom(newSwapFrom)
-      } else if (props.type === 'to') {
-        let newSwapTo = [...swapTo]
-        newSwapTo[props.index].amount = inputValue
-        addSwapTo(newSwapTo)
-      }
+    if (props.type === 'from') {
+      let newSwapFrom = [...swapFrom]
+      newSwapFrom[props.index].amount = inputValue
+      addSwapFrom(newSwapFrom)
+    } else if (props.type === 'to') {
+      let newSwapTo = [...swapTo]
+      newSwapTo[props.index].amount = inputValue
+      addSwapTo(newSwapTo)
     }
   }
 
@@ -55,16 +45,15 @@ const CryptoSwapToItem = ({
     for (let i = index; i < newSwapTo.length; i++) {
       newSwapTo[i].index -= 1
     }
-    console.log(newSwapTo)
     removeSwapTo(newSwapTo)
-    props.assetHasBeenSelected()
-    props.changePercentageFromMinus(props.index)
     setPercentInput(newSwapTo[index].amount)
+    props.changePercentageFromMinus(props.index)
+    props.assetHasBeenSelected()
   }
 
   useEffect(() => {
     setPercentInput(props.percent)
-  }, [])
+  }, [props.percent])
 
   return (
     <div className={classes.cryptoSwapItem}>
@@ -80,8 +69,6 @@ const CryptoSwapToItem = ({
         </Col>
       </Row>
       <Row justify="space-between" align="middle">
-        {/* push amount to store somehow; also do validation to ensure amount less than balance. can do this in the swap button in Swap.js*/}
-        {/* <Col style={{ fontSize: '2em' }}>{props.amount}</Col> */}
         <Col style={{ fontSize: '2em' }}>
           <span>
             <input
@@ -101,7 +88,7 @@ const CryptoSwapToItem = ({
             index={props.index}
             type={props.type}
             amount={percentInput}
-            passBalanceToParent={getBalanceFromChild}
+            passBalanceToParent={() => {}}
             assetHasBeenSelected={props.assetHasBeenSelected}
             asset={props.asset}
           />
