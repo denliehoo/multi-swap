@@ -3,6 +3,7 @@ import { Row, Col } from 'antd/lib/grid'
 import SelectAssetModal from './modal/SelectAssetModal'
 import { useEffect, useState } from 'react'
 import { MinusCircleOutlined } from '@ant-design/icons'
+import axios from 'axios'
 
 import { connect } from 'react-redux'
 import {
@@ -22,6 +23,8 @@ const CryptoSwapItem = ({
 }) => {
   const [balance, setBalance] = useState('')
   const [amount, setAmount] = useState(props.amount)
+  const [price, setPrice] = useState(0)
+  const [priceIsLoading, setPriceIsLoading] = useState(true)
 
   const getBalanceFromChild = (bal) => {
     setBalance(bal)
@@ -53,9 +56,37 @@ const CryptoSwapItem = ({
     props.assetHasBeenSelected()
   }
 
+  const getPrice = async (chain) => {
+    if (props.asset) {
+      if (props.asset === 'ETH') {
+        // call eth price
+        return
+      }
+
+      const res = await axios.get(
+        `https://deep-index.moralis.io/api/v2/erc20/${props.address}/price`,
+        {
+          params: { chain: chain },
+          headers: {
+            accept: 'application/json',
+            'X-API-Key': process.env.REACT_APP_MORALIS_API_KEY,
+          },
+        },
+      )
+      setPrice(res.data.usdPrice)
+    } else {
+      console.log('empty asset!')
+    }
+  }
+
   useEffect(() => {
     setAmount(props.amount)
   }, [props.amount])
+
+  useEffect(() => {
+    console.log(props.asset)
+    getPrice()
+  }, [props.asset])
 
   return (
     <div className={classes.cryptoSwapItem}>
@@ -90,15 +121,12 @@ const CryptoSwapItem = ({
             assetHasBeenSelected={props.assetHasBeenSelected}
             asset={props.asset}
           />
-          {/* <Button>
-                        Select an asset<DownOutlined />
-                    </Button> */}
         </Col>
       </Row>
       <Row justify="space-between">
         {/* use an api to get the dollar value of an asset
                 and then multiply it by amount */}
-        <Col>${4000}</Col>
+        <Col>${price * props.amount}</Col>
 
         <Col>Balanace: {balance}</Col>
       </Row>

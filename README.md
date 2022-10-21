@@ -14,6 +14,8 @@ for smart contract:
 - to start frontend:
 - npm start
 
+Note: can get free nodes here: https://www.quicknode.com/endpoints or https://infura.io/
+
 Roadmap:
 
 - do swap by %
@@ -40,21 +42,20 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 
 ## To do
 
-- Balance API to display balance
-  - validation to ensure swapping amount is < balance
 - Price API to display price
 - Metamask connect
   - use redux and store the wallet address in global store
   - maybe use redux persist storage to ensure wallet address is not deleted
   - refactor custom token addresses into redux persist (maybe)
-- Get User Balances in select a token modal and display in swap component; use an API for this [https://deep-index.moralis.io/api-docs/#/account/getTokenBalances][https://docs.moralis.io/reference/getwallettokenbalances]
-  - get balance should be in the SelectAssetModal component which passes the balance around the other components
-  - Update the swap button to ensure that balances in also sent
 - Add getAmountOut function in smart contract to display how many ERC20/ETH can be receive from the swap
-- connect smart contract to frontend (start with ropsten)
-  - ensure swap ETH (single asset) for multiple assets (e.g. USDC and USDT) is functional
-  - change the function in PreviewSwapModal.js; need to display getAmountOut and connect the swap function properly
 - Add events to smart contract (so that can detect when swap is pending and finished)
+- connect smart contract to frontend (start with ropsten)
+  - Get User Balances in select a token modal and display in swap component; use an API for this [https://deep-index.moralis.io/api-docs/#/account/getTokenBalances][https://docs.moralis.io/reference/getwallettokenbalances]
+  - get balance should be in the SelectAssetModal component which passes the balance around the other components
+  - Update the swap button to ensure that balances is also sent
+  - validation to ensure swapping amount is < balance
+  - ensure swap ETH (single asset) for multiple assets % (e.g. USDC and USDT) is functional
+  - change the function in PreviewSwapModal.js; need to display getAmountOut and connect the swap function properly
   - Add pending spinner after swap and popup notification when swap is completed to frontend
 - touch up on front end (css)
 - refactor CSS code properly

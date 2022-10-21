@@ -97,19 +97,19 @@ const Swap = ({
     return valid
   }
 
-  // const validateAmountLesserThanBalance = () => {
-  //   const swapFromAmount = swapFrom.map((i) => i.amount)
-  //   const swapFromBalance = swapFrom.map((i) => i.balance)
-  //   let valid = true
-  //   for (let i in swapFrom.length) {
-  //     if (swapFromAmount[i] > swapFromBalance) {
-  //       valid = false
-  //       // error message
-  //       break
-  //     }
-  //   }
-  //   return valid
-  // }
+  const validateAmountLesserThanBalance = () => {
+    const swapFromAmount = swapFrom.map((i) => i.amount)
+    const swapFromBalance = swapFrom.map((i) => i.balance)
+    let valid = true
+    for (let i in swapFrom.length) {
+      if (swapFromAmount[i] > swapFromBalance) {
+        valid = false
+        // error message
+        break
+      }
+    }
+    return valid
+  }
 
   const toggleAssetSelectedState = () => {
     setToggleAssetSelected(!toggleAssetSelected)
@@ -168,6 +168,7 @@ const Swap = ({
               assetHasBeenSelected={toggleAssetSelectedState}
               amountHasChanged={amountHasChanged}
               asset={i.symbol}
+              address={i.address}
             />
           ))}
           <Row
@@ -254,12 +255,12 @@ const Swap = ({
               const validPercentages = validatePercentageArray()
               const tokensSelected = validateTokenSelected()
               const validAmount = validateAmount()
-              // const amountLesserThanBalance = validateAmountLesserThanBalance()
+              const amountLesserThanBalance = validateAmountLesserThanBalance()
               if (
                 validPercentages &&
                 tokensSelected &&
-                validAmount
-                // amountLesserThanBalance
+                validAmount &&
+                amountLesserThanBalance
               ) {
                 setShowPreviewSwapModal(true)
               }
