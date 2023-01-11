@@ -1,0 +1,199 @@
+
+import React, { useEffect, useState } from 'react';
+import { Button, Modal, Input } from 'antd'
+import Web3 from 'web3';
+import { connect } from 'react-redux'
+import { connectWalletAction, changeWalletAction, disconnectWalletAction } from '../../reducers/connectWalletReducer';
+
+const ConnectMetaMask = ({props, connectWalletAction, changeWalletAction, disconnectWalletAction, address, walletConnected}) => {
+  // const [isConnected, setIsConnected] = useState(false);
+  // const [account, setAccount] = useState(null);
+  console.log(walletConnected)
+  console.log(address)
+
+  useEffect(() => {
+    const checkMetaMaskConnection = async () => {
+      if (window.ethereum) {
+        const web3 = new Web3(window.ethereum);
+        try {
+          // Request account access if needed
+          await window.ethereum.enable();
+          // Acccounts now exposed
+          const accounts = await web3.eth.getAccounts();
+          connectWalletAction(accounts[0])
+          // setAccount(accounts[0]);
+          // setIsConnected(true);
+          console.log('wallet is connected')
+        } catch (error) {
+          console.error(error);
+          disconnectWalletAction()
+          // setIsConnected(false);
+        }
+      } else {
+        console.error('MetaMask is not installed');
+      }
+    };
+
+    checkMetaMaskConnection();
+  }, []);
+
+  useEffect(() => {
+    if (walletConnected && window.ethereum) {
+      console.log('here')
+      window.ethereum.on('accountsChanged', accounts => {
+        changeWalletAction(accounts[0]);
+      });
+    }else{console.log("no")}
+  }, [walletConnected]);
+
+  const handleConnect = async () => {
+    if (!walletConnected) {
+      try {
+        // Request account access if needed
+        await window.ethereum.enable();
+        // Acccounts now exposed
+        const web3 = new Web3(window.ethereum);
+        const accounts = await web3.eth.getAccounts();
+        connectWalletAction(accounts[0]);
+        // setIsConnected(true);
+      } catch (error) {
+        // console.error(error);
+        disconnectWalletAction()
+        // setIsConnected(false);
+      }
+    }
+  };
+
+  // const handleDisconnect = async () => {
+  //   if (isConnected) {
+  //     try {
+  //       await window.ethereum.enable();
+  //       setAccount(null);
+  //       setIsConnected(false);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  // };
+
+  return (
+    <div>
+      {address ? (
+        <div>
+          {address.substring(0,4) + "..." + address.slice(-4)}
+          {/* <p onClick={handleDisconnect}>Disconnect Metamask</p> */}
+        </div>
+      ) : (
+        <Button onClick={handleConnect}>Connect to MetaMask</Button>
+      )}
+    </div>
+  );
+
+};
+
+
+const mapStateToProps = ({ connectWalletReducer }, ownProps) => ({
+  // address: connectWalletReducer.address,
+  // walletConnected: connectWalletReducer.walletConnected,
+  address: ownProps.address,
+  walletConnected: ownProps.walletConnected,
+  props: ownProps,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  connectWalletAction: (payload) => dispatch(connectWalletAction(payload)),
+  changeWalletAction: (payload) => dispatch(changeWalletAction(payload)),
+  disconnectWalletAction: () => dispatch(disconnectWalletAction()),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConnectMetaMask)
+
+// export default ConnectMetaMask;
+
+// *******
+
+// import React, { useEffect, useState } from 'react';
+// import { Button, Modal, Input } from 'antd'
+// import Web3 from 'web3';
+
+// const ConnectMetaMask = () => {
+//   const [isConnected, setIsConnected] = useState(false);
+//   const [account, setAccount] = useState(null);
+
+//   useEffect(() => {
+//     const checkMetaMaskConnection = async () => {
+//       if (window.ethereum) {
+//         const web3 = new Web3(window.ethereum);
+//         try {
+//           // Request account access if needed
+//           await window.ethereum.enable();
+//           // Acccounts now exposed
+//           const accounts = await web3.eth.getAccounts();
+//           setAccount(accounts[0]);
+//           setIsConnected(true);
+//         } catch (error) {
+//           console.error(error);
+//           setIsConnected(false);
+//         }
+//       } else {
+//         console.error('MetaMask is not installed');
+//       }
+//     };
+
+//     checkMetaMaskConnection();
+//   }, []);
+
+//   useEffect(() => {
+//     if (isConnected && window.ethereum) {
+//       window.ethereum.on('accountsChanged', accounts => {
+//         setAccount(accounts[0]);
+//       });
+//     }
+//   }, [isConnected]);
+
+//   const handleConnect = async () => {
+//     if (!isConnected) {
+//       try {
+//         // Request account access if needed
+//         await window.ethereum.enable();
+//         // Acccounts now exposed
+//         const web3 = new Web3(window.ethereum);
+//         const accounts = await web3.eth.getAccounts();
+//         setAccount(accounts[0]);
+//         setIsConnected(true);
+//       } catch (error) {
+//         console.error(error);
+//         setIsConnected(false);
+//       }
+//     }
+//   };
+
+//   const handleDisconnect = async () => {
+//     if (isConnected) {
+//       try {
+//         await window.ethereum.enable();
+//         setAccount(null);
+//         setIsConnected(false);
+//       } catch (error) {
+//         console.error(error);
+//       }
+//     }
+//   };
+
+//   return (
+//     <div>
+//       {isConnected ? (
+//         <div>
+//           {account.substring(0,4) + "..." + account.slice(-4)}
+//           {/* <p onClick={handleDisconnect}>Disconnect Metamask</p> */}
+//         </div>
+//       ) : (
+//         <Button onClick={handleConnect}>Connect to MetaMask</Button>
+//       )}
+//     </div>
+//   );
+
+// };
+
+// export default ConnectMetaMask;
+

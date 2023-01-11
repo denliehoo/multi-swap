@@ -42,11 +42,7 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 
 ## To do
 
-- Price API to display price
-- Metamask connect
-  - use redux and store the wallet address in global store
-  - maybe use redux persist storage to ensure wallet address is not deleted
-  - refactor custom token addresses into redux persist (maybe)
+- Price API to display price and ensure it is in preview swap
 - Add getAmountOut function in smart contract to display how many ERC20/ETH can be receive from the swap
 - Add events to smart contract (so that can detect when swap is pending and finished)
 - connect smart contract to frontend (start with ropsten)
@@ -113,3 +109,5 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 - 20/10/22: Add a minus button for each cryptoSwapItem
   - ensure that there is always at least 1 to and from
   - remove the state upon minus
+- 11/01/23: Added metamask connect
+  - use redux and store the wallet address in global store

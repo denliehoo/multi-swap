@@ -4,6 +4,7 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { customTokenReducer } from "../reducers/customTokenReducer";
 import { swapReducer } from "../reducers/swapReducer";
+import { connectWalletReducer } from "../reducers/connectWalletReducer";
 
 const persistConfig = {
   key: "root",
@@ -14,6 +15,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   customTokenReducer: customTokenReducer,
   swapReducer: swapReducer,
+  connectWalletReducer: connectWalletReducer
 });
 const reducer = persistReducer(persistConfig, rootReducer);
 

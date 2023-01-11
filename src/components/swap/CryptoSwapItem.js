@@ -60,6 +60,10 @@ const CryptoSwapItem = ({
     if (props.asset) {
       if (props.asset === 'ETH') {
         // call eth price
+        const res = await axios.get(
+          'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd',
+        )
+        setPrice(res.data.ethereum.usd)
         return
       }
 
