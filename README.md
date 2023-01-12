@@ -41,7 +41,6 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 # To do list / Progress:
 
 ## To do
-- Refactor and combine CryptoSwapItem.js and CryptoSwapToItem.js into just CryptoSwapItem.js
 - Add getAmountOut function in smart contract to display how many ERC20/ETH can be receive from the swap (in preview swap modal)
 - Add events to smart contract (so that can detect when swap is pending and finished)
 - connect smart contract to frontend (start with ropsten)
@@ -80,6 +79,14 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
   - e.g. slippage (need control on smartcontracts too)
 - work on light mode dark mode css theme
 
+## To fix bugs
+- In CryptoSwapItem.js
+  - if add 3 assets, if edit the 2nd one and then 3rd then 1st, gives errors. maybe check selectassetitem.js to fix
+or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo, but keep it with empty values except for index:
+  - e.g. {index: 0, amount: 0, asset: "", ...} then, in selectassetitem, we change the details accordingly. 
+  - This ensures that the list is ordered; but what about when remove assets? maybe we re-order? does the key for the cryptoswapitem change when remove to?
+  - Solution is TBC
+
 # Done:
 
 - 9/7/22: Code smart contract for ETH -> Multiple assets
@@ -115,3 +122,4 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
   - Refactored price API. Price API is now called in CryptoSwapItem.js CryptoSwapToItem.js
   - Price is then added as an object in the global store for swap reducer in swapFrom and swapTo
   - Price is then taken from the store and placed in the PreviewSwapModal
+- 12/01/23: - Refactor and combine CryptoSwapItem.js and CryptoSwapToItem.js into just CryptoSwapItem.js

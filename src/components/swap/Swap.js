@@ -9,7 +9,6 @@ import {
 } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import CryptoSwapItem from './CryptoSwapItem'
-import CryptoSwapToItem from './CryptoSwapToItem'
 import PreviewSwapModal from './modal/previewSwap/PreviewSwapModal'
 
 import { connect } from 'react-redux'
@@ -200,7 +199,7 @@ const Swap = ({
         <Row>You Get</Row>
         <div className={classes.buySellContainer}>
           {swapTo.map((i, index) => (
-            <CryptoSwapToItem
+            <CryptoSwapItem
               percent={i.amount}
               key={`toAssets${index}`}
               index={index}
