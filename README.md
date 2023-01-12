@@ -41,9 +41,8 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 # To do list / Progress:
 
 ## To do
-
-- Price API to display price and ensure it is in preview swap
-- Add getAmountOut function in smart contract to display how many ERC20/ETH can be receive from the swap
+- Refactor and combine CryptoSwapItem.js and CryptoSwapToItem.js into just CryptoSwapItem.js
+- Add getAmountOut function in smart contract to display how many ERC20/ETH can be receive from the swap (in preview swap modal)
 - Add events to smart contract (so that can detect when swap is pending and finished)
 - connect smart contract to frontend (start with ropsten)
   - Get User Balances in select a token modal and display in swap component; use an API for this [https://deep-index.moralis.io/api-docs/#/account/getTokenBalances][https://docs.moralis.io/reference/getwallettokenbalances]
@@ -111,3 +110,8 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
   - remove the state upon minus
 - 11/01/23: Added metamask connect
   - use redux and store the wallet address in global store
+- 12/01/23: Price API to display price and ensure it is in preview swap
+  - Created an API folder
+  - Refactored price API. Price API is now called in CryptoSwapItem.js CryptoSwapToItem.js
+  - Price is then added as an object in the global store for swap reducer in swapFrom and swapTo
+  - Price is then taken from the store and placed in the PreviewSwapModal

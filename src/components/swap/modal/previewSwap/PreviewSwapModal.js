@@ -1,7 +1,6 @@
 import { Button, Modal, Row, Col } from 'antd'
 import { useEffect, useState } from 'react'
 import PreviewSwapItem from './PreviewSwapItem'
-
 import { connect } from 'react-redux'
 
 const PreviewSwapModal = ({ props, swapFrom, swapTo }) => {
@@ -14,10 +13,12 @@ const PreviewSwapModal = ({ props, swapFrom, swapTo }) => {
     let swapFromDetailsTemp = swapFrom.map((i) => ({
       amount: i.amount,
       symbol: i.symbol,
+      price: i.price,
     }))
     let swapToDetailsTemp = swapTo.map((i) => ({
       amount: i.amount,
       symbol: i.symbol,
+      price: i.price,
     }))
     const callContractAndReplaceAmount = () => {
       const amountFromContract = '10' // use the smart contract for this
@@ -60,6 +61,7 @@ const PreviewSwapModal = ({ props, swapFrom, swapTo }) => {
               <PreviewSwapItem
                 amount={i.amount}
                 symbol={i.symbol}
+                price={i.price}
                 key={`${index}previewSwapFrom`}
               />
             ))}
@@ -69,6 +71,7 @@ const PreviewSwapModal = ({ props, swapFrom, swapTo }) => {
                 <PreviewSwapItem
                   amount={i.amount}
                   symbol={i.symbol}
+                  price={i.price}
                   key={`${index}previewSwapTo`}
                 />
               ))}

@@ -209,6 +209,7 @@ const Swap = ({
               assetHasBeenSelected={toggleAssetSelectedState}
               asset={i.symbol}
               changePercentageFromMinus={changePercentageFromMinus}
+              address={i.address}
             />
           ))}
 

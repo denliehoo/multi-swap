@@ -1,1 +1,1 @@
-work on price api, e.g. for eth asset and also ensure it is in preview swap
+- Refactor and combine CryptoSwapItem.js and CryptoSwapToItem.js into just CryptoSwapItem.js

@@ -41,12 +41,10 @@ const NavBar = ({
 
   useEffect(() => {
     if (walletConnected && window.ethereum) {
-      console.log('here')
       window.ethereum.on('accountsChanged', (accounts) => {
         changeWalletAction(accounts[0])
       })
     } else {
-      console.log('no')
     }
   }, [walletConnected])
 

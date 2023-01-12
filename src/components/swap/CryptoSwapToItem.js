@@ -3,7 +3,7 @@ import { Row, Col } from 'antd/lib/grid'
 import SelectAssetModal from './modal/SelectAssetModal'
 import { useState, useEffect } from 'react'
 import { MinusCircleOutlined } from '@ant-design/icons'
-
+import { getAssetPrice } from '../../api/api'
 import { connect } from 'react-redux'
 import {
   addSwapFrom,
@@ -21,6 +21,18 @@ const CryptoSwapToItem = ({
   removeSwapTo,
 }) => {
   const [percentInput, setPercentInput] = useState(props.percent)
+  const [price, setPrice] = useState(0)
+  const [priceIsLoading, setPriceIsLoading] = useState(true)
+  const chain = 'ETH'
+
+    useEffect(() => {
+    setPercentInput(props.percent)
+  }, [props.percent])
+
+    useEffect(() => {
+    console.log(props.asset)
+    getPrice(chain)
+  }, [props.asset])
 
   const changeAmountInputHandler = (e) => {
     const inputValue = parseInt(e.target.value)
@@ -51,9 +63,24 @@ const CryptoSwapToItem = ({
     props.assetHasBeenSelected()
   }
 
-  useEffect(() => {
-    setPercentInput(props.percent)
-  }, [props.percent])
+    const getPrice = async (chain) => {
+    if (props.asset) {
+      const price = await getAssetPrice(chain, props.asset,props.address)
+      setPrice(price)
+      setPriceIsLoading(false)
+      console.log("price for asset swap to: ", price)
+      if (props.type === 'to') {
+        let newSwapTo = [...swapTo]
+        newSwapTo[props.index].price = price
+        addSwapTo(newSwapTo)
+      }
+
+    } else {
+      console.log('empty asset!')
+    }
+  }
+
+
 
   return (
     <div className={classes.cryptoSwapItem}>
