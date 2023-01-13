@@ -7,6 +7,11 @@ const getAssetPrice = async (chain, asset, address) => {
       'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd',
     )
     return res.data.ethereum.usd
+  } else if (asset === 'FTM'){
+    const res = await axios.get(
+      'https://api.coingecko.com/api/v3/simple/price?ids=fantom&vs_currencies=usd',
+    )
+    return res.data.fantom.usd
   }
 
   const res = await axios.get(

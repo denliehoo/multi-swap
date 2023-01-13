@@ -54,4 +54,11 @@ interface Irouter {
         address to,
         uint256 deadline
     ) external payable returns (uint256[] memory amounts);
+
+    // amounts out
+    function getAmountsOut(
+        uint amountIn,
+        address[] memory path
+    ) external view returns (uint[] memory amounts);
+
 }

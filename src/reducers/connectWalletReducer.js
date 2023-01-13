@@ -2,7 +2,8 @@
 
 const initialState = {
     address: '',
-    walletConnected: false
+    walletConnected: false,
+    chain: 'eth'
 }
 
 // actions here

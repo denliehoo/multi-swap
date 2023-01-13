@@ -2,22 +2,20 @@
 
 # Instructions:
 
-for smart contract:
+For smart contract:
 
 - to run the contract on a fork:
-
   - ganache-cli --fork NODEURLHERE
   - truffle migrate --reset
   - OR
   - truffle test
 
 - to start frontend:
-- npm start
+  - npm start
 
-Note: can get free nodes here: https://www.quicknode.com/endpoints or https://infura.io/
+Note: can get free nodes here: https://www.quicknode.com/endpoints or https://infura.io/ or https://account.getblock.io/
 
-Roadmap:
-
+Desired Features:
 - do swap by %
 - do swap by specifying amount of token in the array
 - do a proxy setup
@@ -41,20 +39,25 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 # To do list / Progress:
 
 ## To do
-- Add getAmountOut function in smart contract to display how many ERC20/ETH can be receive from the swap (in preview swap modal)
-- Add events to smart contract (so that can detect when swap is pending and finished)
+- refactor to add in ftm chain. Separate ETH network items for future use
 - connect smart contract to frontend (start with ropsten)
   - Get User Balances in select a token modal and display in swap component; use an API for this [https://deep-index.moralis.io/api-docs/#/account/getTokenBalances][https://docs.moralis.io/reference/getwallettokenbalances]
   - get balance should be in the SelectAssetModal component which passes the balance around the other components
   - Update the swap button to ensure that balances is also sent
   - validation to ensure swapping amount is < balance
+  - change the function in PreviewSwapModal.js; need to display getAmountOut and connect the swap function properly, and to display how many ERC20/ETH can be received from the swap in the Modal
+  - Add pending spinner after swap and popup notification when swap is completed to frontend (use the events from the smart contract to know when swap is pending and done)
   - ensure swap ETH (single asset) for multiple assets % (e.g. USDC and USDT) is functional
-  - change the function in PreviewSwapModal.js; need to display getAmountOut and connect the swap function properly
-  - Add pending spinner after swap and popup notification when swap is completed to frontend
+
 - touch up on front end (css)
 - refactor CSS code properly
 - refactor any other code properly
+- deploy to live environment (both smart contract and frontend). Note: consider changing tokens to ftm network so its cheaper to launch and test live
+- -----End Of Phase 1: Swap ETH to Multiple ERC20 tokens-----
 
+<br />
+
+- -----Start Of Phase 2: Swap ETH/ERC20 tokens to ETH/ERC20 tokens-----
 - work on smart contract; possible scenario:
   1. ETH -> ERC20(s) coded previously
   2. ERC20(s) -> ERC20(s)
@@ -67,19 +70,28 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
     through metamask before swapping
 - connect the new swap types to the frontend and ensure it is working
 
-- create similar smart contracts for other chains (e.g. ftm testnet / kovan)
+- -----End Of Phase 2: Swap ETH/ERC20 tokens to ETH/ERC20 tokens-----
 
+<br />
+
+- -----Start Of Phase 3: Ability to use different chains-----
+- get the chain from the connected metamask and store it in the connectWalletReducer. Need ensure that the change chain in the nav bar works too
+- changing the chains should cause the tokens/custom tokens displayed to change accordingly
+- create similar smart contracts for other chains (e.g. ftm testnet / kovan)
 - allow for multiple chains to be connected (e.g. ftm testnet/kovan) on the frontend
 - hardcode common assets for the new chain
-- allow for adding of custom tokens
-  - ensure to seprate custom tokens for diff chains
+- ensure to seprate custom tokens for diff chains
 - ensure swap functionalities are working
+- -----End Of Phase 3: Ability to use different chains-----
 
+<br />
+
+- -----Start Of Phase 4: Continuous Improvements-----
 - work on setting for swaps
   - e.g. slippage (need control on smartcontracts too)
 - work on light mode dark mode css theme
 
-## To fix bugs
+## Pending Bug Fixes
 - In CryptoSwapItem.js
   - if add 3 assets, if edit the 2nd one and then 3rd then 1st, gives errors. maybe check selectassetitem.js to fix
 or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo, but keep it with empty values except for index:
@@ -122,4 +134,5 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
   - Refactored price API. Price API is now called in CryptoSwapItem.js CryptoSwapToItem.js
   - Price is then added as an object in the global store for swap reducer in swapFrom and swapTo
   - Price is then taken from the store and placed in the PreviewSwapModal
-- 12/01/23: - Refactor and combine CryptoSwapItem.js and CryptoSwapToItem.js into just CryptoSwapItem.js
+- 12/01/23: Refactor and combine CryptoSwapItem.js and CryptoSwapToItem.js into just CryptoSwapItem.js
+- 13/01/23: Add events to smart contract (so that can detect when swap is pending and finished)

@@ -11,7 +11,8 @@ const removeAllCustomToken = (payload) => ({
 
 // initial state
 const initialState = {
-    eth: []
+    eth: [],
+    ftm: []
 };
 
 /* state becomes this eventually
