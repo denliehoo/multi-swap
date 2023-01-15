@@ -39,9 +39,7 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 # To do list / Progress:
 
 ## To do
-- refactor to add in ftm chain. Separate ETH network items for future use
-  - Note: If want change back chain, do it in the connecWalletReducer.js
-- connect smart contract to frontend (start with ropsten)
+- connect smart contract to frontend (start with ftm)
   - Get User Balances in select a token modal and display in swap component; use an API for this [https://deep-index.moralis.io/api-docs/#/account/getTokenBalances][https://docs.moralis.io/reference/getwallettokenbalances]
   - get balance should be in the SelectAssetModal component which passes the balance around the other components
   - Update the swap button to ensure that balances is also sent
@@ -49,11 +47,10 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
   - change the function in PreviewSwapModal.js; need to display getAmountOut and connect the swap function properly, and to display how many ERC20/ETH can be received from the swap in the Modal
   - Add pending spinner after swap and popup notification when swap is completed to frontend (use the events from the smart contract to know when swap is pending and done)
   - ensure swap ETH (single asset) for multiple assets % (e.g. USDC and USDT) is functional
-
 - touch up on front end (css)
 - refactor CSS code properly
 - refactor any other code properly
-- deploy to live environment (both smart contract and frontend). Note: consider changing tokens to ftm network so its cheaper to launch and test live
+- deploy to live environment (both smart contract and frontend).
 - -----End Of Phase 1: Swap ETH to Multiple ERC20 tokens-----
 
 <br />
@@ -137,3 +134,5 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
   - Price is then taken from the store and placed in the PreviewSwapModal
 - 12/01/23: Refactor and combine CryptoSwapItem.js and CryptoSwapToItem.js into just CryptoSwapItem.js
 - 13/01/23: Add events to smart contract (so that can detect when swap is pending and finished)
+- 15/01/23: Refactor to add in ftm chain. Separate ETH network items for future use
+  - Note: If want change back chain, do it in the connecWalletReducer.js (e.g. to change chain back to eth, just put chain: 'eth' instead of 'ftm')
