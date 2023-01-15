@@ -20,13 +20,13 @@ const CryptoSwapItemTest = ({
   swapTo,
   removeSwapFrom,
   removeSwapTo,
+  chain,
 }) => {
   const [balance, setBalance] = useState('')
   const [amount, setAmount] = useState(props.amount)
   const [price, setPrice] = useState(0)
   const [priceIsLoading, setPriceIsLoading] = useState(true)
   const [percentInput, setPercentInput] = useState(props.percent)
-  const chain = 'ETH'
 
   useEffect(() => {
     props.type === 'from'
@@ -191,10 +191,11 @@ const CryptoSwapItemTest = ({
   )
 }
 
-const mapStateToProps = ({ swapReducer }, ownProps) => ({
+const mapStateToProps = ({ swapReducer, connectWalletReducer }, ownProps) => ({
   swapFrom: swapReducer.swapFrom,
   swapTo: swapReducer.swapTo,
   props: ownProps,
+  chain: connectWalletReducer.chain,
 })
 
 const mapDispatchToProps = (dispatch) => ({

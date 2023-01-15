@@ -1,36 +1,39 @@
-import classes from "./ManageCustomTokenItem.module.css";
-import { Row, Col } from "antd";
-import IconComponent from "../shared/IconComponent";
-import { DeleteOutlined, ScanOutlined } from "@ant-design/icons";
+import classes from './ManageCustomTokenItem.module.css'
+import { Row, Col } from 'antd'
+import IconComponent from '../shared/IconComponent'
+import { DeleteOutlined, ScanOutlined } from '@ant-design/icons'
 
-import { connect } from "react-redux";
-import { removeCustomToken } from "../../../reducers/customTokenReducer";
+import { connect } from 'react-redux'
+import { removeCustomToken } from '../../../reducers/customTokenReducer'
 
 const ManageCustomTokenItem = ({
   props,
   ethCustomTokens,
+  ftmCustomTokens,
   removeCustomToken,
 }) => {
   const getCustomTokens = (chain) => {
-    if (chain == "eth") {
-      return ethCustomTokens;
+    if (chain === 'eth') {
+      return ethCustomTokens
+    } else if (chain === 'ftm') {
+      return ftmCustomTokens
     }
-  };
+  }
   const deleteHandler = () => {
-    const customTokens = getCustomTokens("eth");
-    const customTokenSymbols = customTokens.map((i) => i.symbol);
-    const indexOfAsset = customTokenSymbols.indexOf(props.symbol);
-    customTokens.splice(indexOfAsset, 1); // remove the entire {asset} from the customTokens array
-    removeCustomToken(customTokens);
+    const customTokens = getCustomTokens(props.chain)
+    const customTokenSymbols = customTokens.map((i) => i.symbol)
+    const indexOfAsset = customTokenSymbols.indexOf(props.symbol)
+    customTokens.splice(indexOfAsset, 1) // remove the entire {asset} from the customTokens array
+    removeCustomToken(customTokens)
     // props.onClickDeleteHandler(customTokens)
-    props.onClickDelete();
+    props.onClickDelete()
 
     // find the array index of the props.symbol -> remove this from the custom token array
     // -> call removeCustomToken and return the new array
-  };
+  }
 
   const tokenContractWebsiteHandler = () => {
-    if (props.chain == "eth") {
+    if (props.chain == 'eth') {
       return (
         <a
           href={`https://etherscan.io/address/${props.address}`}
@@ -38,14 +41,18 @@ const ManageCustomTokenItem = ({
         >
           <ScanOutlined className={classes.icon} />
         </a>
-      );
+      )
+    } else if (props.chain == 'ftm') {
+      return (
+        <a
+          href={`https://ftmscan.com/address/${props.address}`}
+          target="_blank"
+        >
+          <ScanOutlined className={classes.icon} />
+        </a>
+      )
     }
-    // if (props.chain == "...") {
-    //     return (<a href={`https://etherscan.io/address/${props.address}`} target="_blank">
-    //         <ScanOutlined className={classes.icon} />
-    //     </a>)
-    // }
-  };
+  }
   return (
     <Row
       align="middle"
@@ -69,22 +76,23 @@ const ManageCustomTokenItem = ({
         <Row justify="end">{tokenContractWebsiteHandler()}</Row>
       </Col>
     </Row>
-  );
-};
+  )
+}
 
 const mapStateToProps = ({ customTokenReducer }, ownProps) => ({
   ethCustomTokens: customTokenReducer.eth,
+  ftmCustomTokens: customTokenReducer.ftm,
   props: ownProps,
-});
+})
 
 const mapDispatchToProps = (dispatch) => ({
   removeCustomToken: (payload) => dispatch(removeCustomToken(payload)),
-});
+})
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
-)(ManageCustomTokenItem);
+  mapDispatchToProps,
+)(ManageCustomTokenItem)
 
 /*
 Note: if a component have it's own props we also need to put ownProps as a 2nd param

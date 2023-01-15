@@ -40,6 +40,7 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 
 ## To do
 - refactor to add in ftm chain. Separate ETH network items for future use
+  - Note: If want change back chain, do it in the connecWalletReducer.js
 - connect smart contract to frontend (start with ropsten)
   - Get User Balances in select a token modal and display in swap component; use an API for this [https://deep-index.moralis.io/api-docs/#/account/getTokenBalances][https://docs.moralis.io/reference/getwallettokenbalances]
   - get balance should be in the SelectAssetModal component which passes the balance around the other components

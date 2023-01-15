@@ -6,16 +6,18 @@ import {
   changeWalletAction,
   disconnectWalletAction,
 } from '../../reducers/connectWalletReducer'
-import { Button } from 'antd'
 import { useEffect } from 'react'
 import Web3 from 'web3'
+import { changeChain } from '../../reducers/customTokenReducer'
 
 const NavBar = ({
   connectWalletAction,
   changeWalletAction,
   disconnectWalletAction,
+  changeChainAction,
   address,
   walletConnected,
+  chain,
 }) => {
   useEffect(() => {
     const checkMetaMaskConnection = async () => {
@@ -37,6 +39,7 @@ const NavBar = ({
     }
 
     checkMetaMaskConnection()
+    changeChainAction(chain)
   }, [])
 
   useEffect(() => {
@@ -94,9 +97,7 @@ const NavBar = ({
           key: 'connectWallet',
           children: [
             {
-              label: (
-                <div onClick={disconnectWalletAction}>Disconnect</div>
-              ),
+              label: <div onClick={disconnectWalletAction}>Disconnect</div>,
               key: 'disconnectWallet',
             },
           ],
@@ -105,10 +106,10 @@ const NavBar = ({
 
   const rightItems = [
     {
-      label: '[Logo] Ethereum',
-      key: 'eth',
+      label: '[Logo] Fantom',
+      key: 'ftm',
       children: [
-        { label: '[Logo] Fantom', key: 'ftm' },
+        { label: '[Logo] Ethereum', key: 'eth' },
         { label: '[Logo] Avalanche', key: 'avax' },
       ],
     },
@@ -139,12 +140,14 @@ const NavBar = ({
 const mapStateToProps = ({ connectWalletReducer }) => ({
   address: connectWalletReducer.address,
   walletConnected: connectWalletReducer.walletConnected,
+  chain: connectWalletReducer.chain,
 })
 
 const mapDispatchToProps = (dispatch) => ({
   connectWalletAction: (payload) => dispatch(connectWalletAction(payload)),
   changeWalletAction: (payload) => dispatch(changeWalletAction(payload)),
   disconnectWalletAction: () => dispatch(disconnectWalletAction()),
+  changeChainAction: (payload) => dispatch(changeChain(payload)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavBar)

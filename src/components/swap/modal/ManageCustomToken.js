@@ -6,7 +6,7 @@ import { Input, Button } from 'antd'
 import IconComponent from '../shared/IconComponent'
 import { SearchOutlined } from '@ant-design/icons'
 import ManageCustomTokenItem from './ManageCustomTokenItem'
-
+import { getDetailsForCustomToken } from '../../../api/api'
 import { connect } from 'react-redux'
 import {
   addCustomToken,
@@ -17,11 +17,14 @@ const ManageCustomToken = ({
   ethCustomTokens,
   addCustomToken,
   removeAllCustomToken,
+  ftmCustomTokens,
+  chain,
 }) => {
   const [customTokenErrorMessage, setCustomTokenErrorMessage] = useState('')
   const [showImportToken, setShowImportToken] = useState(false)
   const [customTokenData, setCustomTokenData] = useState({})
   const [renderComponent, setRenderComponent] = useState(false)
+  console.log(chain)
 
   /* 
     Problem: Parent component (this comp) isn't aware of the global state changes
@@ -41,18 +44,13 @@ const ManageCustomToken = ({
 
   const checkIfValidAddress = async (tokenAddress, chain) => {
     setCustomTokenErrorMessage('Loading...')
+    // For ETH:
     // SIS: 0xd38BB40815d2B0c2d2c866e0c72c5728ffC76dd9
     // AAVE: 0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9
     // usdt: 0xdac17f958d2ee523a2206206994597c13d831ec7
-    const res = await axios.get(
-      `https://deep-index.moralis.io/api/v2/erc20/metadata?chain=${chain}&addresses=${tokenAddress}`,
-      {
-        headers: {
-          accept: 'application/json',
-          'X-API-Key': process.env.REACT_APP_MORALIS_API_KEY,
-        },
-      },
-    )
+    // For FTM:
+    // AAVE: 0x6a07A792ab2965C72a5B8088d3a069A7aC3a993B
+    const res = await getDetailsForCustomToken(chain, tokenAddress)
     const name = await res.data[0].name
     const symbol = await res.data[0].symbol
     const decimals = await res.data[0].decimals
@@ -86,12 +84,16 @@ const ManageCustomToken = ({
   const getCustomTokens = (chain) => {
     if (chain === 'eth') {
       return ethCustomTokens
+    } else if (chain === 'ftm') {
+      return ftmCustomTokens
     }
   }
 
   const importTokenHandler = (chain) => {
     if (chain === 'eth') {
       addCustomToken([...ethCustomTokens, customTokenData])
+    } else if (chain === 'ftm') {
+      addCustomToken([...ftmCustomTokens, customTokenData])
     }
     setShowImportToken(false)
     setCustomTokenErrorMessage('')
@@ -116,7 +118,7 @@ const ManageCustomToken = ({
           setShowImportToken(false)
           const inputValue = event.target.value
           inputValue.length === 42
-            ? checkIfValidAddress(inputValue, 'eth') // eventually do a get chain from global state and replace here
+            ? checkIfValidAddress(inputValue, chain) // eventually do a get chain from global state and replace here
             : setCustomTokenErrorMessage('Enter valid token address')
         }}
       />
@@ -150,7 +152,7 @@ const ManageCustomToken = ({
                 <Button
                   shape="round"
                   onClick={() => {
-                    importTokenHandler('eth')
+                    importTokenHandler(chain)
                   }}
                 >
                   Import
@@ -165,9 +167,9 @@ const ManageCustomToken = ({
 
       <hr />
       <div style={{ height: '30vh' }}>
-        {getCustomTokens('eth').length ? (
+        {getCustomTokens(chain).length ? (
           <Row justify="space-between">
-            <Col>You have {getCustomTokens('eth').length} custom tokens</Col>
+            <Col>You have {getCustomTokens(chain).length} custom tokens</Col>
             <Col>
               <Button onClick={deleteAllHandler}>Clear All</Button>
             </Col>
@@ -176,13 +178,13 @@ const ManageCustomToken = ({
           <span></span>
         )}
 
-        {getCustomTokens('eth').length ? (
-          getCustomTokens('eth').map((i) => (
+        {getCustomTokens(chain).length ? (
+          getCustomTokens(chain).map((i) => (
             <ManageCustomTokenItem
               name={i.name}
               symbol={i.symbol}
               icon={i.logo}
-              chain={'eth'}
+              chain={chain}
               address={i.address}
               onClickDelete={onClickChildDeleteHandler}
             />
@@ -197,8 +199,10 @@ const ManageCustomToken = ({
   )
 }
 
-const mapStateToProps = ({ customTokenReducer }) => ({
+const mapStateToProps = ({ customTokenReducer, connectWalletReducer }) => ({
   ethCustomTokens: customTokenReducer.eth,
+  ftmCustomTokens: customTokenReducer.ftm,
+  chain: connectWalletReducer.chain,
 })
 
 const mapDispatchToProps = (dispatch) => ({
