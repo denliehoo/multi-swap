@@ -24,7 +24,6 @@ const ManageCustomToken = ({
   const [showImportToken, setShowImportToken] = useState(false)
   const [customTokenData, setCustomTokenData] = useState({})
   const [renderComponent, setRenderComponent] = useState(false)
-  console.log(chain)
 
   /* 
     Problem: Parent component (this comp) isn't aware of the global state changes

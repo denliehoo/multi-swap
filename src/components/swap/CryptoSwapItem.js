@@ -1,8 +1,9 @@
 import classes from './CryptoSwapItem.module.css'
 import { Row, Col } from 'antd/lib/grid'
+import { Button } from 'antd'
 import SelectAssetModal from './modal/SelectAssetModal'
 import React, { useState, useEffect } from 'react'
-import { MinusCircleOutlined } from '@ant-design/icons'
+import { MinusCircleOutlined, DownOutlined } from '@ant-design/icons'
 import { getAssetPrice } from '../../api/api'
 import { connect } from 'react-redux'
 import {
@@ -27,6 +28,7 @@ const CryptoSwapItemTest = ({
   const [price, setPrice] = useState(0)
   const [priceIsLoading, setPriceIsLoading] = useState(true)
   const [percentInput, setPercentInput] = useState(props.percent)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     props.type === 'from'
@@ -155,7 +157,13 @@ const CryptoSwapItemTest = ({
         </Col>
 
         <Col>
-          <SelectAssetModal
+          <Button onClick={()=>{setIsModalOpen(true)}}>
+          {/* {selectedAsset ? selectedAsset : <span>Select A Token</span>} */}
+          {props.asset ? props.asset : <span>Select A Token</span>}
+          <DownOutlined />
+          </Button>
+          {isModalOpen && <SelectAssetModal
+            isModalOpen={isModalOpen}
             index={props.index}
             type={props.type}
             amount={props.type === 'from' ? amount : percentInput}
@@ -164,14 +172,15 @@ const CryptoSwapItemTest = ({
             }
             assetHasBeenSelected={props.assetHasBeenSelected}
             asset={props.asset}
-          />
+            closeModal={()=>{setIsModalOpen(false)}}
+          />}
         </Col>
       </Row>
 
       {props.type === 'from' ? (
         <Row justify="space-between">
           <Col>${priceIsLoading ? '...' : price * props.amount}</Col>
-          <Col>Balanace: {balance}</Col>
+          <Col>Balance: {balance}</Col>
         </Row>
       ) : (
         <Row>

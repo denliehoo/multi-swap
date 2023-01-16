@@ -22,6 +22,9 @@ Desired Features:
 - do multiple routers (and find the one which gives the best exchange)
 - allow for customisation of slippage
 
+Eventually: 
+- refactor the API out. Use C# .NET as the backend to request for the API
+
 Global dependencies required:
 
 - npm i -g truffle ganache-cli
@@ -40,10 +43,6 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 
 ## To do
 - connect smart contract to frontend (start with ftm)
-  - Get User Balances in select a token modal and display in swap component; use an API for this [https://deep-index.moralis.io/api-docs/#/account/getTokenBalances][https://docs.moralis.io/reference/getwallettokenbalances]
-  - get balance should be in the SelectAssetModal component which passes the balance around the other components
-  - Update the swap button to ensure that balances is also sent
-  - validation to ensure swapping amount is < balance
   - change the function in PreviewSwapModal.js; need to display getAmountOut and connect the swap function properly, and to display how many ERC20/ETH can be received from the swap in the Modal
   - Add pending spinner after swap and popup notification when swap is completed to frontend (use the events from the smart contract to know when swap is pending and done)
   - ensure swap ETH (single asset) for multiple assets % (e.g. USDC and USDT) is functional
@@ -136,3 +135,7 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - 13/01/23: Add events to smart contract (so that can detect when swap is pending and finished)
 - 15/01/23: Refactor to add in ftm chain. Separate ETH network items for future use
   - Note: If want change back chain, do it in the connecWalletReducer.js (e.g. to change chain back to eth, just put chain: 'eth' instead of 'ftm')
+- 16/01/23: Get User Balances in select a token modal and display in swap component; use an API for this [https://deep-index.moralis.io/api-docs/#/account/getTokenBalances] or [https://docs.moralis.io/reference/getwallettokenbalances]
+  - get balance should be in the SelectAssetModal component which passes the balance around the other components
+  - Update the swap button to ensure that balances is also sent
+  - validation to ensure swapping amount is < balance

@@ -16,7 +16,6 @@ const SelectAssetItem = ({
   swapTo,
 }) => {
   const addSwapHandler = (type, balance) => {
-    console.log(props.amount)
     const newAssetDetails = {
       index: props.index,
       symbol: props.symbol,
@@ -47,7 +46,7 @@ const SelectAssetItem = ({
       className={classes.selectAssetItemContainer}
       onClick={() => {
         addSwapHandler(props.type, props.balance)
-        props.onClickHandler(props.symbol)
+        props.onClickHandler(props.symbol, props.balance)
       }}
     >
       <Col span={2}>{props.icon}</Col>

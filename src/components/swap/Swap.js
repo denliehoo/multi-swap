@@ -36,6 +36,7 @@ const Swap = ({
     false,
   )
   const [showAmountError, setShowAmountError] = useState(false)
+  const [showAmountGreaterThanBalanceError, setShowAmountGreaterThanBalanceError] = useState(false)
   const [toggleAssetSelected, setToggleAssetSelected] = useState(true)
   const [showPreviewSwapModal, setShowPreviewSwapModal] = useState(false)
 
@@ -51,6 +52,7 @@ const Swap = ({
   )
 
   const amountError = <div>Please ensure amount from is more than zero</div>
+  const amountGreaterThanBalanceError = <div>Please ensure that amount is less than balance</div>
 
   const changeSwapToPercentHandler = (i, percent) => {
     let newSwapToPercentages = [...swapToPercentages]
@@ -99,10 +101,13 @@ const Swap = ({
   const validateAmountLesserThanBalance = () => {
     const swapFromAmount = swapFrom.map((i) => i.amount)
     const swapFromBalance = swapFrom.map((i) => i.balance)
+
     let valid = true
-    for (let i in swapFrom.length) {
-      if (swapFromAmount[i] > swapFromBalance) {
+    for (let i in swapFrom) {
+
+      if (swapFromAmount[i] > swapFromBalance[i]) {
         valid = false
+        setShowAmountGreaterThanBalanceError(true)
         // error message
         break
       }
@@ -116,6 +121,7 @@ const Swap = ({
 
   const amountHasChanged = () => {
     setShowAmountError(false)
+    setShowAmountGreaterThanBalanceError(false)
   }
 
   const changePercentageFromMinus = (index) => {
@@ -241,6 +247,7 @@ const Swap = ({
           {showAmountError ? amountError : ''}
           {showPercentageError ? percentageError : ''}
           {showTokenNotSelectedError ? tokenNotSelectedError : ''}
+          {showAmountGreaterThanBalanceError ? amountGreaterThanBalanceError : ''}
         </div>
 
         <Row style={{ width: '100%' }}>

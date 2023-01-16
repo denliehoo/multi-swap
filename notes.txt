@@ -1,4 +1,0 @@
-Note: if want to change the chain, it in connectWalletReducer and it should change.
-
-but for some reason, when change it to ftm, we get error whereby ftmCustomToken is undefined.... why??!!
-issue solved. think has to do with the persist state

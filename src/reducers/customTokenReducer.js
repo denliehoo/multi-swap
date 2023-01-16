@@ -28,7 +28,6 @@ const initialState = {
 
 // the reducer
 const customTokenReducer = (state = initialState, action) => {
-  console.log(state.chain)
   switch (action.type) {
     case 'ADD_CUSTOM_TOKEN':
       return { ...state, [state.chain]: action.payload }

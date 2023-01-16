@@ -6,12 +6,13 @@ import {
   SearchOutlined,
 } from '@ant-design/icons'
 import { Button, Modal, Input } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SelectAssetItem from './SelectAssetItem'
 import IconComponent from '../shared/IconComponent'
 import ManageCustomToken from './ManageCustomToken'
 import { ethDefaultAssetInfo } from '../../../utils/ethDefaultAssetInfo'
 import { ftmDefaultAssetInfo } from '../../../utils/ftmDefaultAssetInfo'
+import { getTokenBalances } from '../../../api/api'
 import { connect } from 'react-redux'
 
 const SelectAssetModal = ({
@@ -19,23 +20,17 @@ const SelectAssetModal = ({
   ethCustomTokens,
   ftmCustomTokens,
   chain,
+  address,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedAsset, setSelectedAsset] = useState('')
   const [isManageCustomToken, setIsManageCustomToken] = useState(false)
-  console.log(chain)
-  console.log(ftmCustomTokens)
-  const showModal = () => {
-    setIsModalOpen(true)
-  }
+  const [combinedAssetList, setCombinedAssetList] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  const handleOk = () => {
-    setIsModalOpen(false)
-  }
+  useEffect(() => {
+    address && getCombinedListOfAssets(chain, address)
+  }, [address])
 
-  const handleCancel = () => {
-    setIsModalOpen(false)
-  }
   const getCustomTokens = (chain) => {
     if (chain == 'eth') {
       return ethCustomTokens
@@ -52,38 +47,43 @@ const SelectAssetModal = ({
     }
   }
 
-  const getCombinedListOfAssets = (chain) => {
+  const getCombinedListOfAssets = async (chain, address) => {
     const defaultAssets = getDefaultAssets(chain)
     const customTokens = getCustomTokens(chain)
-    console.log(customTokens)
     const formattedCustomTokens = customTokens.map((i) => ({
       symbol: i.symbol,
       name: i.name,
       imgUrl: i.logo,
       address: i.address,
       isDefaultAsset: false,
-      bal: 123, // change bal eventually
+      bal: 123,
     }))
-    const combinedAssetList = defaultAssets.concat(formattedCustomTokens)
-    return combinedAssetList
+    let combinedAssetListTemp = defaultAssets.concat(formattedCustomTokens)
+    const arrayOfAssetAddresses = combinedAssetListTemp.map((i) => i.address)
+    const balancesArray = await getTokenBalances(
+      chain,
+      address,
+      arrayOfAssetAddresses,
+    )
+
+    for (let i in combinedAssetListTemp) {
+      combinedAssetListTemp[i].bal = balancesArray[i]
+    }
+    setCombinedAssetList(combinedAssetListTemp)
+    setIsLoading(false)
+    return combinedAssetListTemp
   }
 
-  const chooseAssetHandler = (symbol) => {
+  const chooseAssetHandler = (symbol, bal) => {
     //.... choose symbol
     setSelectedAsset(symbol)
 
     // pass balance to parent
     props.assetHasBeenSelected()
-    props.passBalanceToParent(getBalances())
+    props.passBalanceToParent(bal)
 
     // closes the modal
-    setIsModalOpen(false)
-  }
-
-  const getBalances = () => {
-    // api here.....
-    const bal = 23.21
-    return bal
+    props.closeModal()
   }
 
   const manageCustomeTokenTitle = (
@@ -104,11 +104,6 @@ const SelectAssetModal = ({
 
   return (
     <>
-      <Button onClick={showModal}>
-        {/* {selectedAsset ? selectedAsset : <span>Select A Token</span>} */}
-        {props.asset ? props.asset : <span>Select A Token</span>}
-        <DownOutlined />
-      </Button>
       <Modal
         title={
           isManageCustomToken ? (
@@ -117,14 +112,18 @@ const SelectAssetModal = ({
             <div>Select A Token</div>
           )
         }
-        visible={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
+        visible={props.isModalOpen}
+        onOk={props.closeModal}
+        onCancel={props.closeModal}
         // allows us to edit the bottom component (i.e. the OK and Cancel)
         footer={null}
         bodyStyle={{ height: '60vh' }}
       >
-        {isManageCustomToken ? (
+        {!address ? (
+          <div>Please connect your wallet to continue</div>
+        ) : isLoading ? (
+          <div>Loading...</div>
+        ) : isManageCustomToken ? (
           <ManageCustomToken />
         ) : (
           // Select a token component
@@ -162,7 +161,7 @@ const SelectAssetModal = ({
             <hr />
             <div>
               <div style={{ overflow: 'auto', height: '30vh' }}>
-                {getCombinedListOfAssets(chain).map((i) => (
+                {combinedAssetList.map((i) => (
                   <SelectAssetItem
                     icon={<IconComponent imgUrl={i.imgUrl} />}
                     symbol={i.symbol}
@@ -205,6 +204,7 @@ const mapStateToProps = (
   ethCustomTokens: customTokenReducer.eth,
   ftmCustomTokens: customTokenReducer.ftm,
   chain: connectWalletReducer.chain,
+  address: connectWalletReducer.address,
   props: ownProps,
 })
 
