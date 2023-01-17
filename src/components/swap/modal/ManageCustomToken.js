@@ -19,6 +19,7 @@ const ManageCustomToken = ({
   removeAllCustomToken,
   ftmCustomTokens,
   chain,
+  props,
 }) => {
   const [customTokenErrorMessage, setCustomTokenErrorMessage] = useState('')
   const [showImportToken, setShowImportToken] = useState(false)
@@ -49,10 +50,11 @@ const ManageCustomToken = ({
     // usdt: 0xdac17f958d2ee523a2206206994597c13d831ec7
     // For FTM:
     // AAVE: 0x6a07A792ab2965C72a5B8088d3a069A7aC3a993B
+    // CRV: 0x1E4F97b9f9F913c46F1632781732927B9019C68b
     const res = await getDetailsForCustomToken(chain, tokenAddress)
     const name = await res.data[0].name
     const symbol = await res.data[0].symbol
-    const decimals = await res.data[0].decimals
+    const decimals = await parseInt(res.data[0].decimals)
     let logo = await res.data[0].logo
     if (!logo) {
       logo = 'No Logo'
@@ -95,6 +97,7 @@ const ManageCustomToken = ({
       addCustomToken([...ftmCustomTokens, customTokenData])
     }
     setShowImportToken(false)
+    props.setToggleChangesInCustomToken()
     setCustomTokenErrorMessage('')
   }
 
@@ -104,6 +107,7 @@ const ManageCustomToken = ({
 
   const deleteAllHandler = () => {
     removeAllCustomToken([])
+    props.setToggleChangesInCustomToken()
   }
 
   return (
@@ -186,6 +190,9 @@ const ManageCustomToken = ({
               chain={chain}
               address={i.address}
               onClickDelete={onClickChildDeleteHandler}
+              setToggleChangesInCustomToken={
+                props.setToggleChangesInCustomToken
+              }
             />
           ))
         ) : (
@@ -198,10 +205,14 @@ const ManageCustomToken = ({
   )
 }
 
-const mapStateToProps = ({ customTokenReducer, connectWalletReducer }) => ({
+const mapStateToProps = (
+  { customTokenReducer, connectWalletReducer },
+  ownProps,
+) => ({
   ethCustomTokens: customTokenReducer.eth,
   ftmCustomTokens: customTokenReducer.ftm,
   chain: connectWalletReducer.chain,
+  props: ownProps,
 })
 
 const mapDispatchToProps = (dispatch) => ({

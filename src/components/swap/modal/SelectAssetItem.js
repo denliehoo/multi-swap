@@ -22,6 +22,7 @@ const SelectAssetItem = ({
       address: props.address,
       balance: balance,
       amount: props.amount,
+      decimals: props.decimals,
     }
     if (type === 'from') {
       // if they are the same index, we change the details

@@ -29,15 +29,16 @@ const Swap = ({
   swapFrom,
   swapTo,
 }) => {
-  console.log('rendered')
   const [swapToPercentages, setSwapToPercentages] = useState([100])
-
   const [showPercentageError, setShowPercentageError] = useState(false)
   const [showTokenNotSelectedError, setShowTokenNotSelectedError] = useState(
     false,
   )
   const [showAmountError, setShowAmountError] = useState(false)
-  const [showAmountGreaterThanBalanceError, setShowAmountGreaterThanBalanceError] = useState(false)
+  const [
+    showAmountGreaterThanBalanceError,
+    setShowAmountGreaterThanBalanceError,
+  ] = useState(false)
   const [toggleAssetSelected, setToggleAssetSelected] = useState(true)
   const [showPreviewSwapModal, setShowPreviewSwapModal] = useState(false)
 
@@ -53,7 +54,9 @@ const Swap = ({
   )
 
   const amountError = <div>Please ensure amount from is more than zero</div>
-  const amountGreaterThanBalanceError = <div>Please ensure that amount is less than balance</div>
+  const amountGreaterThanBalanceError = (
+    <div>Please ensure that amount is less than balance</div>
+  )
 
   const changeSwapToPercentHandler = (i, percent) => {
     let newSwapToPercentages = [...swapToPercentages]
@@ -105,7 +108,6 @@ const Swap = ({
 
     let valid = true
     for (let i in swapFrom) {
-
       if (swapFromAmount[i] > swapFromBalance[i]) {
         valid = false
         setShowAmountGreaterThanBalanceError(true)
@@ -194,6 +196,7 @@ const Swap = ({
                   address: '',
                   balance: 0,
                   amount: '',
+                  decimals: 0,
                 })
               }}
             />
@@ -235,6 +238,7 @@ const Swap = ({
                   address: '',
                   balance: 0,
                   amount: 100,
+                  decimals: 0,
                 })
                 let newSwapToPercentages = [...swapToPercentages]
                 newSwapToPercentages.push(100)
@@ -248,7 +252,9 @@ const Swap = ({
           {showAmountError ? amountError : ''}
           {showPercentageError ? percentageError : ''}
           {showTokenNotSelectedError ? tokenNotSelectedError : ''}
-          {showAmountGreaterThanBalanceError ? amountGreaterThanBalanceError : ''}
+          {showAmountGreaterThanBalanceError
+            ? amountGreaterThanBalanceError
+            : ''}
         </div>
 
         <Row style={{ width: '100%' }}>
@@ -278,15 +284,15 @@ const Swap = ({
           </Button>
         </Row>
       </div>
-      { //showPreviewSwapModal && 
-      (
+      {
+        //showPreviewSwapModal &&
         <PreviewSwapModal
           closePreviewAssetModal={() => {
             setShowPreviewSwapModal(false)
           }}
           visible={showPreviewSwapModal}
         />
-      )}
+      }
     </div>
   )
 }

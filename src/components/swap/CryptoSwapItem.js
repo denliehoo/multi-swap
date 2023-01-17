@@ -157,23 +157,31 @@ const CryptoSwapItemTest = ({
         </Col>
 
         <Col>
-          <Button onClick={()=>{setIsModalOpen(true)}}>
-          {/* {selectedAsset ? selectedAsset : <span>Select A Token</span>} */}
-          {props.asset ? props.asset : <span>Select A Token</span>}
-          <DownOutlined />
+          <Button
+            onClick={() => {
+              setIsModalOpen(true)
+            }}
+          >
+            {/* {selectedAsset ? selectedAsset : <span>Select A Token</span>} */}
+            {props.asset ? props.asset : <span>Select A Token</span>}
+            <DownOutlined />
           </Button>
-          {isModalOpen && <SelectAssetModal
-            isModalOpen={isModalOpen}
-            index={props.index}
-            type={props.type}
-            amount={props.type === 'from' ? amount : percentInput}
-            passBalanceToParent={
-              props.type === 'from' ? getBalanceFromChild : () => {}
-            }
-            assetHasBeenSelected={props.assetHasBeenSelected}
-            asset={props.asset}
-            closeModal={()=>{setIsModalOpen(false)}}
-          />}
+          {
+            <SelectAssetModal
+              isModalOpen={isModalOpen}
+              index={props.index}
+              type={props.type}
+              amount={props.type === 'from' ? amount : percentInput}
+              passBalanceToParent={
+                props.type === 'from' ? getBalanceFromChild : () => {}
+              }
+              assetHasBeenSelected={props.assetHasBeenSelected}
+              asset={props.asset}
+              closeModal={() => {
+                setIsModalOpen(false)
+              }}
+            />
+          }
         </Col>
       </Row>
 

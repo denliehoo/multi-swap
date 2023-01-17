@@ -24,6 +24,7 @@ const initialState = {
       address: '',
       balance: 0,
       amount: '',
+      decimals: 0,
     },
   ],
   swapTo: [
@@ -33,6 +34,7 @@ const initialState = {
       address: '',
       balance: 0,
       amount: 100,
+      decimals: 0,
     },
   ],
 }

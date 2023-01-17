@@ -26,10 +26,13 @@ const SelectAssetModal = ({
   const [isManageCustomToken, setIsManageCustomToken] = useState(false)
   const [combinedAssetList, setCombinedAssetList] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [toggleChangesInCustomToken, setToggleChangesInCustomToken] = useState(
+    false,
+  )
 
   useEffect(() => {
-    address && getCombinedListOfAssets(chain, address)
-  }, [address])
+    props.isModalOpen && address && getCombinedListOfAssets(chain, address)
+  }, [address, props.isModalOpen, toggleChangesInCustomToken])
 
   const getCustomTokens = (chain) => {
     if (chain == 'eth') {
@@ -57,6 +60,7 @@ const SelectAssetModal = ({
       address: i.address,
       isDefaultAsset: false,
       bal: 123,
+      decimals: i.decimals,
     }))
     let combinedAssetListTemp = defaultAssets.concat(formattedCustomTokens)
     const arrayOfAssetAddresses = combinedAssetListTemp.map((i) => i.address)
@@ -70,6 +74,7 @@ const SelectAssetModal = ({
       combinedAssetListTemp[i].bal = balancesArray[i]
     }
     setCombinedAssetList(combinedAssetListTemp)
+    console.log(combinedAssetListTemp)
     setIsLoading(false)
     return combinedAssetListTemp
   }
@@ -83,6 +88,11 @@ const SelectAssetModal = ({
     props.passBalanceToParent(bal)
 
     // closes the modal
+    closeModalHandler()
+  }
+
+  const closeModalHandler = () => {
+    setIsManageCustomToken(false)
     props.closeModal()
   }
 
@@ -113,8 +123,8 @@ const SelectAssetModal = ({
           )
         }
         visible={props.isModalOpen}
-        onOk={props.closeModal}
-        onCancel={props.closeModal}
+        onOk={closeModalHandler}
+        onCancel={closeModalHandler}
         // allows us to edit the bottom component (i.e. the OK and Cancel)
         footer={null}
         bodyStyle={{ height: '60vh' }}
@@ -124,7 +134,11 @@ const SelectAssetModal = ({
         ) : isLoading ? (
           <div>Loading...</div>
         ) : isManageCustomToken ? (
-          <ManageCustomToken />
+          <ManageCustomToken
+            setToggleChangesInCustomToken={() => {
+              setToggleChangesInCustomToken(!toggleChangesInCustomToken)
+            }}
+          />
         ) : (
           // Select a token component
           <div>
@@ -174,6 +188,7 @@ const SelectAssetModal = ({
                     index={props.index}
                     type={props.type}
                     amount={props.amount}
+                    decimals={i.decimals}
                   />
                 ))}
               </div>

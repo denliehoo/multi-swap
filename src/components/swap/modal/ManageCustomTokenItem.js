@@ -27,6 +27,7 @@ const ManageCustomTokenItem = ({
     removeCustomToken(customTokens)
     // props.onClickDeleteHandler(customTokens)
     props.onClickDelete()
+    props.setToggleChangesInCustomToken()
 
     // find the array index of the props.symbol -> remove this from the custom token array
     // -> call removeCustomToken and return the new array

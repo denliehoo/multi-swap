@@ -18,7 +18,7 @@ For smart contract:
     - ganache-cli --fork NODEURLHERE
   2. Deploy the smart contract
     - truffle migrate --reset
-  3. Start the application
+  3. Start the application (wait for the contract to deploy finish before starting)
     - npm start 
 
 Note: can get free nodes here: https://www.quicknode.com/endpoints or https://infura.io/ or https://account.getblock.io/
@@ -53,9 +53,10 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 # To do list / Progress:
 
 ## To do
-- add decimal places in the defaultAsset and custom token, also add it into the swapFrom/swapTo. Then, format the amount out in PreviewSwapModal.js properly
+- Perform the swap on the front end
 - Add pending spinner after swap and popup notification when swap is completed to frontend (use the events from the smart contract to know when swap is pending and done)
 - ensure swap ETH (single asset) for multiple assets % (e.g. USDC and USDT) is functional
+- error handling for when unable to get amounts out (e.g. USDT)
 - touch up on front end (css)
 - refactor CSS code properly
 - refactor any other code properly
@@ -151,3 +152,5 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
   - validation to ensure swapping amount is < balance
 - 17/01/23: connect smart contract to frontend (start with ftm) (refer to: https://github.com/denliehoo/defi-staking-app/blob/main/src/components/App.js on how to connect)
 - 17/01/23: change the function in PreviewSwapModal.js; need to display getAmountOut and connect the swap function properly, and to display how many ERC20/ETH can be received from the swap in the Modal
+- 17/01/23 - 2: add decimal places in the defaultAsset and custom token, also add it into the swapFrom/swapTo. Then, format the amount out in PreviewSwapModal.js properly
+- 17/01/23 - 2: Fix issue which caused the custom token to not appear when toggling for the first time (before fix had to close modal and open again for it to appear)
