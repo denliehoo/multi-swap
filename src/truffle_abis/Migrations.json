@@ -1751,12 +1751,12 @@
     "250": {
       "events": {},
       "links": {},
-      "address": "0x71C011967eA46961e4d961E343941bF66fa56940",
-      "transactionHash": "0x86af1b85b8ef5f00d22970c92823a1677513590a348564b64fb9200f8a080707"
+      "address": "0xAcad6011263cB1D61eCaaaA668C339376e51a2b6",
+      "transactionHash": "0x2d08448f4c3997bc519da778ed8d458b47a7c4e4fdd3c8a45f661e9376c3fd23"
     }
   },
   "schemaVersion": "3.4.8",
-  "updatedAt": "2023-01-13T10:05:33.738Z",
+  "updatedAt": "2023-01-17T09:12:15.548Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

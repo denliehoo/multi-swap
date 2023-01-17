@@ -13,7 +13,20 @@ For smart contract:
 - to start frontend:
   - npm start
 
+- Steps to run the application:
+  1. Start up ganache-cli
+    - ganache-cli --fork NODEURLHERE
+  2. Deploy the smart contract
+    - truffle migrate --reset
+  3. Start the application
+    - npm start 
+
 Note: can get free nodes here: https://www.quicknode.com/endpoints or https://infura.io/ or https://account.getblock.io/
+
+How to set up ganache-cli fork in metamask:
+  - https://www.geeksforgeeks.org/how-to-set-up-ganche-with-metamask/
+  1. Go to metamask and add network (Ensure that ganache cli is already running)
+  2. Network name: Ganache , RPC URL: HTTP://127.0.0.1:8545 , Chain ID: 1337
 
 Desired Features:
 - do swap by %
@@ -26,11 +39,9 @@ Eventually:
 - refactor the API out. Use C# .NET as the backend to request for the API
 
 Global dependencies required:
-
 - npm i -g truffle ganache-cli
 
 Environmental Values:
-
 ```Javascript
 REACT_APP_MORALIS_API_KEY=XXXXX
 ```
@@ -42,10 +53,9 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 # To do list / Progress:
 
 ## To do
-- connect smart contract to frontend (start with ftm)
-  - change the function in PreviewSwapModal.js; need to display getAmountOut and connect the swap function properly, and to display how many ERC20/ETH can be received from the swap in the Modal
-  - Add pending spinner after swap and popup notification when swap is completed to frontend (use the events from the smart contract to know when swap is pending and done)
-  - ensure swap ETH (single asset) for multiple assets % (e.g. USDC and USDT) is functional
+- add decimal places in the defaultAsset and custom token, also add it into the swapFrom/swapTo. Then, format the amount out in PreviewSwapModal.js properly
+- Add pending spinner after swap and popup notification when swap is completed to frontend (use the events from the smart contract to know when swap is pending and done)
+- ensure swap ETH (single asset) for multiple assets % (e.g. USDC and USDT) is functional
 - touch up on front end (css)
 - refactor CSS code properly
 - refactor any other code properly
@@ -139,3 +149,5 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
   - get balance should be in the SelectAssetModal component which passes the balance around the other components
   - Update the swap button to ensure that balances is also sent
   - validation to ensure swapping amount is < balance
+- 17/01/23: connect smart contract to frontend (start with ftm) (refer to: https://github.com/denliehoo/defi-staking-app/blob/main/src/components/App.js on how to connect)
+- 17/01/23: change the function in PreviewSwapModal.js; need to display getAmountOut and connect the swap function properly, and to display how many ERC20/ETH can be received from the swap in the Modal

@@ -29,6 +29,7 @@ const Swap = ({
   swapFrom,
   swapTo,
 }) => {
+  console.log('rendered')
   const [swapToPercentages, setSwapToPercentages] = useState([100])
 
   const [showPercentageError, setShowPercentageError] = useState(false)
@@ -277,15 +278,14 @@ const Swap = ({
           </Button>
         </Row>
       </div>
-      {showPreviewSwapModal ? (
+      { //showPreviewSwapModal && 
+      (
         <PreviewSwapModal
           closePreviewAssetModal={() => {
             setShowPreviewSwapModal(false)
           }}
           visible={showPreviewSwapModal}
         />
-      ) : (
-        ''
       )}
     </div>
   )
