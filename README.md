@@ -53,9 +53,11 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 # To do list / Progress:
 
 ## To do
-- Perform the swap on the front end
-- Add pending spinner after swap and popup notification when swap is completed to frontend (use the events from the smart contract to know when swap is pending and done)
-- ensure swap ETH (single asset) for multiple assets % (e.g. USDC and USDT) is functional
+- touch up on preview swap modal code (it should show token logo too; hence pass the state to swapFrom and swapTo)
+- Add pending spinner after clicking confirm swap and change the pending spinner to a swap submitted modal (refer to wireframe) after user confirms on metamask
+- add a "Pending" section in the nav bar. Upon clicking it, should show the pending transaction
+- Once swap completes, remove the pending and show a Swap completed notification
+- add swap history and save it locally (use redux persist); history can access from nav bar
 - error handling for when unable to get amounts out (e.g. USDT)
 - touch up on front end (css)
 - refactor CSS code properly
@@ -154,3 +156,4 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - 17/01/23: change the function in PreviewSwapModal.js; need to display getAmountOut and connect the swap function properly, and to display how many ERC20/ETH can be received from the swap in the Modal
 - 17/01/23 - 2: add decimal places in the defaultAsset and custom token, also add it into the swapFrom/swapTo. Then, format the amount out in PreviewSwapModal.js properly
 - 17/01/23 - 2: Fix issue which caused the custom token to not appear when toggling for the first time (before fix had to close modal and open again for it to appear)
+- 18/01/23: Add swap functionality to frontend; ensure swap ETH (single asset) for multiple assets % (e.g. USDC and DAI) is functional

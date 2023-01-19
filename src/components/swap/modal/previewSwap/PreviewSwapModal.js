@@ -3,15 +3,18 @@ import { useEffect, useState } from 'react'
 import PreviewSwapItem from './PreviewSwapItem'
 import { connect } from 'react-redux'
 
-const PreviewSwapModal = ({ props, swapFrom, swapTo, multiswap }) => {
+const PreviewSwapModal = ({ props, swapFrom, swapTo, multiswap, address }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [swapFromDetails, setSwapFromDetails] = useState()
   const [swapToDetails, setSwapToDetails] = useState()
   const [swapType, setSwapType] = useState('')
+  const [swapIsLoading, setSwapisLoading] = useState(false)
+  const [swapObject, setSwapObject] = useState({
+    amount: [],
+    poolAddresses: [],
+    percentForEachToken: [],
+  })
 
-  // change this eventually
-  // for now, show the amount out as an unformatted (i.e. without the decimal)
-  // later, add the decimal places to defaultAsset and custom token, also add it into the swapFrom/swapTo
   const getAmountsOutDetails = async () => {
     let swapFromDetailsTemp = swapFrom.map((i) => ({
       amount: i.amount,
@@ -52,14 +55,38 @@ const PreviewSwapModal = ({ props, swapFrom, swapTo, multiswap }) => {
       console.log(swapToDetailsTemp)
       setSwapFromDetails(swapFromDetailsTemp)
       setSwapToDetails(swapToDetailsTemp)
+      setSwapType('swapEthForMultipleTokensByPercent')
+      setSwapObject({
+        amount: [ethAmount],
+        poolAddresses: poolAddresses,
+        percentForEachToken: percentForEachToken,
+      })
       setIsLoading(false)
     }
   }
 
-  const initiateSwap = () => {
+  const initiateSwap = async () => {
     console.log('swap!')
     console.log(swapFromDetails)
     console.log(swapToDetails)
+    setSwapisLoading(true)
+    if (swapType === 'swapEthForMultipleTokensByPercent') {
+      let callSwap = await multiswap.methods
+        .swapEthForMultipleTokensByPercent(
+          swapObject.poolAddresses,
+          swapObject.percentForEachToken,
+        )
+        .send({
+          from: address,
+          value: swapObject.amount[0],
+        })
+
+      console.log(callSwap)
+    }
+    // else if(swapType === ...)...
+
+    // uncomment this ltr when done
+    // props.closePreviewAssetModal()
   }
 
   useEffect(() => {
@@ -103,7 +130,6 @@ const PreviewSwapModal = ({ props, swapFrom, swapTo, multiswap }) => {
           <Button
             onClick={() => {
               initiateSwap()
-              props.closePreviewAssetModal()
             }}
           >
             Confirm
@@ -119,6 +145,7 @@ const mapStateToProps = ({ swapReducer, connectWalletReducer }, ownProps) => ({
   swapTo: swapReducer.swapTo,
   props: ownProps,
   multiswap: connectWalletReducer.multiswap,
+  address: connectWalletReducer.address,
 })
 
 export default connect(mapStateToProps)(PreviewSwapModal)
