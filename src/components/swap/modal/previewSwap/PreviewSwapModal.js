@@ -1,19 +1,29 @@
-import { Button, Modal, Row, Col } from 'antd'
+import { Button, Modal, Row, Col, notification } from 'antd'
 import { useEffect, useState } from 'react'
 import PreviewSwapItem from './PreviewSwapItem'
 import { connect } from 'react-redux'
+import { ExclamationCircleOutlined, LoadingOutlined, SendOutlined } from '@ant-design/icons'
 
 const PreviewSwapModal = ({ props, swapFrom, swapTo, multiswap, address }) => {
-  const [isLoading, setIsLoading] = useState(true)
-  const [swapFromDetails, setSwapFromDetails] = useState()
-  const [swapToDetails, setSwapToDetails] = useState()
+  const [modalContent, setModalContent] = useState('loading')
+  const [swapFromDetails, setSwapFromDetails] = useState([])
+  const [swapToDetails, setSwapToDetails] = useState([])
   const [swapType, setSwapType] = useState('')
-  const [swapIsLoading, setSwapisLoading] = useState(false)
   const [swapObject, setSwapObject] = useState({
     amount: [],
     poolAddresses: [],
     percentForEachToken: [],
   })
+  const [api, contextHolder] = notification.useNotification()
+  const openNotification = (placement) => {
+    api.info({
+      message: 'You have rejected the transaction',
+      placement,
+      icon: <ExclamationCircleOutlined style={{ color: 'red' }} />,
+    })
+  }
+
+  const loadingSpinner = <LoadingOutlined style={{ fontSize: '128px' }} />
 
   const getAmountsOutDetails = async () => {
     let swapFromDetailsTemp = swapFrom.map((i) => ({
@@ -63,7 +73,7 @@ const PreviewSwapModal = ({ props, swapFrom, swapTo, multiswap, address }) => {
         poolAddresses: poolAddresses,
         percentForEachToken: percentForEachToken,
       })
-      setIsLoading(false)
+      setModalContent('previewSwap')
     }
   }
 
@@ -71,42 +81,80 @@ const PreviewSwapModal = ({ props, swapFrom, swapTo, multiswap, address }) => {
     console.log('swap!')
     console.log(swapFromDetails)
     console.log(swapToDetails)
-    setSwapisLoading(true)
-    if (swapType === 'swapEthForMultipleTokensByPercent') {
-      let callSwap = await multiswap.methods
-        .swapEthForMultipleTokensByPercent(
-          swapObject.poolAddresses,
-          swapObject.percentForEachToken,
-        )
-        .send({
-          from: address,
-          value: swapObject.amount[0],
-        })
+    setModalContent('pendingConfirmation')
+    try {
+      if (swapType === 'swapEthForMultipleTokensByPercent') {
+        let callSwap = await multiswap.methods
+          .swapEthForMultipleTokensByPercent(
+            swapObject.poolAddresses,
+            swapObject.percentForEachToken,
+          )
+          .send({
+            from: address,
+            value: swapObject.amount[0],
+          })
 
-      console.log(callSwap)
+        console.log(callSwap)
+      }
+      // else if(swapType === ...)...
+
+      setModalContent('swapSubmitted')
+    } catch (e) {
+      if (e?.code === 4001) {
+        setModalContent('previewSwap')
+        openNotification('top')
+      }
     }
-    // else if(swapType === ...)...
+  }
 
-    // uncomment this ltr when done
-    // props.closePreviewAssetModal()
+  const getPendingSwapText = () => {
+    const getIndividualSwapText = (arr) => {
+      let returnString = ''
+      if (arr.length > 1) {
+        for (let i in arr) {
+          if (arr.length - 1 === parseInt(i)) {
+            returnString = returnString.substring(0, returnString.length - 2)
+            returnString += ` and ${arr[i].amount} ${arr[i].symbol}`
+          } else {
+            returnString += `${arr[i].amount} ${arr[i].symbol}, `
+          }
+        }
+      } else {
+        returnString += `${arr[0].amount} ${arr[0].symbol}`
+      }
+      return returnString
+    }
+
+    return `Swapping ${getIndividualSwapText(
+      swapFromDetails,
+    )} for ${getIndividualSwapText(swapToDetails)}`
+  }
+
+  const closeModalHandler = () => {
+    setModalContent('loading')
+    props.closePreviewAssetModal()
   }
 
   useEffect(() => {
-    getAmountsOutDetails()
+    props.visible && getAmountsOutDetails()
   }, [props.visible])
 
   return (
     <Modal
-      title={'Preview Swap'}
+      title={modalContent === 'previewSwap' ? 'Preview Swap' : ''}
       visible={props.visible}
-      onCancel={props.closePreviewAssetModal}
+      onCancel={closeModalHandler}
       // allows us to edit the bottom component (i.e. the OK and Cancel)
       footer={null}
       bodyStyle={{ height: '60vh' }}
     >
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
+      {contextHolder}
+      {/* loading > preview swap > pending confirmation > swap submitted */}
+      {/* Loading Spinner */}
+      {modalContent === 'loading' && loadingSpinner}
+
+      {/* Preview Swap */}
+      {modalContent === 'previewSwap' && (
         <div>
           <div style={{ overflow: 'auto', height: '50vh' }}>
             <Row>You Give</Row>
@@ -120,16 +168,15 @@ const PreviewSwapModal = ({ props, swapFrom, swapTo, multiswap, address }) => {
               />
             ))}
             <Row>You Get</Row>
-            {!isLoading &&
-              swapToDetails.map((i, index) => (
-                <PreviewSwapItem
-                  amount={i.amount}
-                  symbol={i.symbol}
-                  price={i.price}
-                  imgUrl={i.imgUrl}
-                  key={`${index}previewSwapTo`}
-                />
-              ))}
+            {swapToDetails.map((i, index) => (
+              <PreviewSwapItem
+                amount={i.amount}
+                symbol={i.symbol}
+                price={i.price}
+                imgUrl={i.imgUrl}
+                key={`${index}previewSwapTo`}
+              />
+            ))}
           </div>
           <Button
             onClick={() => {
@@ -138,6 +185,26 @@ const PreviewSwapModal = ({ props, swapFrom, swapTo, multiswap, address }) => {
           >
             Confirm
           </Button>
+        </div>
+      )}
+
+      {/* Peding Confirmation */}
+      {modalContent === 'pendingConfirmation' && (
+        <div>
+          {loadingSpinner}
+          <div>Waiting For Confirmation</div>
+          <div>{getPendingSwapText()}</div>
+          <div>Confirm this transaction in your wallet</div>
+        </div>
+      )}
+
+      {/* Swap Submitted */}
+      {modalContent === 'swapSubmitted' && (
+        <div>
+          <SendOutlined style={{ fontSize: '128px' }} />
+          <div>Your swap has been submitted!</div>
+          <div>View on explorer</div>
+          <Button onClick={closeModalHandler}>Close</Button>
         </div>
       )}
     </Modal>
@@ -153,103 +220,3 @@ const mapStateToProps = ({ swapReducer, connectWalletReducer }, ownProps) => ({
 })
 
 export default connect(mapStateToProps)(PreviewSwapModal)
-
-// import { Button, Modal, Row, Col } from 'antd'
-// import { useEffect, useState } from 'react'
-// import PreviewSwapItem from './PreviewSwapItem'
-// import { connect } from 'react-redux'
-
-// const PreviewSwapModal = ({ props, swapFrom, swapTo }) => {
-//   const [isLoading, setIsLoading] = useState(true)
-//   const [swapFromDetails, setSwapFromDetails] = useState()
-//   const [swapToDetails, setSwapToDetails] = useState()
-
-//   // change this eventually
-//   const getAmountsOutDetails = async () => {
-//     let swapFromDetailsTemp = swapFrom.map((i) => ({
-//       amount: i.amount,
-//       symbol: i.symbol,
-//       price: i.price,
-//     }))
-//     let swapToDetailsTemp = swapTo.map((i) => ({
-//       amount: i.amount,
-//       symbol: i.symbol,
-//       price: i.price,
-//     }))
-//     const callContractAndReplaceAmount = () => {
-//       const amountFromContract = '10' // use the smart contract for this
-//       // replaces the amount; much more code needed here
-//       for (let i of swapToDetailsTemp) {
-//         i.amount = amountFromContract
-//       }
-//       setSwapFromDetails(swapFromDetailsTemp)
-//       setSwapToDetails(swapToDetailsTemp)
-//       setIsLoading(false)
-//     }
-//     setTimeout(callContractAndReplaceAmount, 1500)
-//   }
-
-//   const initiateSwap = () => {
-//     console.log('swap!')
-//     console.log(swapFromDetails)
-//     console.log(swapToDetails)
-//   }
-
-//   useEffect(() => {
-//     getAmountsOutDetails()
-//   }, [])
-//   return (
-//     <Modal
-//       title={'Preview Swap'}
-//       visible={props.visible}
-//       onCancel={props.closePreviewAssetModal}
-//       // allows us to edit the bottom component (i.e. the OK and Cancel)
-//       footer={null}
-//       bodyStyle={{ height: '60vh' }}
-//     >
-//       {isLoading ? (
-//         <div>Loading...</div>
-//       ) : (
-//         <div>
-//           <div style={{ overflow: 'auto', height: '50vh' }}>
-//             <Row>You Give</Row>
-//             {swapFromDetails.map((i, index) => (
-//               <PreviewSwapItem
-//                 amount={i.amount}
-//                 symbol={i.symbol}
-//                 price={i.price}
-//                 key={`${index}previewSwapFrom`}
-//               />
-//             ))}
-//             <Row>You Get</Row>
-//             {!isLoading &&
-//               swapToDetails.map((i, index) => (
-//                 <PreviewSwapItem
-//                   amount={i.amount}
-//                   symbol={i.symbol}
-//                   price={i.price}
-//                   key={`${index}previewSwapTo`}
-//                 />
-//               ))}
-//           </div>
-//           <Button
-//             onClick={() => {
-//               initiateSwap()
-//               props.closePreviewAssetModal()
-//             }}
-//           >
-//             Confirm
-//           </Button>
-//         </div>
-//       )}
-//     </Modal>
-//   )
-// }
-
-// const mapStateToProps = ({ swapReducer }, ownProps) => ({
-//   swapFrom: swapReducer.swapFrom,
-//   swapTo: swapReducer.swapTo,
-//   props: ownProps,
-// })
-
-// export default connect(mapStateToProps)(PreviewSwapModal)

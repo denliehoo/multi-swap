@@ -22,6 +22,7 @@ For smart contract:
     - npm start 
 
 Note: can get free nodes here: https://www.quicknode.com/endpoints or https://infura.io/ or https://account.getblock.io/
+Note: we can edit the block time to ensure transactions on our fork doesn't happen instantly. This makes it more realistic. We can do so by adding a -b flag along with the time in seconds (e.g. -b 20 would be 20 seconds). For example, we can do ganache-cli -b 20 --fork NODEURL HERE [Note: currently facing errors with this]
 
 How to set up ganache-cli fork in metamask:
   - https://www.geeksforgeeks.org/how-to-set-up-ganche-with-metamask/
@@ -53,9 +54,6 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 # To do list / Progress:
 
 ## To do
-- Add pending spinner after clicking confirm swap and change the pending spinner to a swap submitted modal (refer to wireframe) after user confirms on metamask
-- add a "Pending" section in the nav bar. Upon clicking it, should show the pending transaction
-- Once swap completes, remove the pending and show a Swap completed notification
 - add swap history and save it locally (use redux persist); history can access from nav bar
 - error handling for when unable to get amounts out (e.g. USDT)
 - touch up on front end (css)
@@ -108,6 +106,9 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
   - This ensures that the list is ordered; but what about when remove assets? maybe we re-order? does the key for the cryptoswapitem change when remove to?
   - Solution is TBC
 
+## Note / KIV: 
+- The testing of the swap process was done with block time = 0. Meaning to say that the transactions are completed instantly. Have tried to increase the block time, but keep receiving errors from metamask. Will need to ensure the whole process is smooth even when the transaction doesn't complete instantly. Particularly, need to notice the behaviour for the initiateSwap() function in PreviewModal.js. Not sure whether it will wait for the swap to finish before the await ends. If it doesn't, then might need to the setModalContent('swapSubmitted') portion higher up.
+
 # Done:
 
 - 9/7/22: Code smart contract for ETH -> Multiple assets
@@ -157,4 +158,6 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - 17/01/23 - 2: Fix issue which caused the custom token to not appear when toggling for the first time (before fix had to close modal and open again for it to appear)
 - 18/01/23: Add swap functionality to frontend; ensure swap ETH (single asset) for multiple assets % (e.g. USDC and DAI) is functional
 - 19/01/23: touch up on preview swap modal skeleton code (it should show token logo too; hence pass the state to swapFrom and swapTo)
-
+- 19/01/23 -2 : Add pending spinner after clicking confirm swap and change the pending spinner to a swap submitted modal (refer to wireframe) after user confirms on metamask
+- 19/01/23 -2 : Add a "Pending" section in the nav bar. Upon clicking it, should show the pending transaction
+- 19/01/23 -2 : Once swap completes, remove the pending and show a Swap completed notification
