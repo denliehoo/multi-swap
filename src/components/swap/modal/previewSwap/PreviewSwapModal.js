@@ -21,12 +21,14 @@ const PreviewSwapModal = ({ props, swapFrom, swapTo, multiswap, address }) => {
       symbol: i.symbol,
       price: i.price,
       decimals: i.decimals,
+      imgUrl: i.imgUrl,
     }))
     let swapToDetailsTemp = swapTo.map((i) => ({
       amount: i.amount,
       symbol: i.symbol,
       price: i.price,
       decimals: i.decimals,
+      imgUrl: i.imgUrl,
     }))
 
     // next time also need to consider which chain
@@ -113,6 +115,7 @@ const PreviewSwapModal = ({ props, swapFrom, swapTo, multiswap, address }) => {
                 amount={i.amount}
                 symbol={i.symbol}
                 price={i.price}
+                imgUrl={i.imgUrl}
                 key={`${index}previewSwapFrom`}
               />
             ))}
@@ -123,6 +126,7 @@ const PreviewSwapModal = ({ props, swapFrom, swapTo, multiswap, address }) => {
                   amount={i.amount}
                   symbol={i.symbol}
                   price={i.price}
+                  imgUrl={i.imgUrl}
                   key={`${index}previewSwapTo`}
                 />
               ))}

@@ -197,6 +197,7 @@ const Swap = ({
                   balance: 0,
                   amount: '',
                   decimals: 0,
+                  imgUrl: '',
                 })
               }}
             />
@@ -239,6 +240,7 @@ const Swap = ({
                   balance: 0,
                   amount: 100,
                   decimals: 0,
+                  imgUrl: ''
                 })
                 let newSwapToPercentages = [...swapToPercentages]
                 newSwapToPercentages.push(100)

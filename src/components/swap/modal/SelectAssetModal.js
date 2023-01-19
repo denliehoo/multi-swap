@@ -189,6 +189,7 @@ const SelectAssetModal = ({
                     type={props.type}
                     amount={props.amount}
                     decimals={i.decimals}
+                    imgUrl={i.imgUrl}
                   />
                 ))}
               </div>

@@ -25,6 +25,7 @@ const initialState = {
       balance: 0,
       amount: '',
       decimals: 0,
+      imgUrl: ''
     },
   ],
   swapTo: [
@@ -35,6 +36,7 @@ const initialState = {
       balance: 0,
       amount: 100,
       decimals: 0,
+      imgUrl: ''
     },
   ],
 }
