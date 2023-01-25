@@ -1,6 +1,6 @@
 import classes from './Swap.module.css'
 import { Row, Col } from 'antd/lib/grid'
-import { Button } from 'antd'
+import { Button, notification } from 'antd'
 import {
   DownCircleOutlined,
   PlusCircleOutlined,
@@ -18,6 +18,7 @@ import {
   addSwapTo,
   removeSwapTo,
 } from '../../reducers/swapReducer'
+import { attemptToConnectWallet } from '../../reducers/connectWalletReducer'
 
 // Swap > CryptoSwapItem > SelectAssetModal > SelectAssetItem
 
@@ -28,6 +29,8 @@ const Swap = ({
   removeSwapTo,
   swapFrom,
   swapTo,
+  address,
+  attemptToConnectWallet,
 }) => {
   const [swapToPercentages, setSwapToPercentages] = useState([100])
   const [showPercentageError, setShowPercentageError] = useState(false)
@@ -41,6 +44,7 @@ const Swap = ({
   ] = useState(false)
   const [toggleAssetSelected, setToggleAssetSelected] = useState(true)
   const [showPreviewSwapModal, setShowPreviewSwapModal] = useState(false)
+  const [api, contextHolder] = notification.useNotification()
 
   const percentageError = (
     <div>
@@ -148,6 +152,33 @@ const Swap = ({
       }
     }
   }
+
+  const swapButtonHandler = () => {
+    console.log(swapToPercentages)
+    console.log(swapFrom)
+    console.log(swapTo)
+    const validPercentages = validatePercentageArray()
+    const tokensSelected = validateTokenSelected()
+    const validAmount = validateAmount()
+    const amountLesserThanBalance = validateAmountLesserThanBalance()
+    if (
+      validPercentages &&
+      tokensSelected &&
+      validAmount &&
+      amountLesserThanBalance
+    ) {
+      setShowPreviewSwapModal(true)
+    }
+  }
+
+  const showNotificationHandler = (message, description, icon) => {
+    api.open({
+      message: message,
+      description: description,
+      icon: icon,
+      duration: 0,
+    })
+  }
   //
 
   useEffect(() => {
@@ -159,6 +190,7 @@ const Swap = ({
   return (
     // follow uniswap style for swap component
     <div className={classes.container}>
+      {contextHolder}
       <div className={classes.card}>
         <Row justify="space-between" style={{ width: '100%' }}>
           <Col>Swap</Col>
@@ -240,7 +272,7 @@ const Swap = ({
                   balance: 0,
                   amount: 100,
                   decimals: 0,
-                  imgUrl: ''
+                  imgUrl: '',
                 })
                 let newSwapToPercentages = [...swapToPercentages]
                 newSwapToPercentages.push(100)
@@ -265,43 +297,30 @@ const Swap = ({
             block
             shape="round"
             onClick={() => {
-              console.log(swapToPercentages)
-              console.log(swapFrom)
-              console.log(swapTo)
-              const validPercentages = validatePercentageArray()
-              const tokensSelected = validateTokenSelected()
-              const validAmount = validateAmount()
-              const amountLesserThanBalance = validateAmountLesserThanBalance()
-              if (
-                validPercentages &&
-                tokensSelected &&
-                validAmount &&
-                amountLesserThanBalance
-              ) {
-                setShowPreviewSwapModal(true)
-              }
+              address ? swapButtonHandler() : attemptToConnectWallet()
             }}
           >
-            Preview Swap
+            {address ? 'Preview Swap' : 'Connect Wallet'}
           </Button>
         </Row>
       </div>
       {
-        //showPreviewSwapModal &&
         <PreviewSwapModal
           closePreviewAssetModal={() => {
             setShowPreviewSwapModal(false)
           }}
           visible={showPreviewSwapModal}
+          showNotification={showNotificationHandler}
         />
       }
     </div>
   )
 }
 
-const mapStateToProps = ({ swapReducer }) => ({
+const mapStateToProps = ({ swapReducer, connectWalletReducer }) => ({
   swapFrom: swapReducer.swapFrom,
   swapTo: swapReducer.swapTo,
+  address: connectWalletReducer.address,
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -309,6 +328,7 @@ const mapDispatchToProps = (dispatch) => ({
   removeSwapFrom: (payload) => dispatch(removeSwapFrom(payload)),
   addSwapTo: (payload) => dispatch(addSwapTo(payload)),
   removeSwapTo: (payload) => dispatch(removeSwapTo(payload)),
+  attemptToConnectWallet: () => dispatch(attemptToConnectWallet()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Swap)

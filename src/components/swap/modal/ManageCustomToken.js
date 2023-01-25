@@ -18,6 +18,7 @@ const ManageCustomToken = ({
   addCustomToken,
   removeAllCustomToken,
   ftmCustomTokens,
+  goerliCustomTokens,
   chain,
   props,
 }) => {
@@ -54,7 +55,7 @@ const ManageCustomToken = ({
     const res = await getDetailsForCustomToken(chain, tokenAddress)
     const name = await res.data[0].name
     const symbol = await res.data[0].symbol
-    const decimals = await parseInt(res.data[0].decimals)
+    const decimals = await parseFloat(res.data[0].decimals)
     let logo = await res.data[0].logo
     if (!logo) {
       logo = 'No Logo'
@@ -87,6 +88,8 @@ const ManageCustomToken = ({
       return ethCustomTokens
     } else if (chain === 'ftm') {
       return ftmCustomTokens
+    } else if (chain == 'goerli') {
+      return goerliCustomTokens
     }
   }
 
@@ -95,6 +98,8 @@ const ManageCustomToken = ({
       addCustomToken([...ethCustomTokens, customTokenData])
     } else if (chain === 'ftm') {
       addCustomToken([...ftmCustomTokens, customTokenData])
+    } else if (chain === 'goerli') {
+      addCustomToken([...goerliCustomTokens, customTokenData])
     }
     setShowImportToken(false)
     props.setToggleChangesInCustomToken()
@@ -211,6 +216,7 @@ const mapStateToProps = (
 ) => ({
   ethCustomTokens: customTokenReducer.eth,
   ftmCustomTokens: customTokenReducer.ftm,
+  goerliCustomTokens: customTokenReducer.goerli,
   chain: connectWalletReducer.chain,
   props: ownProps,
 })

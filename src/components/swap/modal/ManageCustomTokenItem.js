@@ -10,6 +10,7 @@ const ManageCustomTokenItem = ({
   props,
   ethCustomTokens,
   ftmCustomTokens,
+  goerliCustomTokens,
   removeCustomToken,
 }) => {
   const getCustomTokens = (chain) => {
@@ -17,6 +18,8 @@ const ManageCustomTokenItem = ({
       return ethCustomTokens
     } else if (chain === 'ftm') {
       return ftmCustomTokens
+    } else if (chain == 'goerli') {
+      return goerliCustomTokens
     }
   }
   const deleteHandler = () => {
@@ -47,6 +50,15 @@ const ManageCustomTokenItem = ({
       return (
         <a
           href={`https://ftmscan.com/address/${props.address}`}
+          target="_blank"
+        >
+          <ScanOutlined className={classes.icon} />
+        </a>
+      )
+    } else if (props.chain == 'goerli') {
+      return (
+        <a
+          href={`https://goerli.etherscan.io/address/${props.address}`}
           target="_blank"
         >
           <ScanOutlined className={classes.icon} />
@@ -83,6 +95,7 @@ const ManageCustomTokenItem = ({
 const mapStateToProps = ({ customTokenReducer }, ownProps) => ({
   ethCustomTokens: customTokenReducer.eth,
   ftmCustomTokens: customTokenReducer.ftm,
+  goerliCustomTokens: customTokenReducer.goerli,
   props: ownProps,
 })
 

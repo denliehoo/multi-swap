@@ -50,10 +50,10 @@ const CryptoSwapItemTest = ({
       setAmount(e.target.value)
       props.amountHasChanged()
       let newSwapFrom = [...swapFrom]
-      newSwapFrom[props.index].amount = parseInt(e.target.value)
+      newSwapFrom[props.index].amount = parseFloat(e.target.value)
       addSwapFrom(newSwapFrom)
     } else if (props.type === 'to') {
-      const inputValue = parseInt(e.target.value)
+      const inputValue = parseFloat(e.target.value)
       setPercentInput(inputValue)
       props.changeSwapToPercent(props.index, inputValue)
       let newSwapTo = [...swapTo]

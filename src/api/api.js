@@ -47,7 +47,7 @@ const getDetailsForCustomToken = async (chain, tokenAddress) => {
 // [0x10b620b2dbac4faa7d7ffd71da486f5d44cd86f9,0x841FAD6EAe12c286d1Fd18d1d525DFfA75C7EFFE,0x04068DA6C83AFCFA0e13ba15A6696662335D5B75]
 // should take it the token address and return the user balances in that order. Dont forget to add in the native balance also
 const getTokenBalances = async (chain, walletAddress, tokenAddresses) => {
-  let tokenBalances = [];
+  let tokenBalances = []
   const nativeBalanceResponse = await axios.get(
     `https://deep-index.moralis.io/api/v2/${walletAddress}/balance`,
     {
@@ -58,9 +58,10 @@ const getTokenBalances = async (chain, walletAddress, tokenAddresses) => {
       },
     },
   )
-  tokenBalances.push(parseInt(nativeBalanceResponse.data.balance)/(Math.pow(10,18)))
-  tokenAddresses.splice(0,1) // removes the first element which is address = 'native'
-
+  tokenBalances.push(
+    parseFloat(nativeBalanceResponse.data.balance) / Math.pow(10, 18),
+  )
+  tokenAddresses.splice(0, 1) // removes the first element which is address = 'native'
 
   const tokenBalancesResponse = await axios.get(
     `https://deep-index.moralis.io/api/v2/${walletAddress}/erc20`,
@@ -81,7 +82,7 @@ const getTokenBalances = async (chain, walletAddress, tokenAddresses) => {
         rawBalances[r].token_address.toUpperCase()
       ) {
         let bal =
-          parseInt(rawBalances[r].balance) /
+          parseFloat(rawBalances[r].balance) /
           Math.pow(10, rawBalances[r].decimals)
         tokenBalances.push(bal)
         rawBalances.splice(r, 1)

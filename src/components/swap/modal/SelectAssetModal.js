@@ -12,6 +12,7 @@ import IconComponent from '../shared/IconComponent'
 import ManageCustomToken from './ManageCustomToken'
 import { ethDefaultAssetInfo } from '../../../utils/ethDefaultAssetInfo'
 import { ftmDefaultAssetInfo } from '../../../utils/ftmDefaultAssetInfo'
+import { goerliDefaultAssetInfo } from '../../../utils/goerliDefaultAssetInfo'
 import { getTokenBalances } from '../../../api/api'
 import { connect } from 'react-redux'
 
@@ -19,6 +20,7 @@ const SelectAssetModal = ({
   props,
   ethCustomTokens,
   ftmCustomTokens,
+  goerliCustomTokens,
   chain,
   address,
 }) => {
@@ -39,6 +41,8 @@ const SelectAssetModal = ({
       return ethCustomTokens
     } else if (chain == 'ftm') {
       return ftmCustomTokens
+    } else if (chain == 'goerli') {
+      return goerliCustomTokens
     }
   }
 
@@ -47,6 +51,8 @@ const SelectAssetModal = ({
       return ethDefaultAssetInfo
     } else if (chain === 'ftm') {
       return ftmDefaultAssetInfo
+    } else if (chain == 'goerli') {
+      return goerliDefaultAssetInfo
     }
   }
 
@@ -219,6 +225,7 @@ const mapStateToProps = (
 ) => ({
   ethCustomTokens: customTokenReducer.eth,
   ftmCustomTokens: customTokenReducer.ftm,
+  goerliCustomTokens: customTokenReducer.goerli,
   chain: connectWalletReducer.chain,
   address: connectWalletReducer.address,
   props: ownProps,

@@ -1,5 +1,4 @@
 export const ethDefaultAssetInfo = [
-  // refactor this to an external file eventually
   {
     symbol: 'ETH',
     name: 'Ethereum',

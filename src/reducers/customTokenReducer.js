@@ -21,9 +21,11 @@ const changeChain = (payload) => ({
 
 // initial state
 const initialState = {
-  chain: 'ftm', //might need change this default?
+  // chain: 'ftm', //might need change this default?
+  chain: 'goerli',
   eth: [],
   ftm: [],
+  goerli: [],
 }
 
 // the reducer

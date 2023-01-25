@@ -1,7 +1,6 @@
 # multi-swap
 
 # Instructions:
-
 For smart contract:
 
 - to run the contract on a fork:
@@ -14,14 +13,20 @@ For smart contract:
   - npm start
 
 - Steps to run the application:
-  1. Start up ganache-cli
+  1. Start up ganache-cli (if smart contract fork is to be deployed through truffle)
     - ganache-cli --fork NODEURLHERE
-  2. Deploy the smart contract
+  2. Deploy the smart contract (if smart contract fork is to be deployed through truffle)
     - truffle migrate --reset
   3. Start the application (wait for the contract to deploy finish before starting)
     - npm start 
 
+Note: ensure to change in connectWalletReducer if switching between deploy through truffle and remix
+
+
+Note: if change chain, do it in connectWalletReducer and customTokenReducer
+
 Note: can get free nodes here: https://www.quicknode.com/endpoints or https://infura.io/ or https://account.getblock.io/
+
 Note: we can edit the block time to ensure transactions on our fork doesn't happen instantly. This makes it more realistic. We can do so by adding a -b flag along with the time in seconds (e.g. -b 20 would be 20 seconds). For example, we can do ganache-cli -b 20 --fork NODEURL HERE [Note: currently facing errors with this]
 
 How to set up ganache-cli fork in metamask:
@@ -29,15 +34,6 @@ How to set up ganache-cli fork in metamask:
   1. Go to metamask and add network (Ensure that ganache cli is already running)
   2. Network name: Ganache , RPC URL: HTTP://127.0.0.1:8545 , Chain ID: 1337
 
-Desired Features:
-- do swap by %
-- do swap by specifying amount of token in the array
-- do a proxy setup
-- do multiple routers (and find the one which gives the best exchange)
-- allow for customisation of slippage
-
-Eventually: 
-- refactor the API out. Use C# .NET as the backend to request for the API
 
 Global dependencies required:
 - npm i -g truffle ganache-cli
@@ -47,15 +43,28 @@ Environmental Values:
 REACT_APP_MORALIS_API_KEY=XXXXX
 ```
 
+# Desired Features:
+- do swap by %
+- do swap by specifying amount of token in the array
+- do a proxy setup
+- do multiple routers (and find the one which gives the best exchange)
+- allow for customisation of slippage
+
+Eventually: 
+- refactor the API out. Use C# .NET as the backend to request for the API
+
+# Deployed contracts:
+- Goerli: 0x743EaA47beaC140B1ff8d7b14C92A757A0dFAbF4
+  - Multiswap: https://goerli.etherscan.io/address/0x743eaa47beac140b1ff8d7b14c92a757a0dfabf4#code
+  - Uniswap Router V2: https://goerli.etherscan.io/address/0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D#readContract
+
 ---
 
 https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20cb7cbcd6f
 
 # To do list / Progress:
-
 ## To do
-- add swap history and save it locally (use redux persist); history can access from nav bar
-- error handling for when unable to get amounts out (e.g. USDT)
+- error handling for when unable to get amounts out (e.g. USDT for FTM)
 - touch up on front end (css)
 - refactor CSS code properly
 - refactor any other code properly
@@ -109,8 +118,11 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 ## Note / KIV: 
 - The testing of the swap process was done with block time = 0. Meaning to say that the transactions are completed instantly. Have tried to increase the block time, but keep receiving errors from metamask. Will need to ensure the whole process is smooth even when the transaction doesn't complete instantly. Particularly, need to notice the behaviour for the initiateSwap() function in PreviewModal.js. Not sure whether it will wait for the swap to finish before the await ends. If it doesn't, then might need to the setModalContent('swapSubmitted') portion higher up.
 
-# Done:
+## Low Priority Features: 
+- add swap history and save it locally (use redux persist); history can access from nav bar
 
+
+# Done:
 - 9/7/22: Code smart contract for ETH -> Multiple assets
 - 2/9/22: General swap component structure
 - 16/9/22: UI for Drop drop modal for select an asset (hardcode common assets) [pass state properly in the future]
@@ -159,5 +171,7 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - 18/01/23: Add swap functionality to frontend; ensure swap ETH (single asset) for multiple assets % (e.g. USDC and DAI) is functional
 - 19/01/23: touch up on preview swap modal skeleton code (it should show token logo too; hence pass the state to swapFrom and swapTo)
 - 19/01/23 -2 : Add pending spinner after clicking confirm swap and change the pending spinner to a swap submitted modal (refer to wireframe) after user confirms on metamask
-- 19/01/23 -2 : Add a "Pending" section in the nav bar. Upon clicking it, should show the pending transaction
-- 19/01/23 -2 : Once swap completes, remove the pending and show a Swap completed notification
+- 25/01/23: Add in Goerli network and change it to it for testing
+- 25/01/23: Show notifications when swap is pending (after use clicked confirm on metamask) and when swap is completed
+- 25/01/23: Refactor connect wallet function from navbar to connectWalletReducer
+- 25/01/23: Change the Preview Swap Button to "Connect To Wallet" if not connected. Upon clicking it, it should connect to wallet. 
