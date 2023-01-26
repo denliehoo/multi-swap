@@ -29,9 +29,9 @@ const PreviewSwapModal = ({
     percentForEachToken: [],
   })
   const [api, contextHolder] = notification.useNotification()
-  const openNotification = (placement) => {
+  const openNotification = (message, placement) => {
     api.info({
-      message: 'You have rejected the transaction',
+      message: message,
       placement,
       icon: <ExclamationCircleOutlined style={{ color: 'red' }} />,
     })
@@ -95,6 +95,7 @@ const PreviewSwapModal = ({
         console.log(
           'An error occured in one of the tokens you are trying to swap to/from',
         )
+        setModalContent('unableToGetSwapDetails')
       }
     }
   }
@@ -136,14 +137,15 @@ const PreviewSwapModal = ({
           .send({
             from: address,
             value: swapObject.amount[0],
-          })
+          }) // only when user clicks confirm on metamask will this next step appear
           .on('transactionHash', (hash) => {
             console.log(`Transaction hash: ${hash}. user has confirmed`)
-            props.showNotification(
+            props.showNotificationInSwapJs(
               'Transaction Pending',
               getPendingSwapText(),
               <LoadingOutlined />,
             )
+            props.setSwapIsLoading(true)
             setModalContent('swapSubmitted')
           })
         // .on('receipt', (receipt) => {
@@ -151,16 +153,18 @@ const PreviewSwapModal = ({
         //   console.log(receipt)
         // });
 
+        // Promise will resolve once the transaction has been confirmed and mined
         const receipt = await web3.eth.getTransactionReceipt(
           callSwap.transactionHash,
         )
         console.log(receipt)
         console.log(callSwap)
-        props.showNotification(
+        props.showNotificationInSwapJs(
           'Transaction Completed',
           getSuccessfulSwapText(callSwap),
           <CheckCircleOutlined />,
         )
+        props.setSwapIsLoading(false)
         // in the future, show also push to history
         //
       }
@@ -170,7 +174,7 @@ const PreviewSwapModal = ({
     } catch (e) {
       if (e?.code === 4001) {
         setModalContent('previewSwap')
-        openNotification('top')
+        openNotification('You have rejected the transaction', 'top')
       }
     }
   }
@@ -229,7 +233,14 @@ const PreviewSwapModal = ({
 
   return (
     <Modal
-      title={modalContent === 'previewSwap' ? 'Preview Swap' : ''}
+      // title={modalContent === 'previewSwap' ? 'Preview Swap' : ''}
+      title={
+        modalContent === 'previewSwap'
+          ? 'Preview Swap'
+          : modalContent === 'unableToGetSwapDetails'
+          ? 'Unable To Get Swap Details'
+          : ''
+      }
       visible={props.visible}
       onCancel={closeModalHandler}
       // allows us to edit the bottom component (i.e. the OK and Cancel)
@@ -292,6 +303,16 @@ const PreviewSwapModal = ({
           <SendOutlined style={{ fontSize: '128px' }} />
           <div>Your swap has been submitted!</div>
           <div>View on explorer</div>
+          <Button onClick={closeModalHandler}>Close</Button>
+        </div>
+      )}
+      {/* Unable to get swap details */}
+      {modalContent === 'unableToGetSwapDetails' && (
+        <div>
+          <div>
+            There seems to be an error in one of the tokens you are swapping to
+            or from. Please swap to/from a different token
+          </div>
           <Button onClick={closeModalHandler}>Close</Button>
         </div>
       )}

@@ -56,7 +56,6 @@ const attemptToConnectWallet = () => {
       console.log(multiswapData)
       if (multiswapData) {
         console.log(multiswapData.address)
-        // Note, in the future, once deployed to blockchain, need to replace this with the actual address
         const multiswap = new web3.eth.Contract(
           Multiswap.abi,
           multiswapData.address,

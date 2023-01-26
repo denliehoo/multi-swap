@@ -6,6 +6,7 @@ import {
   PlusCircleOutlined,
   DownOutlined,
   InfoCircleOutlined,
+  LoadingOutlined,
 } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import CryptoSwapItem from './CryptoSwapItem'
@@ -44,6 +45,7 @@ const Swap = ({
   ] = useState(false)
   const [toggleAssetSelected, setToggleAssetSelected] = useState(true)
   const [showPreviewSwapModal, setShowPreviewSwapModal] = useState(false)
+  const [swapIsLoading, setSwapIsLoading] = useState(false)
   const [api, contextHolder] = notification.useNotification()
 
   const percentageError = (
@@ -72,7 +74,6 @@ const Swap = ({
   }
 
   // in basis points; i.e. 10,000 = 100% ; 5000 = 50%, etc...
-
   const validatePercentageArray = () => {
     const arrayHasZero = swapToPercentages.includes(0)
     const sumOfArray = swapToPercentages.reduce(
@@ -296,11 +297,20 @@ const Swap = ({
             size="large"
             block
             shape="round"
+            disabled={swapIsLoading ? true : false}
             onClick={() => {
               address ? swapButtonHandler() : attemptToConnectWallet()
             }}
           >
-            {address ? 'Preview Swap' : 'Connect Wallet'}
+            {address ? (
+              swapIsLoading ? (
+                <LoadingOutlined />
+              ) : (
+                'Preview Swap'
+              )
+            ) : (
+              'Connect Wallet'
+            )}
           </Button>
         </Row>
       </div>
@@ -310,7 +320,10 @@ const Swap = ({
             setShowPreviewSwapModal(false)
           }}
           visible={showPreviewSwapModal}
-          showNotification={showNotificationHandler}
+          showNotificationInSwapJs={showNotificationHandler}
+          setSwapIsLoading={(trueOrFalse) => {
+            setSwapIsLoading(trueOrFalse)
+          }}
         />
       }
     </div>

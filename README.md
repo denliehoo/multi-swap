@@ -64,7 +64,6 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 
 # To do list / Progress:
 ## To do
-- error handling for when unable to get amounts out (e.g. USDT for FTM)
 - touch up on front end (css)
 - refactor CSS code properly
 - refactor any other code properly
@@ -116,7 +115,7 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
   - Solution is TBC
 
 ## Note / KIV: 
-- The testing of the swap process was done with block time = 0. Meaning to say that the transactions are completed instantly. Have tried to increase the block time, but keep receiving errors from metamask. Will need to ensure the whole process is smooth even when the transaction doesn't complete instantly. Particularly, need to notice the behaviour for the initiateSwap() function in PreviewModal.js. Not sure whether it will wait for the swap to finish before the await ends. If it doesn't, then might need to the setModalContent('swapSubmitted') portion higher up.
+- NIL
 
 ## Low Priority Features: 
 - add swap history and save it locally (use redux persist); history can access from nav bar
@@ -175,3 +174,4 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - 25/01/23: Show notifications when swap is pending (after use clicked confirm on metamask) and when swap is completed
 - 25/01/23: Refactor connect wallet function from navbar to connectWalletReducer
 - 25/01/23: Change the Preview Swap Button to "Connect To Wallet" if not connected. Upon clicking it, it should connect to wallet. 
+- 26/01/23: error handling for when unable to get amounts out (e.g. USDT for FTM)
