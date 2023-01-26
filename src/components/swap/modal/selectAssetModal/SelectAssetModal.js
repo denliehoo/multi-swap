@@ -8,12 +8,12 @@ import {
 import { Button, Modal, Input } from 'antd'
 import React, { useEffect, useState } from 'react'
 import SelectAssetItem from './SelectAssetItem'
-import IconComponent from '../shared/IconComponent'
-import ManageCustomToken from './ManageCustomToken'
-import { ethDefaultAssetInfo } from '../../../utils/ethDefaultAssetInfo'
-import { ftmDefaultAssetInfo } from '../../../utils/ftmDefaultAssetInfo'
-import { goerliDefaultAssetInfo } from '../../../utils/goerliDefaultAssetInfo'
-import { getTokenBalances } from '../../../api/api'
+import IconComponent from '../../shared/IconComponent'
+import ManageCustomToken from '../manageCustomTokenModal/ManageCustomToken'
+import { ethDefaultAssetInfo } from '../../../../utils/ethDefaultAssetInfo'
+import { ftmDefaultAssetInfo } from '../../../../utils/ftmDefaultAssetInfo'
+import { goerliDefaultAssetInfo } from '../../../../utils/goerliDefaultAssetInfo'
+import { getTokenBalances } from '../../../../api/api'
 import { connect } from 'react-redux'
 
 const SelectAssetModal = ({

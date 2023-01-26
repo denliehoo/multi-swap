@@ -1,10 +1,10 @@
 import classes from './ManageCustomTokenItem.module.css'
 import { Row, Col } from 'antd'
-import IconComponent from '../shared/IconComponent'
+import IconComponent from '../../shared/IconComponent'
 import { DeleteOutlined, ScanOutlined } from '@ant-design/icons'
 
 import { connect } from 'react-redux'
-import { removeCustomToken } from '../../../reducers/customTokenReducer'
+import { removeCustomToken } from '../../../../reducers/customTokenReducer'
 
 const ManageCustomTokenItem = ({
   props,

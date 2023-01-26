@@ -1,7 +1,7 @@
 import classes from './CryptoSwapItem.module.css'
 import { Row, Col } from 'antd/lib/grid'
 import { Button } from 'antd'
-import SelectAssetModal from './modal/SelectAssetModal'
+import SelectAssetModal from './modal/selectAssetModal/SelectAssetModal'
 import React, { useState, useEffect } from 'react'
 import { MinusCircleOutlined, DownOutlined } from '@ant-design/icons'
 import { getAssetPrice } from '../../api/api'

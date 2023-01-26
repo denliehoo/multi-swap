@@ -6,7 +6,7 @@ import {
   removeSwapFrom,
   addSwapTo,
   removeSwapTo,
-} from '../../../reducers/swapReducer'
+} from '../../../../reducers/swapReducer'
 
 const SelectAssetItem = ({
   props,

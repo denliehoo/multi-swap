@@ -64,8 +64,8 @@ https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20
 
 # To do list / Progress:
 ## To do
+- refactor CSS code
 - touch up on front end (css)
-- refactor CSS code properly
 - refactor any other code properly
 - deploy to live environment (both smart contract and frontend).
 - -----End Of Phase 1: Swap ETH to Multiple ERC20 tokens-----

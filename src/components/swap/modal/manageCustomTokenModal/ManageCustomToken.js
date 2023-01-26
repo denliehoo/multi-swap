@@ -3,15 +3,15 @@ import axios from 'axios'
 import { Row, Col } from 'antd/lib/grid'
 import React, { useState, useEffect } from 'react'
 import { Input, Button } from 'antd'
-import IconComponent from '../shared/IconComponent'
+import IconComponent from '../../shared/IconComponent'
 import { SearchOutlined } from '@ant-design/icons'
 import ManageCustomTokenItem from './ManageCustomTokenItem'
-import { getDetailsForCustomToken } from '../../../api/api'
+import { getDetailsForCustomToken } from '../../../../api/api'
 import { connect } from 'react-redux'
 import {
   addCustomToken,
   removeAllCustomToken,
-} from '../../../reducers/customTokenReducer'
+} from '../../../../reducers/customTokenReducer'
 
 const ManageCustomToken = ({
   ethCustomTokens,

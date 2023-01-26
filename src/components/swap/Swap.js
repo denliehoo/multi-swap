@@ -10,7 +10,7 @@ import {
 } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import CryptoSwapItem from './CryptoSwapItem'
-import PreviewSwapModal from './modal/previewSwap/PreviewSwapModal'
+import PreviewSwapModal from './modal/previewSwapModal/PreviewSwapModal'
 
 import { connect } from 'react-redux'
 import {
