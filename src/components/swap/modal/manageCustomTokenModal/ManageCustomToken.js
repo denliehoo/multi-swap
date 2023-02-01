@@ -1,4 +1,4 @@
-// import classes from "./ManageCustomToken.module.css";
+import classes from "./ManageCustomToken.module.css";
 import axios from 'axios'
 import { Row, Col } from 'antd/lib/grid'
 import React, { useState, useEffect } from 'react'
@@ -121,7 +121,7 @@ const ManageCustomToken = ({
         placeholder="Search name or paste address"
         size="large"
         prefix={<SearchOutlined />}
-        style={{ width: '100%', borderRadius: '10px' }}
+        className='class-name-custom-ant-input'
         onChange={(event) => {
           setShowImportToken(false)
           const inputValue = event.target.value
@@ -131,7 +131,7 @@ const ManageCustomToken = ({
         }}
       />
       {customTokenErrorMessage ? (
-        <div style={{ color: 'red' }}>{customTokenErrorMessage}</div>
+        <div style={{color: '#6B6E70'}}>{customTokenErrorMessage}</div>
       ) : (
         <div></div>
       )}
@@ -159,6 +159,7 @@ const ManageCustomToken = ({
               <Row justify="end" align="middle">
                 <Button
                   shape="round"
+                  type="primary"
                   onClick={() => {
                     importTokenHandler(chain)
                   }}
@@ -173,13 +174,14 @@ const ManageCustomToken = ({
         <div></div>
       )}
 
-      <hr />
+      {/* <hr /> */}
       <div style={{ height: '30vh' }}>
         {getCustomTokens(chain).length ? (
           <Row justify="space-between">
             <Col>You have {getCustomTokens(chain).length} custom tokens</Col>
             <Col>
-              <Button onClick={deleteAllHandler}>Clear All</Button>
+              {/* <Button onClick={deleteAllHandler}>Clear All</Button> */}
+              <div className={classes.clearAll} onClick={deleteAllHandler}>Clear All</div>
             </Col>
           </Row>
         ) : (

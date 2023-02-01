@@ -29,6 +29,7 @@ const CryptoSwapItemTest = ({
   const [priceIsLoading, setPriceIsLoading] = useState(true)
   const [percentInput, setPercentInput] = useState(props.percent)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [inputIsFocused, setInputIsFocused] = useState(false)
 
   useEffect(() => {
     props.type === 'from'
@@ -69,7 +70,7 @@ const CryptoSwapItemTest = ({
     for (let i = index; i < newSwap.length; i++) {
       newSwap[i].index -= 1
     }
-    if (props.type === 'form') {
+    if (props.type === 'from') {
       removeSwapFrom(newSwap)
       setAmount(newSwap[index].amount)
     } else if (props.type === 'to') {
@@ -77,11 +78,6 @@ const CryptoSwapItemTest = ({
       setPercentInput(newSwap[index].amount)
       props.changePercentageFromMinus(props.index)
     }
-    // props.type === 'from' ? removeSwapFrom(newSwap) : removeSwapTo(newSwap)
-    // props.type === 'from'
-    //   ? setAmount(newSwap[index].amount)
-    //   : setPercentInput(newSwap[index].amount)
-    // props.type === 'to' && props.changePercentageFromMinus(props.index)
     props.assetHasBeenSelected()
   }
 
@@ -99,8 +95,11 @@ const CryptoSwapItemTest = ({
     }
   }
 
+  const onInputFocus = () => {setInputIsFocused(true)}
+  const onInputBlur = () => {setInputIsFocused(false)}
+
   return (
-    <div className={classes.cryptoSwapItem}>
+    <div className={inputIsFocused ? `${classes.cryptoSwapItem} ${classes.glowingBorder}` : classes.cryptoSwapItem}>
       {props.type === 'from' ? (
         <React.Fragment>
           <Row>Amount To Swap</Row>
@@ -139,6 +138,8 @@ const CryptoSwapItemTest = ({
               value={amount}
               placeholder={'0.0'}
               type={'number'}
+              onFocus={onInputFocus}
+              onBlur={onInputBlur}
             />
           ) : (
             <span>
@@ -150,6 +151,8 @@ const CryptoSwapItemTest = ({
                 type={'number'}
                 min={'0'}
                 max={'100'}
+                onFocus={onInputFocus}
+                onBlur={onInputBlur}
               />
               %
             </span>
@@ -158,6 +161,8 @@ const CryptoSwapItemTest = ({
 
         <Col>
           <Button
+          type='primary'
+          style={{borderRadius: '10px'}}
             onClick={() => {
               setIsModalOpen(true)
             }}
@@ -201,6 +206,9 @@ const CryptoSwapItemTest = ({
             step="5"
             value={percentInput}
             onChange={changeAmountInputHandler}
+            className={classes.inputSlider}
+            onFocus={onInputFocus}
+            onBlur={onInputBlur}
           />
         </Row>
       )}

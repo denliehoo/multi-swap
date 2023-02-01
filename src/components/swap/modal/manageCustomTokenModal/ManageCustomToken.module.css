@@ -1,0 +1,6 @@
+.clearAll{
+    cursor: pointer;
+}
+.clearAll:hover{
+    color: #61892F;
+}

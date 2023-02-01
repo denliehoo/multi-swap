@@ -1,4 +1,4 @@
-// import classes from "./NavBar.module.css";
+import classes from "./NavBar.module.css";
 import { Menu, Row, Col } from 'antd'
 import { connect } from 'react-redux'
 import {
@@ -50,18 +50,18 @@ const NavBar = ({
     }
   }
 
-  const middleItems = [
-    { label: 'Swap', key: 'swap' },
-    {
-      label: 'DAO',
-      key: 'daoMenu',
+  // const middleItems = [
+  //   { label: 'Swap', key: 'swap' },
+  //   {
+  //     label: 'DAO',
+  //     key: 'daoMenu',
 
-      children: [
-        { label: 'Vote', key: 'daoVote' },
-        { label: 'Forum', key: 'daoForum' },
-      ],
-    },
-  ]
+  //     children: [
+  //       { label: 'Vote', key: 'daoVote' },
+  //       { label: 'Forum', key: 'daoForum' },
+  //     ],
+  //   },
+  // ]
 
   const addressOrConnectButton = (
     <div>
@@ -97,26 +97,23 @@ const NavBar = ({
       ],
     },
     walletConnectPortion,
-    {
-      label: 'Settings',
-      key: 'settingMenu',
-      children: [
-        { label: '[Icon] Dark mode', key: 'settingsDark' },
-        { label: '[Icon] Light mode', key: 'settingsLight' },
-      ],
-    },
+    // {
+    //   label: 'Settings',
+    //   key: 'settingMenu',
+    //   children: [
+    //     { label: '[Icon] Dark mode', key: 'settingsDark' },
+    //     { label: '[Icon] Light mode', key: 'settingsLight' },
+    //   ],
+    // },
   ]
 
   return (
     <Row justify="space-between">
-      <Col span={10}>
-        <Menu items={middleItems} mode={'horizontal'} />
-      </Col>
-
-      <Col span={12}>
-        <Menu items={rightItems} mode={'horizontal'} />
-      </Col>
-    </Row>
+      <Col style={{fontSize: 'large', paddingTop: '10px', paddingLeft: '30px'}}>Multiswap</Col>
+      <Col>
+        <Menu items={rightItems} mode={'horizontal'} className={classes.navbar}/>
+        </Col>
+        </Row>
   )
 }
 
@@ -137,3 +134,34 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavBar)
+
+// import React from 'react';
+// import classes from './NavBar.module.css';
+
+// const Navbar = () => {
+//   return (
+//     <nav>
+//       <ul className={classes.navbar}>
+//         <li className={classes.navbar__item}>
+//           <a href="#">Item 1</a>
+//           <ul className={classes.navbar__sub_menu}>
+//             <li className={classes.navbar__sub_menu_item}>
+//               <a href="#" onClick={() => alert('Sub-menu item 1 clicked')}>Sub-menu Item 1</a>
+//             </li>
+//             <li className={classes.navbar__sub_menu_item}>
+//               <a href="#" onClick={() => alert('Sub-menu item 2 clicked')}>Sub-menu Item 2</a>
+//             </li>
+//           </ul>
+//         </li>
+//         <li className={classes.navbar__item}>
+//           <a href="#">Item 2</a>
+//         </li>
+//         <li className={classes.navbar__item}>
+//           <a href="#">Item 3</a>
+//         </li>
+//       </ul>
+//     </nav>
+//   );
+// };
+
+// export default Navbar;

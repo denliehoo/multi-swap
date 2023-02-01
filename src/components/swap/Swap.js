@@ -220,6 +220,7 @@ const Swap = ({
             <Button
               block
               shape="round"
+              type='primary'
               icon={<PlusCircleOutlined />}
               onClick={() => {
                 // setFromAssets([...fromAssets, { amount: 0 }])
@@ -264,6 +265,7 @@ const Swap = ({
             <Button
               block
               shape="round"
+              type='primary'
               icon={<PlusCircleOutlined />}
               onClick={() => {
                 addSwapState('to', swapTo.length, {
@@ -296,6 +298,7 @@ const Swap = ({
           <Button
             size="large"
             block
+            type='primary'
             shape="round"
             disabled={swapIsLoading ? true : false}
             onClick={() => {

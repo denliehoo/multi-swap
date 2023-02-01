@@ -2,3 +2,16 @@
     color: red;
     border: 1px solid red;
 }
+
+hr{
+    border-color: #86C232;
+}
+
+a {
+    color: #86C232 !important;
+  }
+  
+  
+a:hover {
+    color: #61892F !important;
+  }

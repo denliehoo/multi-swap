@@ -3,10 +3,11 @@
 }
 
 .manageCustomTokenItemContainer:hover {
-    background-color: lightgrey;
+    background-color: #6B6E70;
 }
 
 .icon:hover {
     cursor: pointer;
+    color: #61892F;
 
 }

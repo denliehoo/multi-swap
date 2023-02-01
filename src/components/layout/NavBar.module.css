@@ -1,0 +1,44 @@
+
+.navbar{
+    justify-content: flex-end;
+    padding-right: 30px !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    font-size: large !important;
+} 
+
+
+
+
+/* 
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar__item {
+    position: relative;
+  }
+  
+  .navbar__item:hover .navbar__sub_menu {
+    display: block;
+  }
+  
+  .navbar__sub_menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+  }
+  
+  .navbar__sub-menu_item {
+    display: block;
+  } */

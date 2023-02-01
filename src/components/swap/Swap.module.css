@@ -1,33 +1,27 @@
 .container {
     display: flex;
     justify-content: center;
+    margin-top: 20px;
 }
 
 .card {
-    background-color: lightgray;
+    background-color: transparent;
+    border: 2px solid #222629;
+    box-shadow: 0 0 10px #86C232;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 40%;
-    border-radius: 20px;
+    width: 50%;
+    border-radius: 10px;
     padding: 20px
 }
 
 .buySellContainer {
-    background-color: red;
+    background-color: transparent;
+    border: 2px solid #61892F;
     padding: 20px;
     /* padding-bottom: 0px; */
     border-radius: 20px;
     width: 100%;
-}
-
-.buyContainer {
-    background-color: green;
-}
-
-.cryptoSwapItem {
-    background-color: lightblue;
-    padding: 10px;
-    margin: 10px;
 }

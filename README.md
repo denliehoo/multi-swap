@@ -62,10 +62,31 @@ Eventually:
 
 https://medium.com/@saumya.ranjan/how-to-write-a-readme-md-file-markdown-file-20cb7cbcd6f
 
+# Framework Explaination
+- Antd is used to create multiple components
+## Styling / CSS
+- css modules are used
+```Javascript
+// multiple classes
+className={`${classes.firstClass} ${classes.secondClass}`}
+
+// classes with a "-" in the name
+className={classes["form-control"]}
+```
+- colors used:
+  - #86C232 lightGreen : text and borders
+  - #61892F darkGreen : emphasis for text and borders e.g. on hover
+  - #222629 blackish : background
+  - #6B6E70 light grey :  misc
+  - #474B4F dark grey : emphasis for misc e.g. on hover
+  - transparent: background color for most components
+
 # To do list / Progress:
 ## To do
-- refactor CSS code
+- 
 - touch up on front end (css)
+- format numbers. (TBC: crypto=8dp , FIAT=2dp)
+- Work on the search function in select asset and manage token modal
 - refactor any other code properly
 - deploy to live environment (both smart contract and frontend).
 - -----End Of Phase 1: Swap ETH to Multiple ERC20 tokens-----
@@ -175,3 +196,6 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - 25/01/23: Refactor connect wallet function from navbar to connectWalletReducer
 - 25/01/23: Change the Preview Swap Button to "Connect To Wallet" if not connected. Upon clicking it, it should connect to wallet. 
 - 26/01/23: error handling for when unable to get amounts out (e.g. USDT for FTM)
+- 01/02/23: Basic CSS styling for antd components done in framework.css
+- 01/02/23: Basic styling for some global components in styles.css
+- 01/02/23: Basic CSS for Swap component, Select Asset Modal, Manage Custom Token Modal

@@ -118,6 +118,31 @@ const SelectAssetModal = ({
     </Row>
   )
 
+  const commonTokens = <div>
+  <Row justify="space-evenly">
+    <Button
+      style={{ padding: '0', width: '70px' }}
+      onClick={() => {
+        chooseAssetHandler()
+      }}
+    >
+      <IconComponent
+        imgUrl={
+          'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880'
+        }
+      />
+      ETH
+    </Button>
+    <Button>DAI</Button>
+    <Button>USDC</Button>
+  </Row>
+  <Row justify="space-evenly">
+    <Button>USDT</Button>
+    <Button>WBTC</Button>
+    <Button>WETH</Button>
+  </Row>
+</div>
+
   return (
     <>
       <Modal
@@ -133,7 +158,8 @@ const SelectAssetModal = ({
         onCancel={closeModalHandler}
         // allows us to edit the bottom component (i.e. the OK and Cancel)
         footer={null}
-        bodyStyle={{ height: '60vh' }}
+        // bodyStyle={{ height: '60vh', backgroundColor: '#222629', color: '#86C232', border: '1px solid #86C232', borderRadius: '10px' }}
+        // className={classes.customAntdModal}
       >
         {!address ? (
           <div>Please connect your wallet to continue</div>
@@ -152,35 +178,12 @@ const SelectAssetModal = ({
               placeholder="Search name or paste address"
               size="large"
               prefix={<SearchOutlined />}
-              style={{ width: '100%', borderRadius: '10px' }}
+              className='class-name-custom-ant-input'
             />
+            {/* {commonTokens} */}
+            {/* <hr /> */}
             <div>
-              <Row justify="space-evenly">
-                <Button
-                  style={{ padding: '0', width: '70px' }}
-                  onClick={() => {
-                    chooseAssetHandler()
-                  }}
-                >
-                  <IconComponent
-                    imgUrl={
-                      'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880'
-                    }
-                  />
-                  ETH
-                </Button>
-                <Button>DAI</Button>
-                <Button>USDC</Button>
-              </Row>
-              <Row justify="space-evenly">
-                <Button>USDT</Button>
-                <Button>WBTC</Button>
-                <Button>WETH</Button>
-              </Row>
-            </div>
-            <hr />
-            <div>
-              <div style={{ overflow: 'auto', height: '30vh' }}>
+              <div style={{ overflow: 'auto', height: '30vh', marginTop: '10px' }}>
                 {combinedAssetList.map((i) => (
                   <SelectAssetItem
                     icon={<IconComponent imgUrl={i.imgUrl} />}
@@ -200,11 +203,12 @@ const SelectAssetModal = ({
                 ))}
               </div>
             </div>
-            <hr />
+            {/* <hr /> */}
             <div>
               <Button
                 block
                 shape="round"
+                type='primary'
                 onClick={() => {
                   setIsManageCustomToken(true)
                 }}
