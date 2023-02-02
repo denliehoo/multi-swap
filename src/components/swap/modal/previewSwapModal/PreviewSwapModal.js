@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import {
   ExclamationCircleOutlined,
   LoadingOutlined,
-  SendOutlined,
+  RightCircleOutlined,
   CheckCircleOutlined,
   ScanOutlined,
 } from '@ant-design/icons'
@@ -33,7 +33,8 @@ const PreviewSwapModal = ({
     api.info({
       message: message,
       placement,
-      icon: <ExclamationCircleOutlined style={{ color: 'red' }} />,
+      icon: <ExclamationCircleOutlined />,
+      // duration: 0
     })
   }
 
@@ -95,7 +96,13 @@ const PreviewSwapModal = ({
         console.log(
           'An error occured in one of the tokens you are trying to swap to/from',
         )
-        setModalContent('unableToGetSwapDetails')
+        props.showNotificationInSwapJs(
+          'Unable To Get Swap Details',
+          'There seems to be an error in one of the tokens you are swapping to or from. Please swap to/from a different token',
+          <ExclamationCircleOutlined />,
+          'top',
+        )
+        closeModalHandler()
       }
     }
   }
@@ -144,6 +151,8 @@ const PreviewSwapModal = ({
               'Transaction Pending',
               getPendingSwapText(),
               <LoadingOutlined />,
+              'topRight',
+              15,
             )
             props.setSwapIsLoading(true)
             setModalContent('swapSubmitted')
@@ -163,6 +172,8 @@ const PreviewSwapModal = ({
           'Transaction Completed',
           getSuccessfulSwapText(callSwap),
           <CheckCircleOutlined />,
+          'topRight',
+          15,
         )
         props.setSwapIsLoading(false)
         // in the future, show also push to history
@@ -227,6 +238,31 @@ const PreviewSwapModal = ({
     props.closePreviewAssetModal()
   }
 
+  const getModalFooter = () => {
+    if (modalContent === 'previewSwap') {
+      return (
+        <Button
+          onClick={() => {
+            initiateSwap()
+          }}
+          type="primary"
+          shape="round"
+          block
+        >
+          Confirm
+        </Button>
+      )
+    } else if (modalContent === 'swapSubmitted') {
+      return (
+        <Button onClick={closeModalHandler} type="primary" shape="round" block>
+          Close
+        </Button>
+      )
+    } else {
+      return <div>hi</div>
+    }
+  }
+
   useEffect(() => {
     props.visible && getAmountsOutDetails()
   }, [props.visible])
@@ -234,13 +270,7 @@ const PreviewSwapModal = ({
   return (
     <Modal
       // title={modalContent === 'previewSwap' ? 'Preview Swap' : ''}
-      title={
-        modalContent === 'previewSwap'
-          ? 'Preview Swap'
-          : modalContent === 'unableToGetSwapDetails'
-          ? 'Unable To Get Swap Details'
-          : ''
-      }
+      title={modalContent === 'previewSwap' ? 'Preview Swap' : ''}
       visible={props.visible}
       onCancel={closeModalHandler}
       // allows us to edit the bottom component (i.e. the OK and Cancel)
@@ -250,13 +280,26 @@ const PreviewSwapModal = ({
       {contextHolder}
       {/* loading > preview swap > pending confirmation > swap submitted */}
       {/* Loading Spinner */}
-      {modalContent === 'loading' && loadingSpinner}
+      {modalContent === 'loading' && (
+        <div style={{ width: '100%', height: '100%' }}>
+          <Row
+            align="middle"
+            justify="center"
+            style={{ width: '100%', height: '100%' }}
+          >
+            <Col>{loadingSpinner}</Col>
+          </Row>
+        </div>
+      )}
 
       {/* Preview Swap */}
       {modalContent === 'previewSwap' && (
-        <div>
+       <div style={{ width: '100%', height: '100%' }}>
           <div style={{ overflow: 'auto', height: '50vh' }}>
-            <Row>You Give</Row>
+            <span style={{ fontWeight: '700', color: '#6B6E70' }}>
+              Note: This is only an estimation of what you'll receive
+            </span>
+            <Row style={{ fontWeight: '700', marginTop: '10px' }}>You Give</Row>
             {swapFromDetails.map((i, index) => (
               <PreviewSwapItem
                 amount={i.amount}
@@ -266,7 +309,7 @@ const PreviewSwapModal = ({
                 key={`${index}previewSwapFrom`}
               />
             ))}
-            <Row>You Get</Row>
+            <Row style={{ fontWeight: '700', marginTop: '10px' }}>You Get</Row>
             {swapToDetails.map((i, index) => (
               <PreviewSwapItem
                 amount={i.amount}
@@ -281,6 +324,9 @@ const PreviewSwapModal = ({
             onClick={() => {
               initiateSwap()
             }}
+            type="primary"
+            shape="round"
+            block
           >
             Confirm
           </Button>
@@ -289,31 +335,64 @@ const PreviewSwapModal = ({
 
       {/* Peding Confirmation */}
       {modalContent === 'pendingConfirmation' && (
-        <div>
-          {loadingSpinner}
-          <div>Waiting For Confirmation</div>
-          <div>{getPendingSwapText()}</div>
-          <div>Confirm this transaction in your wallet</div>
+        <div style={{ width: '100%', height: '100%' }}>
+          <Row
+            align="middle"
+            justify="center"
+            style={{ width: '100%', height: '100%', textAlign: 'center' }}
+          >
+            <Col>
+              <Row align="middle" justify="center">
+                {loadingSpinner}
+              </Row>
+              <Row align="middle" justify="center">
+                <div style={{ fontWeight: '700', marginBottom: '15px' }}>
+                  Waiting For Confirmation
+                </div>
+                <div style={{ marginBottom: '15px' }}>
+                  {getPendingSwapText()}
+                </div>
+                <div>Confirm this transaction in your wallet</div>
+              </Row>
+            </Col>
+          </Row>
         </div>
       )}
 
       {/* Swap Submitted */}
       {modalContent === 'swapSubmitted' && (
-        <div>
-          <SendOutlined style={{ fontSize: '128px' }} />
-          <div>Your swap has been submitted!</div>
-          <div>View on explorer</div>
-          <Button onClick={closeModalHandler}>Close</Button>
-        </div>
-      )}
-      {/* Unable to get swap details */}
-      {modalContent === 'unableToGetSwapDetails' && (
-        <div>
-          <div>
-            There seems to be an error in one of the tokens you are swapping to
-            or from. Please swap to/from a different token
-          </div>
-          <Button onClick={closeModalHandler}>Close</Button>
+
+        <div style={{ width: '100%', height: '100%' }}>
+          <Row
+            align="middle"
+            justify="center"
+            style={{ width: '100%', height: '100%', textAlign: 'center' }}
+          >
+            <Col>
+              <Row align="middle" justify="center">
+                <RightCircleOutlined
+                  style={{
+                    fontSize: '128px',
+                    fontWeight: 'normal',
+                    padding: '10px',
+                  }}
+                />
+              </Row>
+              <Row align="middle" justify="center">
+                <div style={{ fontWeight: '700', marginBottom: '15px' }}>
+                  Your swap has been submitted!
+                </div>
+                <Button
+                  onClick={closeModalHandler}
+                  type="primary"
+                  shape="round"
+                  block
+                >
+                  Close
+                </Button>
+              </Row>
+            </Col>
+          </Row>
         </div>
       )}
     </Modal>

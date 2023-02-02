@@ -31,6 +31,8 @@ const SelectAssetModal = ({
   const [toggleChangesInCustomToken, setToggleChangesInCustomToken] = useState(
     false,
   )
+  const [searchInput, setSearchInput] = useState('')
+  const [searchInputResults, setSearchInputResults] = useState([])
 
   useEffect(() => {
     props.isModalOpen && address && getCombinedListOfAssets(chain, address)
@@ -97,6 +99,18 @@ const SelectAssetModal = ({
     closeModalHandler()
   }
 
+  const changeSearchInputHandler = (e) =>{
+    setSearchInput(e.target.value)
+    const userInput = e.target.value.toLowerCase()
+    console.log(userInput)
+    console.log(combinedAssetList)
+    let tempSearchInputResults = [];
+    for(let asset of combinedAssetList){
+      // if
+      console.log(asset)
+    }
+  }
+
   const closeModalHandler = () => {
     setIsManageCustomToken(false)
     props.closeModal()
@@ -158,8 +172,6 @@ const SelectAssetModal = ({
         onCancel={closeModalHandler}
         // allows us to edit the bottom component (i.e. the OK and Cancel)
         footer={null}
-        // bodyStyle={{ height: '60vh', backgroundColor: '#222629', color: '#86C232', border: '1px solid #86C232', borderRadius: '10px' }}
-        // className={classes.customAntdModal}
       >
         {!address ? (
           <div>Please connect your wallet to continue</div>
@@ -179,9 +191,10 @@ const SelectAssetModal = ({
               size="large"
               prefix={<SearchOutlined />}
               className='class-name-custom-ant-input'
+              value={searchInput}
+              onChange={changeSearchInputHandler}
             />
             {/* {commonTokens} */}
-            {/* <hr /> */}
             <div>
               <div style={{ overflow: 'auto', height: '30vh', marginTop: '10px' }}>
                 {combinedAssetList.map((i) => (

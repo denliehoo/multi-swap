@@ -4,3 +4,12 @@
 .clearAll:hover{
     color: #61892F;
 }
+.importTokenContainer{
+    border: 1px solid #6B6E70;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+}
+.customTokenContainer{
+    height: 30vh;
+}

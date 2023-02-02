@@ -95,7 +95,10 @@ const CryptoSwapItemTest = ({
     }
   }
 
-  const onInputFocus = () => {setInputIsFocused(true)}
+  const onInputFocus = (e) => {
+    e.target.addEventListener("wheel", function (e) { e.preventDefault() }, { passive: false }) // prevent input from changing on scroll
+    setInputIsFocused(true)
+  }
   const onInputBlur = () => {setInputIsFocused(false)}
 
   return (

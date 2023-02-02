@@ -4,7 +4,7 @@ import { Button, notification } from 'antd'
 import {
   DownCircleOutlined,
   PlusCircleOutlined,
-  DownOutlined,
+  SettingOutlined,
   InfoCircleOutlined,
   LoadingOutlined,
 } from '@ant-design/icons'
@@ -172,12 +172,13 @@ const Swap = ({
     }
   }
 
-  const showNotificationHandler = (message, description, icon) => {
+  const showNotificationHandler = (message, description, icon, placement, duration) => {
     api.open({
       message: message,
       description: description,
       icon: icon,
-      duration: 0,
+      placement: placement,
+      duration: duration,
     })
   }
   //
@@ -193,12 +194,12 @@ const Swap = ({
     <div className={classes.container}>
       {contextHolder}
       <div className={classes.card}>
-        <Row justify="space-between" style={{ width: '100%' }}>
-          <Col>Swap</Col>
-          <Col>Settings</Col>
+        <Row justify="space-between" style={{ width: '100%', marginBottom: '15px' }}>
+          <Col style={{fontWeight: '700', fontSize: 'large'}}>Swap</Col>
+          {/* <Col><SettingOutlined /></Col> */}
         </Row>
 
-        <Row>You Give</Row>
+        {/* Swap From */}
         <div className={classes.buySellContainer}>
           {swapFrom.map((i, index) => (
             <CryptoSwapItem
@@ -215,7 +216,7 @@ const Swap = ({
           <Row
             justify="center"
             align="middle"
-            style={{ position: 'relative', top: '5px' }}
+            className={classes.plusButonContainer}
           >
             <Button
               block
@@ -241,7 +242,7 @@ const Swap = ({
           <DownCircleOutlined style={{ fontSize: '200%' }} />
         </div>
         {/* Swap to portion */}
-        <Row>You Get</Row>
+        {/* <Row>You Get</Row> */}
         <div className={classes.buySellContainer}>
           {swapTo.map((i, index) => (
             <CryptoSwapItem
@@ -260,7 +261,7 @@ const Swap = ({
           <Row
             justify="center"
             align="middle"
-            style={{ position: 'relative', top: '5px' }}
+            className={classes.plusButonContainer}
           >
             <Button
               block
@@ -294,7 +295,7 @@ const Swap = ({
             : ''}
         </div>
 
-        <Row style={{ width: '100%' }}>
+        <Row style={{ width: '100%', marginTop: '15px' }}>
           <Button
             size="large"
             block

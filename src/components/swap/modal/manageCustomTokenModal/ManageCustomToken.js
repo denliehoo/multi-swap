@@ -131,29 +131,24 @@ const ManageCustomToken = ({
         }}
       />
       {customTokenErrorMessage ? (
-        <div style={{color: '#6B6E70'}}>{customTokenErrorMessage}</div>
+        <div className="color-light-grey">{customTokenErrorMessage}</div>
       ) : (
         <div></div>
       )}
       {showImportToken ? (
         <div
-          style={{
-            border: '1px solid black',
-            borderRadius: '10px',
-            padding: '10px',
-            margin: '10px',
-          }}
+        className={classes.importTokenContainer}
         >
           <Row align="middle">
             <Col span={2}>
               <IconComponent imgUrl={customTokenData.logo} />
             </Col>
             <Col span={10}>
-              <span style={{ fontWeight: '700' }}>
+              <span className="fw-700">
                 {customTokenData.symbol}
               </span>
               <span> </span>
-              <span style={{}}>{customTokenData.name}</span>
+              <span>{customTokenData.name}</span>
             </Col>
             <Col span={12}>
               <Row justify="end" align="middle">
@@ -175,7 +170,7 @@ const ManageCustomToken = ({
       )}
 
       {/* <hr /> */}
-      <div style={{ height: '30vh' }}>
+      <div className={classes.customTokenContainer}>
         {getCustomTokens(chain).length ? (
           <Row justify="space-between">
             <Col>You have {getCustomTokens(chain).length} custom tokens</Col>

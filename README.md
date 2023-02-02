@@ -83,10 +83,10 @@ className={classes["form-control"]}
 
 # To do list / Progress:
 ## To do
-- 
+- Work on the search function in select asset and manage token modal
+- ensure inline css is refactored to module (except for antd specific ones)
 - touch up on front end (css)
 - format numbers. (TBC: crypto=8dp , FIAT=2dp)
-- Work on the search function in select asset and manage token modal
 - refactor any other code properly
 - deploy to live environment (both smart contract and frontend).
 - -----End Of Phase 1: Swap ETH to Multiple ERC20 tokens-----
@@ -199,3 +199,5 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - 01/02/23: Basic CSS styling for antd components done in framework.css
 - 01/02/23: Basic styling for some global components in styles.css
 - 01/02/23: Basic CSS for Swap component, Select Asset Modal, Manage Custom Token Modal
+- 02/02/23: Basic CSS for preview swap modal
+

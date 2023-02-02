@@ -25,3 +25,8 @@
     border-radius: 20px;
     width: 100%;
 }
+
+.plusButtonContainer{
+    position: relative;
+    top: 5px;
+}
