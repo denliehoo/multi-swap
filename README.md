@@ -83,7 +83,7 @@ className={classes["form-control"]}
 
 # To do list / Progress:
 ## To do
-- Work on the search function in select asset and manage token modal
+- Refactor search function into a component to be used in Select asset and Managet Custom token
 - ensure inline css is refactored to module (except for antd specific ones)
 - touch up on front end (css)
 - format numbers. (TBC: crypto=8dp , FIAT=2dp)
@@ -200,4 +200,4 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - 01/02/23: Basic styling for some global components in styles.css
 - 01/02/23: Basic CSS for Swap component, Select Asset Modal, Manage Custom Token Modal
 - 02/02/23: Basic CSS for preview swap modal
-
+- 03/02/23: Search function for select asset modal

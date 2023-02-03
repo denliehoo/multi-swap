@@ -15,6 +15,7 @@ import { ftmDefaultAssetInfo } from '../../../../utils/ftmDefaultAssetInfo'
 import { goerliDefaultAssetInfo } from '../../../../utils/goerliDefaultAssetInfo'
 import { getTokenBalances } from '../../../../api/api'
 import { connect } from 'react-redux'
+// import SearchInputComponent from '../../shared/SearchInputComponent'
 
 const SelectAssetModal = ({
   props,
@@ -99,16 +100,19 @@ const SelectAssetModal = ({
     closeModalHandler()
   }
 
-  const changeSearchInputHandler = (e) =>{
+  const changeSearchInputHandler = (e) => {
     setSearchInput(e.target.value)
     const userInput = e.target.value.toLowerCase()
-    console.log(userInput)
-    console.log(combinedAssetList)
-    let tempSearchInputResults = [];
-    for(let asset of combinedAssetList){
-      // if
-      console.log(asset)
-    }
+
+    const filteredResults = combinedAssetList.filter(
+      (asset) =>
+        asset.symbol.toLowerCase().includes(userInput) ||
+        asset.name.toLowerCase().includes(userInput) ||
+        (userInput.length > 20 &&
+          asset.address.toLowerCase().includes(userInput)),
+    )
+    console.log(filteredResults)
+    setSearchInputResults(filteredResults)
   }
 
   const closeModalHandler = () => {
@@ -132,30 +136,32 @@ const SelectAssetModal = ({
     </Row>
   )
 
-  const commonTokens = <div>
-  <Row justify="space-evenly">
-    <Button
-      style={{ padding: '0', width: '70px' }}
-      onClick={() => {
-        chooseAssetHandler()
-      }}
-    >
-      <IconComponent
-        imgUrl={
-          'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880'
-        }
-      />
-      ETH
-    </Button>
-    <Button>DAI</Button>
-    <Button>USDC</Button>
-  </Row>
-  <Row justify="space-evenly">
-    <Button>USDT</Button>
-    <Button>WBTC</Button>
-    <Button>WETH</Button>
-  </Row>
-</div>
+  const commonTokens = (
+    <div>
+      <Row justify="space-evenly">
+        <Button
+          style={{ padding: '0', width: '70px' }}
+          onClick={() => {
+            chooseAssetHandler()
+          }}
+        >
+          <IconComponent
+            imgUrl={
+              'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880'
+            }
+          />
+          ETH
+        </Button>
+        <Button>DAI</Button>
+        <Button>USDC</Button>
+      </Row>
+      <Row justify="space-evenly">
+        <Button>USDT</Button>
+        <Button>WBTC</Button>
+        <Button>WETH</Button>
+      </Row>
+    </div>
+  )
 
   return (
     <>
@@ -186,18 +192,21 @@ const SelectAssetModal = ({
         ) : (
           // Select a token component
           <div>
+            {/* <SearchInputComponent /> */}
             <Input
               placeholder="Search name or paste address"
               size="large"
               prefix={<SearchOutlined />}
-              className='class-name-custom-ant-input'
+              className="class-name-custom-ant-input"
               value={searchInput}
               onChange={changeSearchInputHandler}
             />
             {/* {commonTokens} */}
             <div>
-              <div style={{ overflow: 'auto', height: '30vh', marginTop: '10px' }}>
-                {combinedAssetList.map((i) => (
+              <div
+                style={{ overflow: 'auto', height: '30vh', marginTop: '10px' }}
+              >
+                {(searchInput ? searchInputResults : combinedAssetList).map((i) => (
                   <SelectAssetItem
                     icon={<IconComponent imgUrl={i.imgUrl} />}
                     symbol={i.symbol}
@@ -214,6 +223,7 @@ const SelectAssetModal = ({
                     imgUrl={i.imgUrl}
                   />
                 ))}
+                {(searchInput && searchInputResults.length === 0) && (<div>Search result in no tokens found</div>)}
               </div>
             </div>
             {/* <hr /> */}
@@ -221,7 +231,7 @@ const SelectAssetModal = ({
               <Button
                 block
                 shape="round"
-                type='primary'
+                type="primary"
                 onClick={() => {
                   setIsManageCustomToken(true)
                 }}
