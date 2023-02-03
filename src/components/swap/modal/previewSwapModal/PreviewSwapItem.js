@@ -1,6 +1,9 @@
 import IconComponent from '../../shared/IconComponent'
 import { Row, Col } from 'antd'
+import { formatNumber } from '../../../../utils/format/formatNumber'
 const PreviewSwapItem = (props) => {
+  console.log(props.amount*props.price)
+  console.log(typeof props.amount*props.price)
   return (
     <div style={{marginTop: '10px' , paddingRight: '15px', paddingTop: '5px'}}>
       <Row justify="space-between">
@@ -10,8 +13,8 @@ const PreviewSwapItem = (props) => {
         </Row>
         <Row align="middle" >
           <Col>
-            <Row justify="end" className='fs-xs'>${props.amount * props.price}</Row>
-            <Row justify="end">{props.amount}</Row>
+            <Row justify="end" className='fs-xs'>{formatNumber(props.amount * props.price, 'fiat')}</Row>
+            <Row justify="end">{formatNumber(props.amount, 'crypto')}</Row>
           </Col>
         </Row>
       </Row>

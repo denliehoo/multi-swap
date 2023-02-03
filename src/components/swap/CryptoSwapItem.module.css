@@ -6,23 +6,6 @@
     border-radius: 10px;
 }
 
-.glowingBorder {
-    box-shadow: 0 0 10px #86C232;
-    animation: glowingBorder 2s linear infinite alternate;
-  }
-  
-  @keyframes glowingBorder {
-    0% {
-      box-shadow: 0 0 10px #86C232;
-    }
-    50% {
-      box-shadow: 0 0 10px #6B6E70;
-    }
-    100% {
-      box-shadow: 0 0 10px #86C232;
-    }
-  }
-
 .inputBox,
 .inputBox:focus {
     background: transparent;

@@ -9,6 +9,7 @@ import {
   CheckCircleOutlined,
   ScanOutlined,
 } from '@ant-design/icons'
+import { formatNumber } from '../../../../utils/format/formatNumber'
 
 const PreviewSwapModal = ({
   props,
@@ -91,11 +92,6 @@ const PreviewSwapModal = ({
         })
         setModalContent('previewSwap')
       } catch (e) {
-        //....
-        console.log(e)
-        console.log(
-          'An error occured in one of the tokens you are trying to swap to/from',
-        )
         props.showNotificationInSwapJs(
           'Unable To Get Swap Details',
           'There seems to be an error in one of the tokens you are swapping to or from. Please swap to/from a different token',
@@ -180,8 +176,6 @@ const PreviewSwapModal = ({
         //
       }
       // else if(swapType === ...)...
-
-      // setModalContent('swapSubmitted')
     } catch (e) {
       if (e?.code === 4001) {
         setModalContent('previewSwap')
@@ -207,9 +201,12 @@ const PreviewSwapModal = ({
       }
       return (
         <span>
-          {`You have successfully swapped ${swapFrom[0].amount} ${
-            swapFrom[0].symbol
-          } for ${getIndividualSwapText(swapToDetailsTemp)}`}{' '}
+          {`You have successfully swapped ${formatNumber(
+            swapFrom[0].amount,
+            'crypto',
+          )} ${swapFrom[0].symbol} for ${getIndividualSwapText(
+            swapToDetailsTemp,
+          )}`}{' '}
           {getLinkToBlockExplorer(receipt.transactionHash)}
         </span>
       )
@@ -222,13 +219,19 @@ const PreviewSwapModal = ({
       for (let i in arr) {
         if (arr.length - 1 === parseFloat(i)) {
           returnString = returnString.substring(0, returnString.length - 2)
-          returnString += ` and ${arr[i].amount} ${arr[i].symbol}`
+          returnString += ` and ${formatNumber(arr[i].amount, 'crypto')} ${
+            arr[i].symbol
+          }`
         } else {
-          returnString += `${arr[i].amount} ${arr[i].symbol}, `
+          returnString += `${formatNumber(arr[i].amount, 'crypto')} ${
+            arr[i].symbol
+          }, `
         }
       }
     } else {
-      returnString += `${arr[0].amount} ${arr[0].symbol}`
+      returnString += `${formatNumber(arr[0].amount, 'crypto')} ${
+        arr[0].symbol
+      }`
     }
     return returnString
   }
@@ -236,31 +239,6 @@ const PreviewSwapModal = ({
   const closeModalHandler = () => {
     setModalContent('loading')
     props.closePreviewAssetModal()
-  }
-
-  const getModalFooter = () => {
-    if (modalContent === 'previewSwap') {
-      return (
-        <Button
-          onClick={() => {
-            initiateSwap()
-          }}
-          type="primary"
-          shape="round"
-          block
-        >
-          Confirm
-        </Button>
-      )
-    } else if (modalContent === 'swapSubmitted') {
-      return (
-        <Button onClick={closeModalHandler} type="primary" shape="round" block>
-          Close
-        </Button>
-      )
-    } else {
-      return <div>hi</div>
-    }
   }
 
   useEffect(() => {
@@ -294,7 +272,7 @@ const PreviewSwapModal = ({
 
       {/* Preview Swap */}
       {modalContent === 'previewSwap' && (
-       <div style={{ width: '100%', height: '100%' }}>
+        <div style={{ width: '100%', height: '100%' }}>
           <div style={{ overflow: 'auto', height: '50vh' }}>
             <span style={{ fontWeight: '700', color: '#6B6E70' }}>
               Note: This is only an estimation of what you'll receive
@@ -361,7 +339,6 @@ const PreviewSwapModal = ({
 
       {/* Swap Submitted */}
       {modalContent === 'swapSubmitted' && (
-
         <div style={{ width: '100%', height: '100%' }}>
           <Row
             align="middle"

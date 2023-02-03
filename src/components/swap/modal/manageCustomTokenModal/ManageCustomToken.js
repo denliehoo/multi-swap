@@ -26,6 +26,8 @@ const ManageCustomToken = ({
   const [showImportToken, setShowImportToken] = useState(false)
   const [customTokenData, setCustomTokenData] = useState({})
   const [renderComponent, setRenderComponent] = useState(false)
+  const [inputIsFocused, setInputIsFocused] = useState(false)
+
 
   /* 
     Problem: Parent component (this comp) isn't aware of the global state changes
@@ -118,10 +120,12 @@ const ManageCustomToken = ({
   return (
     <div>
       <Input
-        placeholder="Search name or paste address"
+        placeholder="Paste Token Address"
         size="large"
         prefix={<SearchOutlined />}
-        className='class-name-custom-ant-input'
+        className={`class-name-custom-ant-input ${
+          inputIsFocused && 'glowing-border'
+        }`}
         onChange={(event) => {
           setShowImportToken(false)
           const inputValue = event.target.value
@@ -129,6 +133,8 @@ const ManageCustomToken = ({
             ? checkIfValidAddress(inputValue, chain) // eventually do a get chain from global state and replace here
             : setCustomTokenErrorMessage('Enter valid token address')
         }}
+        onFocus={() =>setInputIsFocused(true)}
+        onBlur={() =>setInputIsFocused(false)}
       />
       {customTokenErrorMessage ? (
         <div className="color-light-grey">{customTokenErrorMessage}</div>

@@ -15,7 +15,7 @@ import { ftmDefaultAssetInfo } from '../../../../utils/ftmDefaultAssetInfo'
 import { goerliDefaultAssetInfo } from '../../../../utils/goerliDefaultAssetInfo'
 import { getTokenBalances } from '../../../../api/api'
 import { connect } from 'react-redux'
-// import SearchInputComponent from '../../shared/SearchInputComponent'
+import SearchInputComponent from '../../shared/SearchInputComponent'
 
 const SelectAssetModal = ({
   props,
@@ -100,21 +100,6 @@ const SelectAssetModal = ({
     closeModalHandler()
   }
 
-  const changeSearchInputHandler = (e) => {
-    setSearchInput(e.target.value)
-    const userInput = e.target.value.toLowerCase()
-
-    const filteredResults = combinedAssetList.filter(
-      (asset) =>
-        asset.symbol.toLowerCase().includes(userInput) ||
-        asset.name.toLowerCase().includes(userInput) ||
-        (userInput.length > 20 &&
-          asset.address.toLowerCase().includes(userInput)),
-    )
-    console.log(filteredResults)
-    setSearchInputResults(filteredResults)
-  }
-
   const closeModalHandler = () => {
     setIsManageCustomToken(false)
     props.closeModal()
@@ -192,38 +177,39 @@ const SelectAssetModal = ({
         ) : (
           // Select a token component
           <div>
-            {/* <SearchInputComponent /> */}
-            <Input
-              placeholder="Search name or paste address"
-              size="large"
-              prefix={<SearchOutlined />}
-              className="class-name-custom-ant-input"
-              value={searchInput}
-              onChange={changeSearchInputHandler}
+            <SearchInputComponent
+              itemToFilter={combinedAssetList}
+              searchInput={searchInput}
+              setSearchInput={setSearchInput}
+              setSearchInputResults={setSearchInputResults}
             />
             {/* {commonTokens} */}
             <div>
               <div
                 style={{ overflow: 'auto', height: '30vh', marginTop: '10px' }}
               >
-                {(searchInput ? searchInputResults : combinedAssetList).map((i) => (
-                  <SelectAssetItem
-                    icon={<IconComponent imgUrl={i.imgUrl} />}
-                    symbol={i.symbol}
-                    name={i.name}
-                    balance={i.bal}
-                    isDefaultAsset={i.isDefaultAsset}
-                    onClickHandler={chooseAssetHandler}
-                    address={i.address}
-                    key={i.symbol}
-                    index={props.index}
-                    type={props.type}
-                    amount={props.amount}
-                    decimals={i.decimals}
-                    imgUrl={i.imgUrl}
-                  />
-                ))}
-                {(searchInput && searchInputResults.length === 0) && (<div>Search result in no tokens found</div>)}
+                {(searchInput ? searchInputResults : combinedAssetList).map(
+                  (i) => (
+                    <SelectAssetItem
+                      icon={<IconComponent imgUrl={i.imgUrl} />}
+                      symbol={i.symbol}
+                      name={i.name}
+                      balance={i.bal}
+                      isDefaultAsset={i.isDefaultAsset}
+                      onClickHandler={chooseAssetHandler}
+                      address={i.address}
+                      key={i.symbol}
+                      index={props.index}
+                      type={props.type}
+                      amount={props.amount}
+                      decimals={i.decimals}
+                      imgUrl={i.imgUrl}
+                    />
+                  ),
+                )}
+                {searchInput && searchInputResults.length === 0 && (
+                  <div>Search result in no tokens found</div>
+                )}
               </div>
             </div>
             {/* <hr /> */}

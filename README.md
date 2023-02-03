@@ -83,10 +83,8 @@ className={classes["form-control"]}
 
 # To do list / Progress:
 ## To do
-- Refactor search function into a component to be used in Select asset and Managet Custom token
+- Get chain id and ensure use is connected to the correct chain. If it isn't, request they add that chain/swap. Metamask should also popup for this when user clicks change or add chain
 - ensure inline css is refactored to module (except for antd specific ones)
-- touch up on front end (css)
-- format numbers. (TBC: crypto=8dp , FIAT=2dp)
 - refactor any other code properly
 - deploy to live environment (both smart contract and frontend).
 - -----End Of Phase 1: Swap ETH to Multiple ERC20 tokens-----
@@ -201,3 +199,5 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - 01/02/23: Basic CSS for Swap component, Select Asset Modal, Manage Custom Token Modal
 - 02/02/23: Basic CSS for preview swap modal
 - 03/02/23: Search function for select asset modal
+- 03/02/23 - 2: Refactor search function into a component to be used in Select asset modal
+- 03/02/23 - 2: format numbers. (TBC: crypto=8dp , FIAT=2dp)

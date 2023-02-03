@@ -56,3 +56,21 @@ a:hover {
 .color-light-grey{
   color: #6B6E70;
 }
+
+/* Glowing Border */
+.glowing-border {
+  box-shadow: 0 0 15px #86C232;
+  animation: glowing-border 2s linear infinite alternate;
+}
+
+@keyframes glowing-border {
+  0% {
+    box-shadow: 0 0 15px #86C232;
+  }
+  50% {
+    box-shadow: 0 0 15px #6B6E70;
+  }
+  100% {
+    box-shadow: 0 0 15px #86C232;
+  }
+}

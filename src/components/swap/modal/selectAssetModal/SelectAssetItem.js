@@ -7,6 +7,7 @@ import {
   addSwapTo,
   removeSwapTo,
 } from '../../../../reducers/swapReducer'
+import { formatNumber } from '../../../../utils/format/formatNumber'
 
 const SelectAssetItem = ({
   props,
@@ -67,7 +68,7 @@ const SelectAssetItem = ({
         </Row>
       </Col>
       <Col span={4}>
-        <Row justify="end">{props.balance}</Row>
+        <Row justify="end">{formatNumber(props.balance, "crypto")}</Row>
       </Col>
     </Row>
   )

@@ -12,6 +12,7 @@ import {
   addSwapTo,
   removeSwapTo,
 } from '../../reducers/swapReducer'
+import { formatNumber } from '../../utils/format/formatNumber'
 
 const CryptoSwapItemTest = ({
   props,
@@ -102,7 +103,7 @@ const CryptoSwapItemTest = ({
   const onInputBlur = () => {setInputIsFocused(false)}
 
   return (
-    <div className={inputIsFocused ? `${classes.cryptoSwapItem} ${classes.glowingBorder}` : classes.cryptoSwapItem}>
+    <div className={inputIsFocused ? `${classes.cryptoSwapItem} glowing-border` : classes.cryptoSwapItem}>
       {props.type === 'from' ? (
         <React.Fragment>
           <Row>Amount To Swap</Row>
@@ -195,8 +196,8 @@ const CryptoSwapItemTest = ({
 
       {props.type === 'from' ? (
         <Row justify="space-between">
-          <Col>${priceIsLoading ? '...' : price * props.amount}</Col>
-          <Col>Balance: {balance}</Col>
+          <Col>{priceIsLoading ? '...' : formatNumber(price * props.amount, 'fiat')}</Col>
+          <Col>Balance: {formatNumber(balance,"crypto")}</Col>
         </Row>
       ) : (
         <Row>

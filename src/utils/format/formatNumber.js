@@ -1,0 +1,29 @@
+export const formatNumber = (num, type) => {
+  // make a case for number NaN also
+  if (isNaN(num) || num === 'NaN') {
+    console.log('yes')
+    return 'Unable to fetch price'
+  }
+
+  const number = typeof num === 'string' ? parseFloat(num) : num
+
+  if (type === 'fiat') {
+    return `$ ${number
+      .toFixed(2)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+  }
+
+  if (type === 'crypto') {
+    let formattedNumber = number.toFixed(8).toString()
+    const parts = formattedNumber.split('.')
+    const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    const decimalPart = parts[1].replace(/0+$/, '')
+    if (decimalPart.length > 0) {
+      formattedNumber = integerPart + '.' + decimalPart
+    } else {
+      formattedNumber = integerPart
+    }
+    return formattedNumber
+  }
+}
