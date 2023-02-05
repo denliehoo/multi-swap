@@ -1,7 +1,9 @@
 export const formatNumber = (num, type) => {
-  // make a case for number NaN also
+  if (num === '') {
+    return 0
+  }
+
   if (isNaN(num) || num === 'NaN') {
-    console.log('yes')
     return 'Unable to fetch price'
   }
 

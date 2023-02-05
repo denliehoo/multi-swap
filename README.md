@@ -83,7 +83,6 @@ className={classes["form-control"]}
 
 # To do list / Progress:
 ## To do
-- Get chain id and ensure use is connected to the correct chain. If it isn't, request they add that chain/swap. Metamask should also popup for this when user clicks change or add chain
 - ensure inline css is refactored to module (except for antd specific ones)
 - refactor any other code properly
 - deploy to live environment (both smart contract and frontend).
@@ -201,3 +200,7 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - 03/02/23: Search function for select asset modal
 - 03/02/23 - 2: Refactor search function into a component to be used in Select asset modal
 - 03/02/23 - 2: format numbers. (TBC: crypto=8dp , FIAT=2dp)
+- 05/02/23: Get chain id and ensure use is connected to the correct chain. If it isn't, request they add that chain. Metamask should also popup for this when user clicks change or add chain
+  - try: wallet_switchEthereumChain first with just the chain Id
+  - it will give an error if the user doesnt have the chain id in their metamask
+  - Then, in catch block, do: wallet_addEthereumChain to get the users to add the chain

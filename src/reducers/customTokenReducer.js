@@ -14,7 +14,7 @@ const removeAllCustomToken = (payload) => ({
   payload,
 })
 
-const changeChain = (payload) => ({
+const changeChainCustomTokenReducer = (payload) => ({
   type: 'CHANGE_CHAIN',
   payload,
 })
@@ -49,7 +49,7 @@ export {
   addCustomToken,
   removeCustomToken,
   removeAllCustomToken,
-  changeChain,
+  changeChainCustomTokenReducer,
   customTokenReducer,
 }
 

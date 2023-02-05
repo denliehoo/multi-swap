@@ -32,6 +32,7 @@ const Swap = ({
   swapTo,
   address,
   attemptToConnectWallet,
+  chain
 }) => {
   const [swapToPercentages, setSwapToPercentages] = useState([100])
   const [showPercentageError, setShowPercentageError] = useState(false)
@@ -303,7 +304,7 @@ const Swap = ({
             shape="round"
             disabled={swapIsLoading ? true : false}
             onClick={() => {
-              address ? swapButtonHandler() : attemptToConnectWallet()
+              address ? swapButtonHandler() : attemptToConnectWallet(chain)
             }}
           >
             {address ? (
@@ -338,6 +339,7 @@ const mapStateToProps = ({ swapReducer, connectWalletReducer }) => ({
   swapFrom: swapReducer.swapFrom,
   swapTo: swapReducer.swapTo,
   address: connectWalletReducer.address,
+  chain: connectWalletReducer.chain
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -345,7 +347,7 @@ const mapDispatchToProps = (dispatch) => ({
   removeSwapFrom: (payload) => dispatch(removeSwapFrom(payload)),
   addSwapTo: (payload) => dispatch(addSwapTo(payload)),
   removeSwapTo: (payload) => dispatch(removeSwapTo(payload)),
-  attemptToConnectWallet: () => dispatch(attemptToConnectWallet()),
+  attemptToConnectWallet: (chain) => dispatch(attemptToConnectWallet(chain)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Swap)

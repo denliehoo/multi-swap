@@ -1,4 +1,4 @@
-import classes from "./NavBar.module.css";
+import classes from './NavBar.module.css'
 import { Menu, Row, Col } from 'antd'
 import { connect } from 'react-redux'
 import {
@@ -9,13 +9,13 @@ import {
   attemptToConnectWallet,
 } from '../../reducers/connectWalletReducer'
 import { useEffect } from 'react'
-import { changeChain } from '../../reducers/customTokenReducer'
+import { changeChainCustomTokenReducer } from '../../reducers/customTokenReducer'
 
 const NavBar = ({
   connectWalletAction,
   changeWalletAction,
   disconnectWalletAction,
-  changeChainAction,
+  changeChainCustomTokenReducer,
   connectSmartContractAction,
   attemptToConnectWallet,
   address,
@@ -25,20 +25,27 @@ const NavBar = ({
   useEffect(() => {
     const checkMetaMaskConnection = async () => {
       if (window.ethereum) {
-        await attemptToConnectWallet()
+        await attemptToConnectWallet(chain)
       } else {
         console.log('MetaMask is not installed')
       }
     }
 
     checkMetaMaskConnection()
-    changeChainAction(chain)
+    changeChainCustomTokenReducer(chain)
   }, [])
+
+  console.log(chain)
 
   useEffect(() => {
     if (walletConnected && window.ethereum) {
       window.ethereum.on('accountsChanged', (accounts) => {
         changeWalletAction(accounts[0])
+      })
+      window.ethereum.on('chainChanged', async (chainId) => {
+        console.log(`Chain changed to ${chainId}`)
+        disconnectWalletAction();
+        await attemptToConnectWallet(chain)
       })
     } else {
     }
@@ -46,7 +53,7 @@ const NavBar = ({
 
   const connectWalletHandler = async () => {
     if (!walletConnected) {
-      await attemptToConnectWallet()
+      await attemptToConnectWallet(chain)
     }
   }
 
@@ -89,12 +96,13 @@ const NavBar = ({
 
   const rightItems = [
     {
-      label: '[Logo] Fantom',
-      key: 'ftm',
-      children: [
-        { label: '[Logo] Ethereum', key: 'eth' },
-        { label: '[Logo] Avalanche', key: 'avax' },
-      ],
+      // label: <span>[Logo] Fantom</span>,
+      label: <span>[Logo] Goerli</span>,
+      key: 'connectWallet',
+      // children: [
+      //   { label: '[Logo] Goerli', key: 'goerli' },
+      //   { label: '[Logo] Avalanche', key: 'avax' },
+      // ],
     },
     walletConnectPortion,
     // {
@@ -109,11 +117,19 @@ const NavBar = ({
 
   return (
     <Row justify="space-between">
-      <Col style={{fontSize: 'large', paddingTop: '10px', paddingLeft: '30px'}}>Multiswap</Col>
+      <Col
+        style={{ fontSize: 'large', paddingTop: '10px', paddingLeft: '30px' }}
+      >
+        Multiswap
+      </Col>
       <Col>
-        <Menu items={rightItems} mode={'horizontal'} className={classes.navbar}/>
-        </Col>
-        </Row>
+        <Menu
+          items={rightItems}
+          mode={'horizontal'}
+          className={classes.navbar}
+        />
+      </Col>
+    </Row>
   )
 }
 
@@ -127,41 +143,11 @@ const mapDispatchToProps = (dispatch) => ({
   connectWalletAction: (payload) => dispatch(connectWalletAction(payload)),
   changeWalletAction: (payload) => dispatch(changeWalletAction(payload)),
   disconnectWalletAction: () => dispatch(disconnectWalletAction()),
-  changeChainAction: (payload) => dispatch(changeChain(payload)),
+  changeChainCustomTokenReducer: (payload) =>
+    dispatch(changeChainCustomTokenReducer(payload)),
   connectSmartContractAction: (payload) =>
     dispatch(connectSmartContractAction(payload)),
-  attemptToConnectWallet: () => dispatch(attemptToConnectWallet()),
+  attemptToConnectWallet: (chain) => dispatch(attemptToConnectWallet(chain)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavBar)
-
-// import React from 'react';
-// import classes from './NavBar.module.css';
-
-// const Navbar = () => {
-//   return (
-//     <nav>
-//       <ul className={classes.navbar}>
-//         <li className={classes.navbar__item}>
-//           <a href="#">Item 1</a>
-//           <ul className={classes.navbar__sub_menu}>
-//             <li className={classes.navbar__sub_menu_item}>
-//               <a href="#" onClick={() => alert('Sub-menu item 1 clicked')}>Sub-menu Item 1</a>
-//             </li>
-//             <li className={classes.navbar__sub_menu_item}>
-//               <a href="#" onClick={() => alert('Sub-menu item 2 clicked')}>Sub-menu Item 2</a>
-//             </li>
-//           </ul>
-//         </li>
-//         <li className={classes.navbar__item}>
-//           <a href="#">Item 2</a>
-//         </li>
-//         <li className={classes.navbar__item}>
-//           <a href="#">Item 3</a>
-//         </li>
-//       </ul>
-//     </nav>
-//   );
-// };
-
-// export default Navbar;

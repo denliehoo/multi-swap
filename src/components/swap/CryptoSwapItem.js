@@ -39,7 +39,7 @@ const CryptoSwapItemTest = ({
   }, [props.amount, props.percent])
 
   useEffect(() => {
-    console.log(props.asset)
+    // console.log(props.asset)
     getPrice(chain)
   }, [props.asset])
 
@@ -92,7 +92,7 @@ const CryptoSwapItemTest = ({
       newSwap[props.index].price = price
       props.type === 'from' ? addSwapFrom(newSwap) : addSwapTo(newSwap)
     } else {
-      console.log('empty asset!')
+      // console.log('empty asset!')
     }
   }
 

@@ -40,7 +40,7 @@ const PreviewSwapModal = ({
   }
 
   const loadingSpinner = <LoadingOutlined style={{ fontSize: '128px' }} />
-  console.log(modalContent)
+  // console.log(modalContent)
 
   const getAmountsOutDetails = async () => {
     let swapFromDetailsTemp = swapFrom.map((i) => ({
