@@ -4,6 +4,7 @@ import Web3 from 'web3'
 
 // import from utils if deployed through remix
 import Multiswap from '../utils/deployedContractsABI/goerliABI.json'
+// import Multiswap from '../utils/deployedContractsABI/ftmABI.json'
 
 // config for chain ids
 const chainIds = {

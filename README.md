@@ -57,6 +57,8 @@ Eventually:
 - Goerli: 0x743EaA47beaC140B1ff8d7b14C92A757A0dFAbF4
   - Multiswap: https://goerli.etherscan.io/address/0x743eaa47beac140b1ff8d7b14c92a757a0dfabf4#code
   - Uniswap Router V2: https://goerli.etherscan.io/address/0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D#readContract
+- Fantom: 0x4e604887d397BB75e064522223c0D56CDD92E990
+  - Multiswap: https://ftmscan.com/address/0x4e604887d397BB75e064522223c0D56CDD92E990#code
 
 ---
 
@@ -83,7 +85,6 @@ className={classes["form-control"]}
 
 # To do list / Progress:
 ## To do
-- ensure inline css is refactored to module (except for antd specific ones)
 - refactor any other code properly
 - deploy to live environment (both smart contract and frontend).
 - -----End Of Phase 1: Swap ETH to Multiple ERC20 tokens-----
@@ -125,7 +126,7 @@ className={classes["form-control"]}
 - work on light mode dark mode css theme
 
 ## Pending Bug Fixes
-- In CryptoSwapItem.js
+- In CryptoSwapItem.js[ cant seem to recreate this issue. KIV]
   - if add 3 assets, if edit the 2nd one and then 3rd then 1st, gives errors. maybe check selectassetitem.js to fix
 or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo, but keep it with empty values except for index:
   - e.g. {index: 0, amount: 0, asset: "", ...} then, in selectassetitem, we change the details accordingly. 
@@ -135,8 +136,9 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 ## Note / KIV: 
 - NIL
 
-## Low Priority Features: 
+## Low Priority Items: 
 - add swap history and save it locally (use redux persist); history can access from nav bar
+- Optimisation/Reducing API Calls: find a way to cache/store the balances for a time period (e.g. 1 min) or when a swap is initiated on the platform. Meaning that instead of checking the API for balances directly, it should check the cache and the store it. Then, when opening the asset modal in another location, it should check if the time period (e.g. 1 min) is up OR if a swap is initiated on the platform. If that is the case, then check the API agian. Else, display the cached/stored information. 
 
 
 # Done:
@@ -204,3 +206,5 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
   - try: wallet_switchEthereumChain first with just the chain Id
   - it will give an error if the user doesnt have the chain id in their metamask
   - Then, in catch block, do: wallet_addEthereumChain to get the users to add the chain
+- 06/02/23: ensure inline css is refactored to module (except for antd specific ones)
+- 06/02/23: make error handling look nicer

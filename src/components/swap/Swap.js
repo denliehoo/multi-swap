@@ -6,6 +6,7 @@ import {
   PlusCircleOutlined,
   SettingOutlined,
   InfoCircleOutlined,
+  ExclamationCircleOutlined,
   LoadingOutlined,
 } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
@@ -32,7 +33,7 @@ const Swap = ({
   swapTo,
   address,
   attemptToConnectWallet,
-  chain
+  chain,
 }) => {
   const [swapToPercentages, setSwapToPercentages] = useState([100])
   const [showPercentageError, setShowPercentageError] = useState(false)
@@ -171,9 +172,18 @@ const Swap = ({
     ) {
       setShowPreviewSwapModal(true)
     }
+    else{
+      window.scrollTo(0, 0)
+    }
   }
 
-  const showNotificationHandler = (message, description, icon, placement, duration) => {
+  const showNotificationHandler = (
+    message,
+    description,
+    icon,
+    placement,
+    duration,
+  ) => {
     api.open({
       message: message,
       description: description,
@@ -195,11 +205,47 @@ const Swap = ({
     <div className={classes.container}>
       {contextHolder}
       <div className={classes.card}>
-        <Row justify="space-between" style={{ width: '100%', marginBottom: '15px' }}>
-          <Col style={{fontWeight: '700', fontSize: 'large'}}>Swap</Col>
+        <Row
+          justify="space-between"
+          style={{ width: '100%', marginBottom: '15px' }}
+        >
+          <Col style={{ fontWeight: '700', fontSize: 'large' }}>Swap</Col>
           {/* <Col><SettingOutlined /></Col> */}
         </Row>
 
+        {(showAmountError ||
+          showPercentageError ||
+          showTokenNotSelectedError ||
+          showAmountGreaterThanBalanceError) && (
+          <Row className={classes.errorMessagesContainer} align="middle">
+            <Col span={4}>
+              <Row justify="center">
+                <ExclamationCircleOutlined style={{ fontSize: '200%', padding: '10px' }} />
+              </Row>
+            </Col>
+            <Col span={20}>
+              <div className={showAmountError && classes.errorMessage}>
+                {showAmountError && amountError}
+              </div>
+              <div className={showPercentageError && classes.errorMessage}>
+                {showPercentageError && percentageError}
+              </div>
+              <div
+                className={showTokenNotSelectedError && classes.errorMessage}
+              >
+                {showTokenNotSelectedError && tokenNotSelectedError}
+              </div>
+              <div
+                className={
+                  showAmountGreaterThanBalanceError && classes.errorMessage
+                }
+              >
+                {showAmountGreaterThanBalanceError &&
+                  amountGreaterThanBalanceError}
+              </div>
+            </Col>
+          </Row>
+        )}
         {/* Swap From */}
         <div className={classes.buySellContainer}>
           {swapFrom.map((i, index) => (
@@ -219,10 +265,11 @@ const Swap = ({
             align="middle"
             className={classes.plusButonContainer}
           >
-            <Button
+            {/* temporary remove the plus buttom for swap from since currently only allowing for 1 to multiple swap */}
+            {/* <Button
               block
               shape="round"
-              type='primary'
+              type="primary"
               icon={<PlusCircleOutlined />}
               onClick={() => {
                 // setFromAssets([...fromAssets, { amount: 0 }])
@@ -236,7 +283,7 @@ const Swap = ({
                   imgUrl: '',
                 })
               }}
-            />
+            /> */}
           </Row>
         </div>
         <div style={{ margin: '5px' }}>
@@ -267,7 +314,7 @@ const Swap = ({
             <Button
               block
               shape="round"
-              type='primary'
+              type="primary"
               icon={<PlusCircleOutlined />}
               onClick={() => {
                 addSwapState('to', swapTo.length, {
@@ -287,20 +334,11 @@ const Swap = ({
           </Row>
         </div>
 
-        <div>
-          {showAmountError ? amountError : ''}
-          {showPercentageError ? percentageError : ''}
-          {showTokenNotSelectedError ? tokenNotSelectedError : ''}
-          {showAmountGreaterThanBalanceError
-            ? amountGreaterThanBalanceError
-            : ''}
-        </div>
-
         <Row style={{ width: '100%', marginTop: '15px' }}>
           <Button
             size="large"
             block
-            type='primary'
+            type="primary"
             shape="round"
             disabled={swapIsLoading ? true : false}
             onClick={() => {
@@ -339,7 +377,7 @@ const mapStateToProps = ({ swapReducer, connectWalletReducer }) => ({
   swapFrom: swapReducer.swapFrom,
   swapTo: swapReducer.swapTo,
   address: connectWalletReducer.address,
-  chain: connectWalletReducer.chain
+  chain: connectWalletReducer.chain,
 })
 
 const mapDispatchToProps = (dispatch) => ({

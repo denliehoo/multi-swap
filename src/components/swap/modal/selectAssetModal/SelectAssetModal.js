@@ -4,6 +4,7 @@ import {
   ArrowLeftOutlined,
   DownOutlined,
   SearchOutlined,
+  LoadingOutlined
 } from '@ant-design/icons'
 import { Button, Modal, Input } from 'antd'
 import React, { useEffect, useState } from 'react'
@@ -167,7 +168,9 @@ const SelectAssetModal = ({
         {!address ? (
           <div>Please connect your wallet to continue</div>
         ) : isLoading ? (
-          <div>Loading...</div>
+          <Row align="middle" justify="center">
+            <LoadingOutlined style={{ fontSize: '128px' }} />{' '}
+          </Row>
         ) : isManageCustomToken ? (
           <ManageCustomToken
             setToggleChangesInCustomToken={() => {
@@ -185,9 +188,7 @@ const SelectAssetModal = ({
             />
             {/* {commonTokens} */}
             <div>
-              <div
-                style={{ overflow: 'auto', height: '30vh', marginTop: '10px' }}
-              >
+              <div className={classes.selectAssetsContainer}>
                 {(searchInput ? searchInputResults : combinedAssetList).map(
                   (i) => (
                     <SelectAssetItem

@@ -1,3 +1,8 @@
 .modalBackArrow:hover {
     cursor: pointer;
 }
+.selectAssetsContainer{
+    overflow: auto;
+     height: 30vh;
+     margin-top: 10px;
+}

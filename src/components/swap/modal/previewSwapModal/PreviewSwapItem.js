@@ -5,7 +5,7 @@ const PreviewSwapItem = (props) => {
   console.log(props.amount*props.price)
   console.log(typeof props.amount*props.price)
   return (
-    <div style={{marginTop: '10px' , paddingRight: '15px', paddingTop: '5px'}}>
+    <div className='mt-10 pr-15 pt-5'>
       <Row justify="space-between">
         <Row align="middle" >
           <IconComponent size={40} imgUrl={props.imgUrl} />

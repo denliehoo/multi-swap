@@ -48,9 +48,15 @@ a:hover {
 
 /* margins */
 .mt-15{margin-top: 15px;}
+.mt-10{margin-top: 10px;}
 .mb-15{margin-bottom: 15px;}
 .ml-15{margin-left: 15px;}
 .ml-10{margin-left: 10px;}
+.mt-10{margin-top: 10px;}
+
+/* padding */
+.pt-5{padding-top: 5px;}
+.pr-15{padding-right: 15px;}
 
 /* color */
 .color-light-grey{

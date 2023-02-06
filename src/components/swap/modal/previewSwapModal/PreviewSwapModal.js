@@ -1,3 +1,4 @@
+import classes from "./PreviewSwapModal.module.css";
 import { Button, Modal, Row, Col, notification } from 'antd'
 import { useEffect, useState } from 'react'
 import PreviewSwapItem from './PreviewSwapItem'
@@ -259,7 +260,7 @@ const PreviewSwapModal = ({
       {/* loading > preview swap > pending confirmation > swap submitted */}
       {/* Loading Spinner */}
       {modalContent === 'loading' && (
-        <div style={{ width: '100%', height: '100%' }}>
+        <div className={classes.modalContentsContainer}>
           <Row
             align="middle"
             justify="center"
@@ -272,12 +273,12 @@ const PreviewSwapModal = ({
 
       {/* Preview Swap */}
       {modalContent === 'previewSwap' && (
-        <div style={{ width: '100%', height: '100%' }}>
+        <div className={classes.modalContentsContainer}>
           <div style={{ overflow: 'auto', height: '50vh' }}>
-            <span style={{ fontWeight: '700', color: '#6B6E70' }}>
+            <span className='fw-700 color-light-grey'>
               Note: This is only an estimation of what you'll receive
             </span>
-            <Row style={{ fontWeight: '700', marginTop: '10px' }}>You Give</Row>
+            <Row className='fw-700 mt-10'>You Give</Row>
             {swapFromDetails.map((i, index) => (
               <PreviewSwapItem
                 amount={i.amount}
@@ -287,7 +288,7 @@ const PreviewSwapModal = ({
                 key={`${index}previewSwapFrom`}
               />
             ))}
-            <Row style={{ fontWeight: '700', marginTop: '10px' }}>You Get</Row>
+            <Row className='fw-700 mt-10'>You Get</Row>
             {swapToDetails.map((i, index) => (
               <PreviewSwapItem
                 amount={i.amount}
@@ -313,7 +314,7 @@ const PreviewSwapModal = ({
 
       {/* Peding Confirmation */}
       {modalContent === 'pendingConfirmation' && (
-        <div style={{ width: '100%', height: '100%' }}>
+        <div className={classes.modalContentsContainer}>
           <Row
             align="middle"
             justify="center"
@@ -324,10 +325,10 @@ const PreviewSwapModal = ({
                 {loadingSpinner}
               </Row>
               <Row align="middle" justify="center">
-                <div style={{ fontWeight: '700', marginBottom: '15px' }}>
+                <div className='fw-700 mb-15'>
                   Waiting For Confirmation
                 </div>
-                <div style={{ marginBottom: '15px' }}>
+                <div className='mb-15'>
                   {getPendingSwapText()}
                 </div>
                 <div>Confirm this transaction in your wallet</div>
@@ -339,7 +340,7 @@ const PreviewSwapModal = ({
 
       {/* Swap Submitted */}
       {modalContent === 'swapSubmitted' && (
-        <div style={{ width: '100%', height: '100%' }}>
+        <div className={classes.modalContentsContainer}>
           <Row
             align="middle"
             justify="center"
@@ -356,7 +357,7 @@ const PreviewSwapModal = ({
                 />
               </Row>
               <Row align="middle" justify="center">
-                <div style={{ fontWeight: '700', marginBottom: '15px' }}>
+                <div className='fw-700 mb-15'>
                   Your swap has been submitted!
                 </div>
                 <Button
