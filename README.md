@@ -42,16 +42,13 @@ Environmental Values:
 ```Javascript
 REACT_APP_MORALIS_API_KEY=XXXXX
 ```
-
-# Desired Features:
-- do swap by %
-- do swap by specifying amount of token in the array
-- do a proxy setup
-- do multiple routers (and find the one which gives the best exchange)
-- allow for customisation of slippage
-
-Eventually: 
-- refactor the API out. Use C# .NET as the backend to request for the API
+# Product Road Map:
+- Phase 1: Swap ETH for multiple token + Basic UI Done
+- Phase 2: Swap multiple ETH/ERC20 tokens for ETH/ERC20 tokens
+- Phase 3: Deploy to different EVM networks and allow for multiswap
+- Phase 4: Continuous Improvements
+  - Connect multiple routers to the smart contract and give the best rate for each token
+  - Customisation of slippage
 
 # Deployed contracts:
 - Goerli: 0x743EaA47beaC140B1ff8d7b14C92A757A0dFAbF4
@@ -85,13 +82,10 @@ className={classes["form-control"]}
 
 # To do list / Progress:
 ## To do
-- refactor any other code properly
-- deploy to live environment (both smart contract and frontend).
-- -----End Of Phase 1: Swap ETH to Multiple ERC20 tokens-----
-
 <br />
 
 - -----Start Of Phase 2: Swap ETH/ERC20 tokens to ETH/ERC20 tokens-----
+- refactor code from Phase 1
 - work on smart contract; possible scenario:
   1. ETH -> ERC20(s) coded previously
   2. ERC20(s) -> ERC20(s)
@@ -134,11 +128,16 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
   - Solution is TBC
 
 ## Note / KIV: 
-- NIL
+- In phase 1 release, have removed all the other assets from select asset modal in swap from except for the native asset (e.g. ETH or FTM) to ensure user doesn't select anything else from swap from
+  - To revert the change, Search for the comment: // setCombinedAssetList(combinedAssetListTemp)
+  - uncomment the that line
+  - comment out the line below that
 
 ## Low Priority Items: 
-- add swap history and save it locally (use redux persist); history can access from nav bar
 - Optimisation/Reducing API Calls: find a way to cache/store the balances for a time period (e.g. 1 min) or when a swap is initiated on the platform. Meaning that instead of checking the API for balances directly, it should check the cache and the store it. Then, when opening the asset modal in another location, it should check if the time period (e.g. 1 min) is up OR if a swap is initiated on the platform. If that is the case, then check the API agian. Else, display the cached/stored information. 
+- add swap history and save it to a database; history can access from nav bar
+- Refactor backend to C# 
+- Proxy set up for smart contract
 
 
 # Done:
@@ -208,3 +207,5 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
   - Then, in catch block, do: wallet_addEthereumChain to get the users to add the chain
 - 06/02/23: ensure inline css is refactored to module (except for antd specific ones)
 - 06/02/23: make error handling look nicer
+- 08/02/23: Prepare to deply to live environment
+- -----End Of Phase 1: Swap ETH to Multiple ERC20 tokens-----

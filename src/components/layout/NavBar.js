@@ -10,6 +10,9 @@ import {
 } from '../../reducers/connectWalletReducer'
 import { useEffect } from 'react'
 import { changeChainCustomTokenReducer } from '../../reducers/customTokenReducer'
+import fantomLogo from '../../assets/images/fantomLogo.svg'
+import IconComponent from '../swap/shared/IconComponent'
+import multiswapLogo from '../../assets/images/multiswapLogo.png'
 
 const NavBar = ({
   connectWalletAction,
@@ -35,7 +38,6 @@ const NavBar = ({
     changeChainCustomTokenReducer(chain)
   }, [])
 
-  console.log(chain)
 
   useEffect(() => {
     if (walletConnected && window.ethereum) {
@@ -96,8 +98,8 @@ const NavBar = ({
 
   const rightItems = [
     {
-      // label: <span>[Logo] Fantom</span>,
-      label: <span>[Logo] Goerli</span>,
+      label: <span><IconComponent imgUrl={fantomLogo} size={'small'}/> Fantom</span>,
+      // label: <span>[Logo] Goerli</span>,
       key: 'connectWallet',
       // children: [
       //   { label: '[Logo] Goerli', key: 'goerli' },
@@ -120,6 +122,7 @@ const NavBar = ({
       <Col
         style={{ fontSize: 'large', paddingTop: '10px', paddingLeft: '30px' }}
       >
+        <IconComponent imgUrl={multiswapLogo} size={'small'}/>
         Multiswap
       </Col>
       <Col>

@@ -3,8 +3,8 @@ import Web3 from 'web3'
 // import Multiswap from '../truffle_abis/Multiswap.json'
 
 // import from utils if deployed through remix
-import Multiswap from '../utils/deployedContractsABI/goerliABI.json'
-// import Multiswap from '../utils/deployedContractsABI/ftmABI.json'
+// import Multiswap from '../utils/deployedContractsABI/goerliABI.json'
+import Multiswap from '../utils/deployedContractsABI/ftmABI.json'
 
 // config for chain ids
 const chainIds = {
@@ -32,8 +32,8 @@ const chainConfig = {
 const initialState = {
   address: '',
   walletConnected: false,
-  // chain: 'ftm',
-  chain: 'goerli',
+  chain: 'ftm',
+  // chain: 'goerli',
   // chain: 'eth'
   multiswap: {},
   web3: {},
@@ -65,7 +65,6 @@ const changeChainConnectWalletReducer = (payload) => ({
 })
 
 const attemptToConnectWallet = (chain) => {
-  console.log(chain)
   return async (dispatch) => {
     ///
     try {
@@ -80,15 +79,12 @@ const attemptToConnectWallet = (chain) => {
       // if network id not equal to the goerli, attempt to change chain
       // if connect to ganache instead, think just hardcode chainIds[chain] to that of ganache instead
       if(web3.utils.toHex(networkId) !== chainIds[chain]){
-        console.log("Not the same!")
         // attempt to connect
         onCorrectChain = await attemptToChangeChain(chain)
-        console.log(onCorrectChain)
         !onCorrectChain && dispatch(disconnectWalletAction())
       }
       await dispatch(connectWalletAction({ address: accounts[0], web3: web3 }))
 
-      console.log(onCorrectChain)
 
       // ****** DO NOT DELETE THIS COMMENT
       // This is for if smart contract deployed through truffle
@@ -110,11 +106,12 @@ const attemptToConnectWallet = (chain) => {
       if (onCorrectChain) {
         const multiswap = new web3.eth.Contract(
           Multiswap,
-          '0x743EaA47beaC140B1ff8d7b14C92A757A0dFAbF4',
+          // '0x743EaA47beaC140B1ff8d7b14C92A757A0dFAbF4', // Goerli
+          '0x4e604887d397BB75e064522223c0D56CDD92E990', // FTM
         )
         // ******
 
-        console.log(multiswap)
+        console.log(multiswap.methods)
         dispatch(connectSmartContractAction(multiswap))
       } else {
         // if no network...

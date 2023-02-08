@@ -102,7 +102,14 @@ const Swap = ({
 
   const validateAmount = () => {
     const swapFromAmount = swapFrom.map((i) => i.amount)
-    const valid = swapFromAmount.includes(0) ? false : true
+    const arrayContainsNaN =(arr)=>{
+      let results = false
+      for(let i in arr){
+        if(!arr[i]){results = true}
+      }
+      return results
+    }
+    const valid = (swapFromAmount.includes(0) || swapFromAmount.includes('') || arrayContainsNaN(swapFromAmount)) ? false : true
     if (!valid) {
       setShowAmountError(true)
     }

@@ -83,8 +83,9 @@ const SelectAssetModal = ({
     for (let i in combinedAssetListTemp) {
       combinedAssetListTemp[i].bal = balancesArray[i]
     }
-    setCombinedAssetList(combinedAssetListTemp)
-    console.log(combinedAssetListTemp)
+    {/* comment out the line 2 lines below this and uncomment the line below this to change back to show all assets even for swap from */}
+    // setCombinedAssetList(combinedAssetListTemp)
+    props.type === 'from' ? setCombinedAssetList([combinedAssetListTemp[0]]) : setCombinedAssetList(combinedAssetListTemp)
     setIsLoading(false)
     return combinedAssetListTemp
   }

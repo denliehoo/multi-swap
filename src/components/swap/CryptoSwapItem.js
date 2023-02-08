@@ -39,7 +39,6 @@ const CryptoSwapItemTest = ({
   }, [props.amount, props.percent])
 
   useEffect(() => {
-    // console.log(props.asset)
     getPrice(chain)
   }, [props.asset])
 
@@ -55,12 +54,18 @@ const CryptoSwapItemTest = ({
       newSwapFrom[props.index].amount = parseFloat(e.target.value)
       addSwapFrom(newSwapFrom)
     } else if (props.type === 'to') {
-      const inputValue = parseFloat(e.target.value)
-      setPercentInput(inputValue)
-      props.changeSwapToPercent(props.index, inputValue)
-      let newSwapTo = [...swapTo]
-      newSwapTo[props.index].amount = inputValue
-      addSwapTo(newSwapTo)
+      const re = /^\d*$/
+      if (
+        e.target.value === '' ||
+        (re.test(e.target.value) && e.target.value <= 100)
+      ) {
+        const inputValue = parseFloat(e.target.value)
+        setPercentInput(inputValue)
+        props.changeSwapToPercent(props.index, inputValue)
+        let newSwapTo = [...swapTo]
+        newSwapTo[props.index].amount = inputValue
+        addSwapTo(newSwapTo)
+      }
     }
   }
 
@@ -97,13 +102,27 @@ const CryptoSwapItemTest = ({
   }
 
   const onInputFocus = (e) => {
-    e.target.addEventListener("wheel", function (e) { e.preventDefault() }, { passive: false }) // prevent input from changing on scroll
+    e.target.addEventListener(
+      'wheel',
+      function (e) {
+        e.preventDefault()
+      },
+      { passive: false },
+    ) // prevent input from changing on scroll
     setInputIsFocused(true)
   }
-  const onInputBlur = () => {setInputIsFocused(false)}
+  const onInputBlur = () => {
+    setInputIsFocused(false)
+  }
 
   return (
-    <div className={inputIsFocused ? `${classes.cryptoSwapItem} glowing-border` : classes.cryptoSwapItem}>
+    <div
+      className={
+        inputIsFocused
+          ? `${classes.cryptoSwapItem} glowing-border`
+          : classes.cryptoSwapItem
+      }
+    >
       {props.type === 'from' ? (
         <React.Fragment>
           <Row>Amount To Swap</Row>
@@ -133,7 +152,6 @@ const CryptoSwapItemTest = ({
       )}
 
       <Row justify="space-between" align="middle">
-        {/* push amount to store somehow; also do validation to ensure amount less than balance. can do this in the swap button in Swap.js*/}
         <Col style={{ fontSize: '2em' }}>
           {props.type === 'from' ? (
             <input
@@ -165,13 +183,12 @@ const CryptoSwapItemTest = ({
 
         <Col>
           <Button
-          type='primary'
-          style={{borderRadius: '10px'}}
+            type="primary"
+            style={{ borderRadius: '10px' }}
             onClick={() => {
               setIsModalOpen(true)
             }}
           >
-            {/* {selectedAsset ? selectedAsset : <span>Select A Token</span>} */}
             {props.asset ? props.asset : <span>Select A Token</span>}
             <DownOutlined />
           </Button>
@@ -196,8 +213,12 @@ const CryptoSwapItemTest = ({
 
       {props.type === 'from' ? (
         <Row justify="space-between">
-          <Col>{priceIsLoading ? '...' : formatNumber(price * props.amount, 'fiat')}</Col>
-          <Col>Balance: {formatNumber(balance,"crypto")}</Col>
+          <Col>
+            {priceIsLoading
+              ? '...'
+              : formatNumber(price * props.amount, 'fiat')}
+          </Col>
+          <Col>Balance: {formatNumber(balance, 'crypto')}</Col>
         </Row>
       ) : (
         <Row>
@@ -235,12 +256,3 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CryptoSwapItemTest)
-
-/*
-Current problems:
-- if add 3 assets, if edit the 2nd one and then 3rd then 1st, gives errors. maybe check selectassetitem.js to fix
-or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo, but keep it with empty values except for index:
-e.g. {index: 0, amount: 0, asset: "", ...} then, in selectassetitem, we change the details accordingly. 
-This ensures that the list is ordered; but what about when remove assets? maybe we re-order? does the key for the cryptoswapitem change when remove to?
-TBC
-*/

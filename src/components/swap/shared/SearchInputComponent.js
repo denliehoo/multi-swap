@@ -14,7 +14,6 @@ const SearchInputComponent = (props) => {
         (userInput.length > 20 &&
           asset.address.toLowerCase().includes(userInput)),
     )
-    console.log(filteredResults)
     props.setSearchInputResults(filteredResults)
   }
 

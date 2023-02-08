@@ -41,7 +41,6 @@ const PreviewSwapModal = ({
   }
 
   const loadingSpinner = <LoadingOutlined style={{ fontSize: '128px' }} />
-  // console.log(modalContent)
 
   const getAmountsOutDetails = async () => {
     let swapFromDetailsTemp = swapFrom.map((i) => ({
@@ -75,14 +74,13 @@ const PreviewSwapModal = ({
             percentForEachToken,
           )
           .call()
-        console.log(amountsOut)
         for (let i in swapToDetailsTemp) {
           // divide by the 10^num of dp
           swapToDetailsTemp[i].amount =
             amountsOut[i] / Math.pow(10, swapToDetailsTemp[i].decimals)
         }
-        console.log(swapFromDetailsTemp)
-        console.log(swapToDetailsTemp)
+        // console.log(swapFromDetailsTemp)
+        // console.log(swapToDetailsTemp)
         setSwapFromDetails(swapFromDetailsTemp)
         setSwapToDetails(swapToDetailsTemp)
         setSwapType('swapEthForMultipleTokensByPercent')
@@ -93,6 +91,7 @@ const PreviewSwapModal = ({
         })
         setModalContent('previewSwap')
       } catch (e) {
+        console.log(e)
         props.showNotificationInSwapJs(
           'Unable To Get Swap Details',
           'There seems to be an error in one of the tokens you are swapping to or from. Please swap to/from a different token',
@@ -127,9 +126,8 @@ const PreviewSwapModal = ({
   }
 
   const initiateSwap = async () => {
-    console.log('swap!')
-    console.log(swapFromDetails)
-    console.log(swapToDetails)
+    // console.log(swapFromDetails)
+    // console.log(swapToDetails)
     setModalContent('pendingConfirmation')
     try {
       if (swapType === 'swapEthForMultipleTokensByPercent') {
@@ -143,7 +141,7 @@ const PreviewSwapModal = ({
             value: swapObject.amount[0],
           }) // only when user clicks confirm on metamask will this next step appear
           .on('transactionHash', (hash) => {
-            console.log(`Transaction hash: ${hash}. user has confirmed`)
+            // console.log(`Transaction hash: ${hash}. user has confirmed`)
             props.showNotificationInSwapJs(
               'Transaction Pending',
               getPendingSwapText(),
@@ -163,8 +161,8 @@ const PreviewSwapModal = ({
         const receipt = await web3.eth.getTransactionReceipt(
           callSwap.transactionHash,
         )
-        console.log(receipt)
-        console.log(callSwap)
+        // console.log(receipt)
+        // console.log(callSwap)
         props.showNotificationInSwapJs(
           'Transaction Completed',
           getSuccessfulSwapText(callSwap),
