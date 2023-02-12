@@ -98,8 +98,8 @@ const NavBar = ({
 
   const rightItems = [
     {
-      label: <span><IconComponent imgUrl={fantomLogo} size={'small'}/> Fantom</span>,
-      // label: <span>[Logo] Goerli</span>,
+      // label: <span><IconComponent imgUrl={fantomLogo} size={'small'}/> Fantom</span>,
+      label: <span>[Logo] Goerli</span>,
       key: 'connectWallet',
       // children: [
       //   { label: '[Logo] Goerli', key: 'goerli' },

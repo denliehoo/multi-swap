@@ -3,8 +3,8 @@ import Web3 from 'web3'
 // import Multiswap from '../truffle_abis/Multiswap.json'
 
 // import from utils if deployed through remix
-// import Multiswap from '../utils/deployedContractsABI/goerliABI.json'
-import Multiswap from '../utils/deployedContractsABI/ftmABI.json'
+import Multiswap from '../utils/deployedContractsABI/goerliABI.json'
+// import Multiswap from '../utils/deployedContractsABI/ftmABI.json'
 
 // config for chain ids
 const chainIds = {
@@ -32,8 +32,8 @@ const chainConfig = {
 const initialState = {
   address: '',
   walletConnected: false,
-  chain: 'ftm',
-  // chain: 'goerli',
+  // chain: 'ftm',
+  chain: 'goerli',
   // chain: 'eth'
   multiswap: {},
   web3: {},
@@ -106,8 +106,8 @@ const attemptToConnectWallet = (chain) => {
       if (onCorrectChain) {
         const multiswap = new web3.eth.Contract(
           Multiswap,
-          // '0x743EaA47beaC140B1ff8d7b14C92A757A0dFAbF4', // Goerli
-          '0x4e604887d397BB75e064522223c0D56CDD92E990', // FTM
+          '0x743EaA47beaC140B1ff8d7b14C92A757A0dFAbF4', // Goerli
+          // '0x4e604887d397BB75e064522223c0D56CDD92E990', // FTM
         )
         // ******
 

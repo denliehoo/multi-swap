@@ -161,8 +161,8 @@ const PreviewSwapModal = ({
         const receipt = await web3.eth.getTransactionReceipt(
           callSwap.transactionHash,
         )
-        // console.log(receipt)
-        // console.log(callSwap)
+        console.log(receipt)
+        console.log(callSwap)
         props.showNotificationInSwapJs(
           'Transaction Completed',
           getSuccessfulSwapText(callSwap),
@@ -191,7 +191,7 @@ const PreviewSwapModal = ({
 
   const getSuccessfulSwapText = (receipt) => {
     if (swapType === 'swapEthForMultipleTokensByPercent') {
-      let swapToDetailsTemp = JSON.parse(JSON.stringify(swapTo))
+      let swapToDetailsTemp = JSON.parse(JSON.stringify(swapTo)) // deep copy to ensure original doesn't change
       for (let i in swapToDetailsTemp) {
         swapToDetailsTemp[i].amount =
           parseInt(
