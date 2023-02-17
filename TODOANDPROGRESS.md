@@ -3,8 +3,12 @@
 - refactor code from Phase 1
 - add approve button (for ERC20 tokens) to frontend
   - check whether allowance has been given by the user to spend the ERC20 tokens (using smart contract method)
-  - If have allowance, then dont need to display Approve token button. Can just proceed with swap. 
-  - If dont have allowance, have to get the user to call the approve function on the ERC20 tokens
+    - Check in PreviewSwapModal. Check when call getAmountsOut() function. 
+    - then, in previewSwap modal content, if there is any tokens with not enough allowance, ask them to approve the token
+    - this approve token should be above the "you get" part. and it should be e.g. Approve USDT, Approve USDC next to each other
+    - then, if there is any approval required, disable the confirm button
+    - Once user confirms the approval, change the approve XXX button to XXX approved and put a tick
+    - then, if there are no more that requires approval, enable the swap button. 
   - To do this, we cannot create an interface on smart contract on behalf of user.
   - Instead, we must get the ABI of the ERC20 token and get the user to call the approve function directly on our front end
   - To get contract ABI, can call APIs to do so from e.g. etherscan API or ftmscan API. For example can use this get method:

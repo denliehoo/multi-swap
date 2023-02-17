@@ -2,11 +2,9 @@ import classes from './SelectAssetModal.module.css'
 import { Row, Col } from 'antd/lib/grid'
 import {
   ArrowLeftOutlined,
-  DownOutlined,
-  SearchOutlined,
   LoadingOutlined
 } from '@ant-design/icons'
-import { Button, Modal, Input } from 'antd'
+import { Button, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import SelectAssetItem from './SelectAssetItem'
 import IconComponent from '../../shared/IconComponent'
@@ -41,21 +39,21 @@ const SelectAssetModal = ({
   }, [address, props.isModalOpen, toggleChangesInCustomToken])
 
   const getCustomTokens = (chain) => {
-    if (chain == 'eth') {
+    if (chain === 'eth') {
       return ethCustomTokens
-    } else if (chain == 'ftm') {
+    } else if (chain === 'ftm') {
       return ftmCustomTokens
-    } else if (chain == 'goerli') {
+    } else if (chain === 'goerli') {
       return goerliCustomTokens
     }
   }
 
   const getDefaultAssets = (chain) => {
-    if (chain == 'eth') {
+    if (chain === 'eth') {
       return ethDefaultAssetInfo
     } else if (chain === 'ftm') {
       return ftmDefaultAssetInfo
-    } else if (chain == 'goerli') {
+    } else if (chain === 'goerli') {
       return goerliDefaultAssetInfo
     }
   }
@@ -84,8 +82,8 @@ const SelectAssetModal = ({
       combinedAssetListTemp[i].bal = balancesArray[i]
     }
     {/* comment out the line 2 lines below this and uncomment the line below this to change back to show all assets even for swap from */}
-    // setCombinedAssetList(combinedAssetListTemp)
-    props.type === 'from' ? setCombinedAssetList([combinedAssetListTemp[0]]) : setCombinedAssetList(combinedAssetListTemp)
+    setCombinedAssetList(combinedAssetListTemp)
+    // props.type === 'from' ? setCombinedAssetList([combinedAssetListTemp[0]]) : setCombinedAssetList(combinedAssetListTemp)
     setIsLoading(false)
     return combinedAssetListTemp
   }

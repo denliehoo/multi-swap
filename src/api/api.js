@@ -78,7 +78,7 @@ const getTokenBalances = async (chain, walletAddress, tokenAddresses) => {
     let pushZero = true
     for (let r in rawBalances) {
       if (
-        tokenAddresses[t].toUpperCase() ==
+        tokenAddresses[t].toUpperCase() ===
         rawBalances[r].token_address.toUpperCase()
       ) {
         let bal =
@@ -95,4 +95,18 @@ const getTokenBalances = async (chain, walletAddress, tokenAddresses) => {
   return tokenBalances
 }
 
-export { getAssetPrice, getDetailsForCustomToken, getTokenBalances }
+const getContractABI = async (chain, address) => {
+  const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY
+  let res;
+  if (chain === 'goerli') {
+    res = `https://api.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${ETHERSCAN_API_KEY}`
+  }
+  // else if(chain ==='ftm')
+}
+
+export {
+  getAssetPrice,
+  getDetailsForCustomToken,
+  getTokenBalances,
+  getContractABI,
+}

@@ -4,8 +4,6 @@ import { Button, notification } from 'antd'
 import {
   DownCircleOutlined,
   PlusCircleOutlined,
-  SettingOutlined,
-  InfoCircleOutlined,
   ExclamationCircleOutlined,
   LoadingOutlined,
 } from '@ant-design/icons'
@@ -82,7 +80,7 @@ const Swap = ({
       (partialSum, a) => partialSum + a,
       0,
     )
-    const valid = arrayHasZero || sumOfArray != 100 ? false : true
+    const valid = arrayHasZero || sumOfArray !== 100 ? false : true
     if (!valid) {
       setShowPercentageError(true)
     }

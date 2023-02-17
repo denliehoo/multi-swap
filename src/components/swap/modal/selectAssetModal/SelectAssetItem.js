@@ -28,14 +28,14 @@ const SelectAssetItem = ({
     }
     if (type === 'from') {
       // if they are the same index, we change the details
-      if (props.index == swapFrom[props.index].index) {
+      if (props.index === swapFrom[props.index].index) {
         let newSwapFrom = [...swapFrom]
         newSwapFrom[props.index] = newAssetDetails
         addSwapFrom(newSwapFrom)
       }
     } else if (type === 'to') {
       let newSwapTo = [...swapTo]
-      if (props.index == swapTo[props.index].index) {
+      if (props.index === swapTo[props.index].index) {
         newSwapTo[props.index] = newAssetDetails
         addSwapTo(newSwapTo)
       }

@@ -42,6 +42,7 @@ const PreviewSwapModal = ({
 
   const loadingSpinner = <LoadingOutlined style={{ fontSize: '128px' }} />
 
+  // possible to refactor this whole function out while still being able to call the state changing functions?
   const getAmountsOutDetails = async () => {
     let swapFromDetailsTemp = swapFrom.map((i) => ({
       amount: i.amount,
@@ -59,6 +60,7 @@ const PreviewSwapModal = ({
     }))
 
     // next time also need to consider which chain
+    // ETH -> ERC20s
     if (swapFrom.length == 1 && swapFrom[0].address === 'native') {
       // note: we change to string because thats usually how we call functions in the contract; check migrations file.
       const ethAmount = (swapFrom[0].amount * Math.pow(10, 18)).toString() //since amount needs to be in wei; i.e. 1x10^18
@@ -79,8 +81,6 @@ const PreviewSwapModal = ({
           swapToDetailsTemp[i].amount =
             amountsOut[i] / Math.pow(10, swapToDetailsTemp[i].decimals)
         }
-        // console.log(swapFromDetailsTemp)
-        // console.log(swapToDetailsTemp)
         setSwapFromDetails(swapFromDetailsTemp)
         setSwapToDetails(swapToDetailsTemp)
         setSwapType('swapEthForMultipleTokensByPercent')

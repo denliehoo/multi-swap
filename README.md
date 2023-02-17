@@ -55,11 +55,18 @@ REACT_APP_MORALIS_API_KEY=XXXXX
   - Customisation of slippage
 
 # Deployed contracts:
-- Goerli: 0x743EaA47beaC140B1ff8d7b14C92A757A0dFAbF4
-  - Multiswap: https://goerli.etherscan.io/address/0x743eaa47beac140b1ff8d7b14c92a757a0dfabf4#code
-  - Uniswap Router V2: https://goerli.etherscan.io/address/0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D#readContract
-- Fantom: 0x4e604887d397BB75e064522223c0D56CDD92E990
-  - Multiswap: https://ftmscan.com/address/0x4e604887d397BB75e064522223c0D56CDD92E990#code
+- Uniswap Router V2: https://goerli.etherscan.io/address/0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D#readContract
+- Phase 1:
+  - Goerli: 0x743EaA47beaC140B1ff8d7b14C92A757A0dFAbF4
+    - Multiswap: https://goerli.etherscan.io/address/0x743eaa47beac140b1ff8d7b14c92a757a0dfabf4#code
+  - Fantom: 0x4e604887d397BB75e064522223c0D56CDD92E990
+    - Multiswap: https://ftmscan.com/address/0x4e604887d397BB75e064522223c0D56CDD92E990#code
+- Phase 2:
+  - Goerli: 0x6aD14F3770bb85a35706DCa781E003Fcf1e716e3
+    - Multiswap: https://goerli.etherscan.io/address/0x6ad14f3770bb85a35706dca781e003fcf1e716e3#code
+  - Fantom: 
+    - Multiswap: 
+
 
 ---
 
@@ -84,3 +91,6 @@ className={classes["form-control"]}
 
 # To do list / Progress:
 Check TODOANDPROGRESS.md
+---
+Deployment instructions refer to: 
+https://hackernoon.com/how-to-deploy-a-react-application-with-firebase-hosting-p92m37b7
