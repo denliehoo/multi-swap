@@ -161,6 +161,7 @@ const SelectAssetModal = ({
         visible={props.isModalOpen}
         onOk={closeModalHandler}
         onCancel={closeModalHandler}
+        destroyOnClose={true}
         // allows us to edit the bottom component (i.e. the OK and Cancel)
         footer={null}
       >

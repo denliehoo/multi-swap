@@ -6,7 +6,7 @@ export const ftmDefaultAssetInfo = [
       'https://assets.coingecko.com/coins/images/4001/large/Fantom_round.png?1669652346',
     bal: 0.203,
     decimals: 18,
-    address: 'native',
+    address: '0x0000000000000000000000000000000000000000',
     isDefaultAsset: true,
   },
   {

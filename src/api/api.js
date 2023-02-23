@@ -97,10 +97,20 @@ const getTokenBalances = async (chain, walletAddress, tokenAddresses) => {
 
 const getContractABI = async (chain, address) => {
   const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY
-  let res;
+  let res
   if (chain === 'goerli') {
-    res = `https://api.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${ETHERSCAN_API_KEY}`
+    res = await axios.get(
+      `https://api-goerli.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${ETHERSCAN_API_KEY}`,
+    )
+    if (res.status === 200) {
+      return JSON.parse(res.data.result)
+    }
+    else{
+      // likely means contract not verified
+      return null
+    }
   }
+
   // else if(chain ==='ftm')
 }
 

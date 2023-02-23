@@ -1,21 +1,7 @@
 # To do list / Progress:
 ## To do
+- connect the new swap types for all case to the frontend and ensure it is working
 - refactor code from Phase 1
-- add approve button (for ERC20 tokens) to frontend
-  - check whether allowance has been given by the user to spend the ERC20 tokens (using smart contract method)
-    - Check in PreviewSwapModal. Check when call getAmountsOut() function. 
-    - then, in previewSwap modal content, if there is any tokens with not enough allowance, ask them to approve the token
-    - this approve token should be above the "you get" part. and it should be e.g. Approve USDT, Approve USDC next to each other
-    - then, if there is any approval required, disable the confirm button
-    - Once user confirms the approval, change the approve XXX button to XXX approved and put a tick
-    - then, if there are no more that requires approval, enable the swap button. 
-  - To do this, we cannot create an interface on smart contract on behalf of user.
-  - Instead, we must get the ABI of the ERC20 token and get the user to call the approve function directly on our front end
-  - To get contract ABI, can call APIs to do so from e.g. etherscan API or ftmscan API. For example can use this get method:
-    - https://api.etherscan.io/api?module=contract&action=getabi&address=TOKENADDRESSHERE&apikey=APIKEYHERE
-  - error handling for if unable to get contract ABI
-  - Note: throw error on frontend if user tries to swap ETH + ERC20s -> ETH + ERC20s or ETH -> ETH
-- connect the new swap types to the frontend and ensure it is working
 - optimise CSS for different screen sizes
 
 - -----End Of Phase 2: Swap ETH/ERC20 tokens to ETH/ERC20 tokens-----
@@ -55,8 +41,8 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 
 ## Low Priority Items: 
 - Optimisation/Reducing API Calls: find a way to cache/store the balances for a time period (e.g. 1 min) or when a swap is initiated on the platform. Meaning that instead of checking the API for balances directly, it should check the cache and the store it. Then, when opening the asset modal in another location, it should check if the time period (e.g. 1 min) is up OR if a swap is initiated on the platform. If that is the case, then check the API agian. Else, display the cached/stored information. 
-- add swap history and save it to a database; history can access from nav bar
-- Refactor backend to C# 
+- Refactor backend APIs to C# 
+- add swap history and save it to a database along with the value it was swapped for; history can access from nav bar
 - Proxy set up for smart contract
 - store contract ABIs in a database and fetch it:
   - current idea is to call etherscan/ftmscan/etc api to fetch the ABI whenever user wants to approve tokens for ERC20 transfer
@@ -161,3 +147,18 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
   4. ERC20(s) -> ETH + ERC20(s)
   5. ETH + ERC20 -> ERC20(s)
 - 12/02/23: write tests for it to ensure it works properly
+- 23/02/23: check for getAmountsOut for these cases in the getAmountsOut function in the preview swap Modal:
+  1. ETH -> ERC20(s) coded previously
+  2. ERC20(s) -> ETH
+  3. ERC20(s) -> ERC20(s)
+  4. ERC20(s) -> ETH + ERC20(s)
+  5. ETH + ERC20 -> ERC20(s)
+  - Note: throw error on frontend if user tries to swap ETH + ERC20s -> ETH + ERC20s or ETH -> ETH
+    - To get the approve function, we cannot create an interface on smart contract on behalf of user.Instead, we must get the ABI of the ERC20 token and get the user to call the approve function directly on our front end.
+    - To get contract ABI, we can call APIs to do so from e.g. etherscan API or ftmscan API. For example can use this get method:
+    - https://api.etherscan.io/api?module=contract&action=getabi&address=TOKENADDRESSHERE&apikey=APIKEYHERE
+    - Perform error handling for if unable to get contract ABI. Load the contract in the getAmountsOut function
+    - if have any that requires approval, add an Approve XXX Token button between the You Give and You Get in the preview swap screen. Can add a "approvalsRequired" state
+    - disable the Confirm button if have any approval
+    - upon user approve and confirm, change the Approve XXX Token button to a button which says Approved XXX Token and diable the button; maybe put a tick symbol beside it also
+    - if there are no more that requires approval, enable the Confirm button

@@ -270,8 +270,7 @@ const Swap = ({
             align="middle"
             className={classes.plusButonContainer}
           >
-            {/* temporary remove the plus buttom for swap from since currently only allowing for 1 to multiple swap */}
-            {/* <Button
+            <Button
               block
               shape="round"
               type="primary"
@@ -288,7 +287,7 @@ const Swap = ({
                   imgUrl: '',
                 })
               }}
-            /> */}
+            />
           </Row>
         </div>
         <div style={{ margin: '5px' }}>

@@ -6,7 +6,7 @@ export const ethDefaultAssetInfo = [
       'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880',
     bal: 0.203,
     decimals: 18,
-    address: 'native',
+    address: '0x0000000000000000000000000000000000000000',
     isDefaultAsset: true,
   },
   {
