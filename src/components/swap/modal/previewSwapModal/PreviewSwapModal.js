@@ -41,7 +41,9 @@ const PreviewSwapModal = ({
   }
   const UINT_256_MAX_AMOUNT =
     '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
-  const MULTISWAP_ADDRESS = '0x6aD14F3770bb85a35706DCa781E003Fcf1e716e3'
+  const MULTISWAP_ADDRESS = {
+    goerli: '0x6aD14F3770bb85a35706DCa781E003Fcf1e716e3',
+  }
   const openNotification = (message, placement) => {
     api.info({
       message: message,
@@ -137,6 +139,7 @@ const PreviewSwapModal = ({
             amount: [ethAmount],
             poolAddresses: poolAddressesOut,
             percentForEachToken: percentForEachTokenOut,
+            event: 'SwapEthForTokensEvent',
           },
           [],
         )
@@ -171,6 +174,7 @@ const PreviewSwapModal = ({
           {
             poolAddresses: poolAddressesIn,
             amountForEachTokens: amountForEachTokensIn,
+            event: 'SwapTokensForEthEvent',
           },
           tokensToApprove,
         )
@@ -210,6 +214,7 @@ const PreviewSwapModal = ({
             amountForEachTokensIn: amountForEachTokensIn,
             poolAddressesOut: poolAddressesOut,
             percentForEachTokenOut: percentForEachTokenOut,
+            event: 'SwapTokensForTokensEvent',
           },
           tokensToApprove,
         )
@@ -265,6 +270,7 @@ const PreviewSwapModal = ({
             amountForEachTokensIn: amountForEachTokensIn,
             poolAddressesOut: orderedPoolAddressesOut,
             percentForEachTokenOut: orderedPercentForEachTokenOut,
+            event: 'SwapTokensForTokensAndEthEvent',
           },
           tokensToApprove,
         )
@@ -320,6 +326,7 @@ const PreviewSwapModal = ({
             amountForEachTokensIn: orderedAmountForEachTokensIn,
             poolAddressesOut: poolAddressesOut,
             percentForEachTokenOut: percentForEachTokenOut,
+            event: 'SwapEthAndTokensForTokensEvent',
           },
           tokensToApprove,
         )
@@ -385,13 +392,27 @@ const PreviewSwapModal = ({
     }
   }
 
+  const userAcceptedTransaction = () => {
+    props.showNotificationInSwapJs(
+      'Transaction Pending',
+      getPendingSwapText(),
+      <LoadingOutlined />,
+      'topRight',
+      15,
+    )
+    props.setSwapIsLoading(true)
+    setModalContent('swapSubmitted')
+  }
+
   const initiateSwap = async () => {
     // console.log(swapFromDetails)
     // console.log(swapToDetails)
     setModalContent('pendingConfirmation')
+    let callSwap
     try {
       if (swapType === 'swapEthForMultipleTokensByPercent') {
-        let callSwap = await multiswap.methods
+        // 1. ETH -> ERC20(s)
+        callSwap = await multiswap.methods
           .swapEthForMultipleTokensByPercent(
             swapObject.poolAddresses,
             swapObject.percentForEachToken,
@@ -402,39 +423,96 @@ const PreviewSwapModal = ({
           }) // only when user clicks confirm on metamask will this next step appear
           .on('transactionHash', (hash) => {
             // console.log(`Transaction hash: ${hash}. user has confirmed`)
-            props.showNotificationInSwapJs(
-              'Transaction Pending',
-              getPendingSwapText(),
-              <LoadingOutlined />,
-              'topRight',
-              15,
-            )
-            props.setSwapIsLoading(true)
-            setModalContent('swapSubmitted')
+            userAcceptedTransaction()
           })
-
-        // Promise will resolve once the transaction has been confirmed and mined
-        const receipt = await web3.eth.getTransactionReceipt(
-          callSwap.transactionHash,
-        )
-        console.log(receipt)
-        console.log(callSwap)
-        props.showNotificationInSwapJs(
-          'Transaction Completed',
-          getSuccessfulSwapText(callSwap),
-          <CheckCircleOutlined />,
-          'topRight',
-          15,
-        )
-        props.setSwapIsLoading(false)
-        // in the future, show also push to history
-        //
+      } else if (swapType === 'swapMultipleTokensForEth') {
+        // 2. ERC20(s) -> ETH
+        callSwap = await multiswap.methods
+          .swapMultipleTokensForEth(
+            swapObject.poolAddresses,
+            swapObject.amountForEachTokens,
+          )
+          .send({
+            from: address,
+          })
+          .on('transactionHash', (hash) => {
+            userAcceptedTransaction()
+          })
+      } else if (swapType === 'swapMultipleTokensForMultipleTokensByPercent') {
+        // 3. ERC20(s) -> ERC20(s)
+        callSwap = await multiswap.methods
+          .swapMultipleTokensForMultipleTokensByPercent(
+            swapObject.poolAddressesIn,
+            swapObject.amountForEachTokensIn,
+            swapObject.poolAddressesOut,
+            swapObject.percentForEachTokenOut,
+          )
+          .send({
+            from: address,
+          })
+          .on('transactionHash', (hash) => {
+            userAcceptedTransaction()
+          })
+      } else if (
+        swapType === 'swapMultipleTokensForMultipleTokensAndEthByPercent'
+      ) {
+        // 4. ERC20(s) -> ETH + ERC20(s)
+        callSwap = await multiswap.methods
+          .swapMultipleTokensForMultipleTokensAndEthByPercent(
+            swapObject.poolAddressesIn,
+            swapObject.amountForEachTokensIn,
+            swapObject.poolAddressesOut,
+            swapObject.percentForEachTokenOut,
+          )
+          .send({
+            from: address,
+          })
+          .on('transactionHash', (hash) => {
+            userAcceptedTransaction()
+          })
+      } else if (swapType === 'swapTokensAndEthForMultipleTokensByPercent') {
+        // 5. ETH + ERC20 -> ERC20(s)
+        callSwap = await multiswap.methods
+          .swapTokensAndEthForMultipleTokensByPercent(
+            swapObject.poolAddressesIn,
+            swapObject.amountForEachTokensIn,
+            swapObject.poolAddressesOut,
+            swapObject.percentForEachTokenOut,
+          )
+          .send({
+            from: address,
+            value:
+              swapObject.amountForEachTokensIn[
+                swapObject.amountForEachTokensIn.length - 1
+              ],
+          })
+          .on('transactionHash', (hash) => {
+            userAcceptedTransaction()
+          })
       }
-      // else if(swapType === ...)...
+
+      // Promise will resolve once the transaction has been confirmed and mined
+      const receipt = await web3.eth.getTransactionReceipt(
+        callSwap.transactionHash,
+      )
+      console.log(receipt)
+      console.log(callSwap)
+      props.showNotificationInSwapJs(
+        'Transaction Completed',
+        getSuccessfulSwapText(callSwap),
+        <CheckCircleOutlined />,
+        'topRight',
+        60,
+      )
+      props.setSwapIsLoading(false)
+      // in the future, show also push to history
+      //
     } catch (e) {
       if (e?.code === 4001) {
         setModalContent('previewSwap')
         openNotification('You have rejected the transaction', 'top')
+      } else {
+        console.log(e)
       }
     }
   }
@@ -447,13 +525,18 @@ const PreviewSwapModal = ({
 
   const getSuccessfulSwapText = (receipt) => {
     if (swapType === 'swapEthForMultipleTokensByPercent') {
-      let swapToDetailsTemp = JSON.parse(JSON.stringify(swapTo)) // deep copy to ensure original doesn't change
-      for (let i in swapToDetailsTemp) {
-        swapToDetailsTemp[i].amount =
-          parseInt(
-            receipt.events.SwapEthForTokensEvent.returnValues.swapTo[i][1],
-          ) / Math.pow(10, swapToDetailsTemp[i].decimals)
-      }
+      // let swapToDetailsTemp = JSON.parse(JSON.stringify(swapTo)) // deep copy to ensure original doesn't change
+      // for (let i in swapToDetailsTemp) {
+      //   swapToDetailsTemp[i].amount =
+      //     parseInt(
+      //       receipt.events[swapObject.event].returnValues.swapTo[i][1],
+      //     ) / Math.pow(10, swapToDetailsTemp[i].decimals)
+      // }
+      let swapToDetailsTemp = formatAmountsInArrayForSuccessfulSwap(
+        receipt,
+        swapToDetails,
+        'swapTo',
+      )
       return (
         <span>
           {`You have successfully swapped ${formatNumber(
@@ -461,11 +544,50 @@ const PreviewSwapModal = ({
             'crypto',
           )} ${swapFrom[0].symbol} for ${getIndividualSwapText(
             swapToDetailsTemp,
-          )}`}{' '}
+          )}`}
+          {getLinkToBlockExplorer(receipt.transactionHash)}
+        </span>
+      )
+    } else if (swapType === 'swapMultipleTokensForEth') {
+      return (
+        <span>
+          {`You have successfully swapped ${getIndividualSwapText(
+            swapFromDetails,
+          )} for ${formatNumber(
+            (receipt.events[swapObject.event].returnValues.swapToAmount/Math.pow(10, swapToDetails[0].decimals)),
+            'crypto',
+          )} ${swapToDetails[0].symbol}`}
+          {getLinkToBlockExplorer(receipt.transactionHash)}
+        </span>
+      )
+    } else {
+      let swapToDetailsTemp = formatAmountsInArrayForSuccessfulSwap(
+        receipt,
+        swapToDetails,
+        'swapTo',
+      )
+      return (
+        <span>
+          {`You have successfully swapped ${getIndividualSwapText(
+            swapFromDetails,
+          )} for ${getIndividualSwapText(swapToDetailsTemp)}`}
           {getLinkToBlockExplorer(receipt.transactionHash)}
         </span>
       )
     }
+  }
+
+  const formatAmountsInArrayForSuccessfulSwap = (receipt, arr, swapType) => {
+    // swapType = "swapFrom" or "swapTo"
+    arr = JSON.parse(JSON.stringify(arr)) //deep copy to ensure it doesnt replace the arr
+    for (let i in arr) {
+      arr[i].amount =
+        parseInt(
+          // receipt.events.SwapEthForTokensEvent.returnValues.swapTo[i][1],
+          receipt.events[swapObject.event].returnValues[swapType][i][1],
+        ) / Math.pow(10, arr[i].decimals)
+    }
+    return arr
   }
 
   const getIndividualSwapText = (arr) => {
@@ -560,7 +682,7 @@ const PreviewSwapModal = ({
       })
 
       const approved = await i.contract.methods
-        .approve(MULTISWAP_ADDRESS, UINT_256_MAX_AMOUNT)
+        .approve(MULTISWAP_ADDRESS[chain], UINT_256_MAX_AMOUNT)
         .send({ from: address })
       if (approved.events.Approval.returnValues) {
         setTokensRequiringApproval((prevState) => {

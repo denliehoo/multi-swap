@@ -1,6 +1,6 @@
 # To do list / Progress:
 ## To do
-- connect the new swap types for all case to the frontend and ensure it is working
+- Optimisation/Reducing API Calls: find a way to cache/store the balances for a time period (e.g. 1 min) or when a swap is initiated on the platform. Meaning that instead of checking the API for balances directly, it should check the cache and the store it. Then, when opening the asset modal in another location, it should check if the time period (e.g. 1 min) is up OR if a swap is initiated on the platform. If that is the case, then check the API agian. Else, display the cached/stored information. 
 - refactor code from Phase 1
 - optimise CSS for different screen sizes
 
@@ -40,7 +40,7 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
   - comment out the line below that
 
 ## Low Priority Items: 
-- Optimisation/Reducing API Calls: find a way to cache/store the balances for a time period (e.g. 1 min) or when a swap is initiated on the platform. Meaning that instead of checking the API for balances directly, it should check the cache and the store it. Then, when opening the asset modal in another location, it should check if the time period (e.g. 1 min) is up OR if a swap is initiated on the platform. If that is the case, then check the API agian. Else, display the cached/stored information. 
+- error in the return value in event for some swaps (currently for sure case 2 is effected). The token swapfrom value amount is showing the amount of ETH it is swapped for when it should show the amount of the original tokens being swapped instead. Currently, swap from portion is still working since we take the swap from value from frontend itself. Ensure that the swapfrom values for all cases are correct. 
 - Refactor backend APIs to C# 
 - add swap history and save it to a database along with the value it was swapped for; history can access from nav bar
 - Proxy set up for smart contract
@@ -162,3 +162,4 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
     - disable the Confirm button if have any approval
     - upon user approve and confirm, change the Approve XXX Token button to a button which says Approved XXX Token and diable the button; maybe put a tick symbol beside it also
     - if there are no more that requires approval, enable the Confirm button
+- 24/02/23: Connect the new swap types for all case to the frontend and ensure it is working

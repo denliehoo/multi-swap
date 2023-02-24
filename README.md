@@ -45,6 +45,7 @@ Note: can get free nodes here: https://www.quicknode.com/endpoints or https://in
 Environmental Values:
 ```Javascript
 REACT_APP_MORALIS_API_KEY=XXXXX
+REACT_APP_ETHERSCAN_API_KEY=XXXX
 ```
 # Product Road Map:
 - Phase 1: Swap ETH for multiple token + Basic UI Done
