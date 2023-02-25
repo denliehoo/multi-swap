@@ -1,14 +1,13 @@
 # To do list / Progress:
 ## To do
-- Optimisation/Reducing API Calls: find a way to cache/store the balances for a time period (e.g. 1 min) or when a swap is initiated on the platform. Meaning that instead of checking the API for balances directly, it should check the cache and the store it. Then, when opening the asset modal in another location, it should check if the time period (e.g. 1 min) is up OR if a swap is initiated on the platform. If that is the case, then check the API agian. Else, display the cached/stored information. 
 - refactor code from Phase 1
-- optimise CSS for different screen sizes
 
 - -----End Of Phase 2: Swap ETH/ERC20 tokens to ETH/ERC20 tokens-----
 
 <br />
 
 - -----Start Of Phase 3: Ability to use different chains-----
+- optimise CSS for different screen sizes
 - get the chain from the connected metamask and store it in the connectWalletReducer. Need ensure that the change chain in the nav bar works too
 - changing the chains should cause the tokens/custom tokens displayed to change accordingly
 - create similar smart contracts for other chains (e.g. ftm testnet / kovan)
@@ -163,3 +162,8 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
     - upon user approve and confirm, change the Approve XXX Token button to a button which says Approved XXX Token and diable the button; maybe put a tick symbol beside it also
     - if there are no more that requires approval, enable the Confirm button
 - 24/02/23: Connect the new swap types for all case to the frontend and ensure it is working
+- 25/02/23: Optimisation and reducing API calls: Add the balances during getTokenBalances api call to local storage.
+  - If balances is queried again, check whether it has been more than 60 seconds
+  - If more than 60 seconds, remove from local storage 
+  - If it has been less than 60 seconds, show the balance from local
+  - If a swap has occured / custom token imported, remove from local

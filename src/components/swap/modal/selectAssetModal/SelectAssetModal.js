@@ -1,9 +1,6 @@
 import classes from './SelectAssetModal.module.css'
 import { Row, Col } from 'antd/lib/grid'
-import {
-  ArrowLeftOutlined,
-  LoadingOutlined
-} from '@ant-design/icons'
+import { ArrowLeftOutlined, LoadingOutlined } from '@ant-design/icons'
 import { Button, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import SelectAssetItem from './SelectAssetItem'
@@ -81,7 +78,6 @@ const SelectAssetModal = ({
     for (let i in combinedAssetListTemp) {
       combinedAssetListTemp[i].bal = balancesArray[i]
     }
-    {/* comment out the line 2 lines below this and uncomment the line below this to change back to show all assets even for swap from */}
     setCombinedAssetList(combinedAssetListTemp)
     // props.type === 'from' ? setCombinedAssetList([combinedAssetListTemp[0]]) : setCombinedAssetList(combinedAssetListTemp)
     setIsLoading(false)
@@ -101,7 +97,14 @@ const SelectAssetModal = ({
   }
 
   const closeModalHandler = () => {
+    setSelectedAsset('')
     setIsManageCustomToken(false)
+    setCombinedAssetList([])
+    setIsLoading(true)
+    setToggleChangesInCustomToken(false)
+    setSearchInput('')
+    setSearchInputResults([])
+
     props.closeModal()
   }
 

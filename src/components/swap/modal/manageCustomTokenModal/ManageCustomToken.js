@@ -1,4 +1,4 @@
-import classes from "./ManageCustomToken.module.css";
+import classes from './ManageCustomToken.module.css'
 import axios from 'axios'
 import { Row, Col } from 'antd/lib/grid'
 import React, { useState, useEffect } from 'react'
@@ -7,6 +7,7 @@ import IconComponent from '../../shared/IconComponent'
 import { SearchOutlined } from '@ant-design/icons'
 import ManageCustomTokenItem from './ManageCustomTokenItem'
 import { getDetailsForCustomToken } from '../../../../api/api'
+import { localStorageKey } from '../../../../cofig/config'
 import { connect } from 'react-redux'
 import {
   addCustomToken,
@@ -27,7 +28,6 @@ const ManageCustomToken = ({
   const [customTokenData, setCustomTokenData] = useState({})
   const [renderComponent, setRenderComponent] = useState(false)
   const [inputIsFocused, setInputIsFocused] = useState(false)
-
 
   /* 
     Problem: Parent component (this comp) isn't aware of the global state changes
@@ -103,6 +103,7 @@ const ManageCustomToken = ({
     } else if (chain === 'goerli') {
       addCustomToken([...goerliCustomTokens, customTokenData])
     }
+    localStorage.removeItem(localStorageKey) // remove current balances from cache because of new token
     setShowImportToken(false)
     props.setToggleChangesInCustomToken()
     setCustomTokenErrorMessage('')
@@ -133,8 +134,8 @@ const ManageCustomToken = ({
             ? checkIfValidAddress(inputValue, chain) // eventually do a get chain from global state and replace here
             : setCustomTokenErrorMessage('Enter valid token address')
         }}
-        onFocus={() =>setInputIsFocused(true)}
-        onBlur={() =>setInputIsFocused(false)}
+        onFocus={() => setInputIsFocused(true)}
+        onBlur={() => setInputIsFocused(false)}
       />
       {customTokenErrorMessage ? (
         <div className="color-light-grey">{customTokenErrorMessage}</div>
@@ -142,17 +143,13 @@ const ManageCustomToken = ({
         <div></div>
       )}
       {showImportToken ? (
-        <div
-        className={classes.importTokenContainer}
-        >
+        <div className={classes.importTokenContainer}>
           <Row align="middle">
             <Col span={2}>
               <IconComponent imgUrl={customTokenData.logo} />
             </Col>
             <Col span={10}>
-              <span className="fw-700">
-                {customTokenData.symbol}
-              </span>
+              <span className="fw-700">{customTokenData.symbol}</span>
               <span> </span>
               <span>{customTokenData.name}</span>
             </Col>
@@ -182,7 +179,9 @@ const ManageCustomToken = ({
             <Col>You have {getCustomTokens(chain).length} custom tokens</Col>
             <Col>
               {/* <Button onClick={deleteAllHandler}>Clear All</Button> */}
-              <div className={classes.clearAll} onClick={deleteAllHandler}>Clear All</div>
+              <div className={classes.clearAll} onClick={deleteAllHandler}>
+                Clear All
+              </div>
             </Col>
           </Row>
         ) : (

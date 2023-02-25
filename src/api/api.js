@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { localStorageKey } from '../cofig/config'
 
 const getAssetPrice = async (chain, asset, address) => {
   if (asset === 'ETH') {
@@ -47,6 +48,40 @@ const getDetailsForCustomToken = async (chain, tokenAddress) => {
 // [0x10b620b2dbac4faa7d7ffd71da486f5d44cd86f9,0x841FAD6EAe12c286d1Fd18d1d525DFfA75C7EFFE,0x04068DA6C83AFCFA0e13ba15A6696662335D5B75]
 // should take it the token address and return the user balances in that order. Dont forget to add in the native balance also
 const getTokenBalances = async (chain, walletAddress, tokenAddresses) => {
+  const encodeBase64 = (text) => {
+    if (typeof btoa === 'function') {
+      return btoa(text)
+    } else {
+      const buffer = new Buffer.from(text, 'binary')
+      return buffer.toString('base64')
+    }
+  }
+
+  const decodeBase64 = (text) => {
+    if (typeof atob === 'function') {
+      return atob(text)
+    } else {
+      const buffer = new Buffer.from(text, 'base64')
+      return buffer.toString('binary')
+    }
+  }
+  // const localStorageKey = 'Y2FjaGVkQmFsYW5jZXM='
+  let dataFromLocalStorage = localStorage.getItem(localStorageKey)
+  if (dataFromLocalStorage) {
+    dataFromLocalStorage = JSON.parse(decodeBase64(dataFromLocalStorage))
+    const { timestamp, data } = dataFromLocalStorage
+    if (timestamp && data[chain]) {
+      // if it has been less than 60s (60000) since balance was last fetched, we return from local
+      // rmemeber to removeItem from local once a swap has been initiated
+      if (Date.now() - timestamp <= 6000) {
+        return data[chain]
+      }
+    }
+    // else if it has been more than 60s, we get token balance from API
+    console.log('removing')
+    localStorage.removeItem(localStorageKey)
+  }
+
   let tokenBalances = []
   const nativeBalanceResponse = await axios.get(
     `https://deep-index.moralis.io/api/v2/${walletAddress}/balance`,
@@ -92,6 +127,16 @@ const getTokenBalances = async (chain, walletAddress, tokenAddresses) => {
     }
     pushZero && tokenBalances.push(0)
   }
+
+  localStorage.setItem(
+    localStorageKey,
+    encodeBase64(
+      JSON.stringify({
+        timestamp: Date.now(),
+        data: { [chain]: tokenBalances },
+      }),
+    ),
+  )
   return tokenBalances
 }
 
@@ -104,8 +149,7 @@ const getContractABI = async (chain, address) => {
     )
     if (res.status === 200) {
       return JSON.parse(res.data.result)
-    }
-    else{
+    } else {
       // likely means contract not verified
       return null
     }
