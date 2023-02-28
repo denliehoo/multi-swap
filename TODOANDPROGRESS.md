@@ -1,11 +1,5 @@
 # To do list / Progress:
 ## To do
-- refactor code from Phase 1
-
-- -----End Of Phase 2: Swap ETH/ERC20 tokens to ETH/ERC20 tokens-----
-
-<br />
-
 - -----Start Of Phase 3: Ability to use different chains-----
 - optimise CSS for different screen sizes
 - get the chain from the connected metamask and store it in the connectWalletReducer. Need ensure that the change chain in the nav bar works too
@@ -167,3 +161,5 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
   - If more than 60 seconds, remove from local storage 
   - If it has been less than 60 seconds, show the balance from local
   - If a swap has occured / custom token imported, remove from local
+- 28/02/23: Preparing to launch phase 2
+- -----End Of Phase 2: Swap ETH/ERC20 tokens to ETH/ERC20 tokens-----

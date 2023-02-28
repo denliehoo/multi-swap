@@ -362,6 +362,8 @@ const Swap = ({
         </Row>
       </div>
       {
+        // do remove state here (maybe leave the thing in global state too, see how)
+        // also remember to change percentage array to just [100] and any other relevant
         <PreviewSwapModal
           closePreviewAssetModal={() => {
             setShowPreviewSwapModal(false)
@@ -371,6 +373,7 @@ const Swap = ({
           setSwapIsLoading={(trueOrFalse) => {
             setSwapIsLoading(trueOrFalse)
           }}
+          resetPercentageArray={()=>{setSwapToPercentages([100])}}
         />
       }
     </div>

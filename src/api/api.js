@@ -73,12 +73,11 @@ const getTokenBalances = async (chain, walletAddress, tokenAddresses) => {
     if (timestamp && data[chain]) {
       // if it has been less than 60s (60000) since balance was last fetched, we return from local
       // rmemeber to removeItem from local once a swap has been initiated
-      if (Date.now() - timestamp <= 6000) {
+      if (Date.now() - timestamp <= 60000) {
         return data[chain]
       }
     }
     // else if it has been more than 60s, we get token balance from API
-    console.log('removing')
     localStorage.removeItem(localStorageKey)
   }
 
@@ -141,18 +140,21 @@ const getTokenBalances = async (chain, walletAddress, tokenAddresses) => {
 }
 
 const getContractABI = async (chain, address) => {
-  const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY
   let res
   if (chain === 'goerli') {
     res = await axios.get(
-      `https://api-goerli.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${ETHERSCAN_API_KEY}`,
+      `https://api-goerli.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`,
     )
-    if (res.status === 200) {
-      return JSON.parse(res.data.result)
-    } else {
-      // likely means contract not verified
-      return null
-    }
+  } else if (chain === 'ftm'){
+    res = await axios.get(
+      `https://api.ftmscan.com/api?module=contract&action=getabi&address=${address}&apikey=${process.env.REACT_APP_FTMSCAN_API_KEY}`
+    )
+  }
+  if (res?.status === 200) {
+    return JSON.parse(res.data.result)
+  } else {
+    // likely means contract not verified
+    return null
   }
 
   // else if(chain ==='ftm')

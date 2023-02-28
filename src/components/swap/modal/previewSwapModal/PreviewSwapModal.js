@@ -2,6 +2,7 @@ import classes from './PreviewSwapModal.module.css'
 import { Button, Modal, Row, Col, notification } from 'antd'
 import { useEffect, useState, useRef } from 'react'
 import PreviewSwapItem from './PreviewSwapItem'
+import { resetSwap } from '../../../../reducers/swapReducer'
 import { connect } from 'react-redux'
 import {
   ExclamationCircleOutlined,
@@ -12,7 +13,13 @@ import {
 } from '@ant-design/icons'
 import { formatNumber } from '../../../../utils/format/formatNumber'
 import { getContractABI } from '../../../../api/api'
-import { NATIVE_ADDRESS, WETH_ADDRESS, UINT_256_MAX_AMOUNT, MULTISWAP_ADDRESS, localStorageKey  } from '../../../../cofig/config'
+import {
+  NATIVE_ADDRESS,
+  WETH_ADDRESS,
+  UINT_256_MAX_AMOUNT,
+  MULTISWAP_ADDRESS,
+  localStorageKey,
+} from '../../../../cofig/config'
 
 const PreviewSwapModal = ({
   props,
@@ -22,6 +29,7 @@ const PreviewSwapModal = ({
   address,
   chain,
   web3,
+  resetSwap,
 }) => {
   const [modalContent, setModalContent] = useState('loading')
   const [swapFromDetails, setSwapFromDetails] = useState([])
@@ -104,7 +112,6 @@ const PreviewSwapModal = ({
     const amountForEachTokensIn = swapFrom.map((i) =>
       (i.amount * Math.pow(10, i.decimals)).toString(),
     )
-    console.log(amountForEachTokensIn)
     const percentForEachTokenOut = swapTo.map((i) =>
       (i.amount * 100).toString(),
     ) // *100 because in basis point i.e. 50% = 5000
@@ -113,7 +120,7 @@ const PreviewSwapModal = ({
     // 1. ETH -> ERC20s
     try {
       if (
-        swapFrom.length == 1 &&
+        swapFrom.length === 1 &&
         swapFrom[0].address === NATIVE_ADDRESS &&
         !poolAddressesOut.includes(NATIVE_ADDRESS)
       ) {
@@ -148,7 +155,7 @@ const PreviewSwapModal = ({
       // 2. ERC20(s) -> ETH
       else if (
         !poolAddressesIn.includes(NATIVE_ADDRESS) &&
-        swapTo.length == 1 &&
+        swapTo.length === 1 &&
         swapTo[0].address === NATIVE_ADDRESS
       ) {
         console.log('case 2!')
@@ -372,19 +379,19 @@ const PreviewSwapModal = ({
   }
 
   const getLinkToBlockExplorer = (hash) => {
-    if (chain == 'eth') {
+    if (chain === 'eth') {
       return (
         <a href={`https://etherscan.io/tx/${hash}`} target="_blank">
           <ScanOutlined />
         </a>
       )
-    } else if (chain == 'ftm') {
+    } else if (chain === 'ftm') {
       return (
         <a href={`https://ftmscan.com/tx/${hash}`} target="_blank">
           <ScanOutlined />
         </a>
       )
-    } else if (chain == 'goerli') {
+    } else if (chain === 'goerli') {
       return (
         <a href={`https://goerli.etherscan.io/tx/${hash}`} target="_blank">
           <ScanOutlined />
@@ -556,7 +563,8 @@ const PreviewSwapModal = ({
           {`You have successfully swapped ${getIndividualSwapText(
             swapFromDetails,
           )} for ${formatNumber(
-            (receipt.events[swapObject.event].returnValues.swapToAmount/Math.pow(10, swapToDetails[0].decimals)),
+            receipt.events[swapObject.event].returnValues.swapToAmount /
+              Math.pow(10, swapToDetails[0].decimals),
             'crypto',
           )} ${swapToDetails[0].symbol}`}
           {getLinkToBlockExplorer(receipt.transactionHash)}
@@ -647,10 +655,7 @@ const PreviewSwapModal = ({
         .allowanceERC20(poolAddressesIn[i])
         .call({ from: address })
 
-      console.log('this is allowance for ', poolAddressesIn[i])
-      console.log(allowance)
-
-      if (amountForEachTokensIn[i] > allowance) {
+      if (parseFloat(amountForEachTokensIn[i]) > parseFloat(allowance)) {
         const tokenContractABI = await getContractABI(chain, poolAddressesIn[i])
         if (!tokenContractABI) {
           // throw an error here
@@ -674,8 +679,7 @@ const PreviewSwapModal = ({
   }
 
   const approveTokenHandler = async (i, index) => {
-    console.log(tokensApproved)
-    console.log(i.address)
+
     try {
       setTokensRequiringApproval((prevState) => {
         const newState = [...prevState]
@@ -710,6 +714,12 @@ const PreviewSwapModal = ({
     }
   }
 
+  const resetSwapToDefaultHandler = () => {
+    closeModalHandler()
+    props.resetPercentageArray()
+    resetSwap()
+  }
+
   useEffect(() => {
     props.visible && getAmountsOutDetails()
   }, [props.visible])
@@ -718,9 +728,14 @@ const PreviewSwapModal = ({
     <Modal
       title={modalContent === 'previewSwap' ? 'Preview Swap' : ''}
       visible={props.visible}
-      onCancel={closeModalHandler}
+      onCancel={
+        modalContent === 'swapSubmitted'
+          ? resetSwapToDefaultHandler
+          : closeModalHandler
+      }
       footer={null}
       bodyStyle={{ height: '60vh' }}
+      maskClosable={false}
     >
       {contextHolder}
       {/* loading > preview swap > pending confirmation > swap submitted */}
@@ -837,9 +852,11 @@ const PreviewSwapModal = ({
                 {loadingSpinner}
               </Row>
               <Row align="middle" justify="center">
-                <div className="fw-700 mb-15">Waiting For Confirmation</div>
-                <div className="mb-15">{getPendingSwapText()}</div>
-                <div>Confirm this transaction in your wallet</div>
+                <div>
+                  <div className="fw-700 mb-15">Waiting For Confirmation</div>
+                  <div className="mb-15">{getPendingSwapText()}</div>
+                  <div>Confirm this transaction in your wallet</div>
+                </div>
               </Row>
             </Col>
           </Row>
@@ -869,7 +886,7 @@ const PreviewSwapModal = ({
                   Your swap has been submitted!
                 </div>
                 <Button
-                  onClick={closeModalHandler}
+                  onClick={resetSwapToDefaultHandler}
                   type="primary"
                   shape="round"
                   block
@@ -894,5 +911,7 @@ const mapStateToProps = ({ swapReducer, connectWalletReducer }, ownProps) => ({
   web3: connectWalletReducer.web3,
   chain: connectWalletReducer.chain,
 })
-
-export default connect(mapStateToProps)(PreviewSwapModal)
+const mapDispatchToProps = (dispatch) => ({
+  resetSwap: () => dispatch(resetSwap()),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(PreviewSwapModal)

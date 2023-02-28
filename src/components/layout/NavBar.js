@@ -38,7 +38,6 @@ const NavBar = ({
     changeChainCustomTokenReducer(chain)
   }, [])
 
-
   useEffect(() => {
     if (walletConnected && window.ethereum) {
       window.ethereum.on('accountsChanged', (accounts) => {
@@ -46,7 +45,7 @@ const NavBar = ({
       })
       window.ethereum.on('chainChanged', async (chainId) => {
         console.log(`Chain changed to ${chainId}`)
-        disconnectWalletAction();
+        disconnectWalletAction()
         await attemptToConnectWallet(chain)
       })
     } else {
@@ -98,9 +97,13 @@ const NavBar = ({
 
   const rightItems = [
     {
-      // label: <span><IconComponent imgUrl={fantomLogo} size={'small'}/> Fantom</span>,
-      label: <span>[Logo] Goerli</span>,
-      key: 'connectWallet',
+      label: (
+        <span>
+          <IconComponent imgUrl={fantomLogo} size={'small'} /> Fantom
+        </span>
+      ),
+      // label: <span>[Logo] Goerli</span>,
+      key: 'networkName',
       // children: [
       //   { label: '[Logo] Goerli', key: 'goerli' },
       //   { label: '[Logo] Avalanche', key: 'avax' },
@@ -122,7 +125,7 @@ const NavBar = ({
       <Col
         style={{ fontSize: 'large', paddingTop: '10px', paddingLeft: '30px' }}
       >
-        <IconComponent imgUrl={multiswapLogo} size={'small'}/>
+        <IconComponent imgUrl={multiswapLogo} size={'small'} />
         Multiswap
       </Col>
       <Col>

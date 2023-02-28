@@ -8,4 +8,5 @@ export const UINT_256_MAX_AMOUNT =
   '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
 export const MULTISWAP_ADDRESS = {
   goerli: '0x6aD14F3770bb85a35706DCa781E003Fcf1e716e3',
+  ftm: '0x439de68f77b135AA56beB2825Be77aA20fbb4384'
 }

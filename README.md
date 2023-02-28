@@ -46,11 +46,12 @@ Environmental Values:
 ```Javascript
 REACT_APP_MORALIS_API_KEY=XXXXX
 REACT_APP_ETHERSCAN_API_KEY=XXXX
+REACT_APP_FTMSCAN_API_KEY=XXXX
 ```
 # Product Road Map:
 - Phase 1: Swap ETH for multiple token + Basic UI Done
 - Phase 2: Swap multiple ETH/ERC20 tokens for ETH/ERC20 tokens
-- Phase 3: Deploy to different EVM networks and allow for multiswap
+- Phase 3: Deploy to different EVM networks and allow for multiswap + Responsive frontend design for multiple screen sizes
 - Phase 4: Continuous Improvements
   - Connect multiple routers to the smart contract and give the best rate for each token
   - Customisation of slippage
@@ -65,8 +66,8 @@ REACT_APP_ETHERSCAN_API_KEY=XXXX
 - Phase 2:
   - Goerli: 0x6aD14F3770bb85a35706DCa781E003Fcf1e716e3
     - Multiswap: https://goerli.etherscan.io/address/0x6ad14f3770bb85a35706dca781e003fcf1e716e3#code
-  - Fantom: 
-    - Multiswap: 
+  - Fantom: 0x439de68f77b135AA56beB2825Be77aA20fbb4384
+    - Multiswap: https://ftmscan.com/address/0x439de68f77b135aa56beb2825be77aa20fbb4384
 
 
 ---

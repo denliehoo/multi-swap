@@ -218,7 +218,7 @@ const CryptoSwapItemTest = ({
               ? '...'
               : formatNumber(price * props.amount, 'fiat')}
           </Col>
-          <Col>Balance: {formatNumber(balance, 'crypto')}</Col>
+          <Col>Balance: {props.asset && formatNumber(balance, 'crypto')}</Col>
         </Row>
       ) : (
         <Row>

@@ -1,0 +1,780 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "enum Multiswap.ToAddress",
+				"name": "toAddress",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint256",
+				"name": "inputtedEthAmountFromContract",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "poolAddresses",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "percentForEachToken",
+				"type": "uint256[]"
+			}
+		],
+		"name": "internalSwapEthForMultipleTokensByPercent",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "ethAmount",
+				"type": "uint256"
+			},
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapTo",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "enum Multiswap.ToAddress",
+				"name": "toAddress",
+				"type": "uint8"
+			},
+			{
+				"internalType": "address[]",
+				"name": "poolAddresses",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "amountForEachTokens",
+				"type": "uint256[]"
+			}
+		],
+		"name": "internalSwapMultipleTokensForEth",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapFrom",
+				"type": "tuple[]"
+			},
+			{
+				"internalType": "uint256",
+				"name": "ethAmount",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "poolAddresses",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "percentForEachToken",
+				"type": "uint256[]"
+			}
+		],
+		"name": "swapEthForMultipleTokensByPercent",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "ethAmount",
+				"type": "uint256"
+			},
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapTo",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_router",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"indexed": false,
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapFrom",
+				"type": "tuple[]"
+			},
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"indexed": false,
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapTo",
+				"type": "tuple[]"
+			}
+		],
+		"name": "SwapEthAndTokensForTokensEvent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "swapFromAmount",
+				"type": "uint256"
+			},
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"indexed": false,
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapTo",
+				"type": "tuple[]"
+			}
+		],
+		"name": "SwapEthForTokensEvent",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "poolAddresses",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "amountForEachTokens",
+				"type": "uint256[]"
+			}
+		],
+		"name": "swapMultipleTokensForEth",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapFrom",
+				"type": "tuple[]"
+			},
+			{
+				"internalType": "uint256",
+				"name": "ethAmount",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "_poolAddressesIn",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_amountForEachTokensIn",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "address[]",
+				"name": "_poolAddressesOut",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_percentForEachTokenOut",
+				"type": "uint256[]"
+			}
+		],
+		"name": "swapMultipleTokensForMultipleTokensAndEthByPercent",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapFrom",
+				"type": "tuple[]"
+			},
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapTo",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "poolAddressesIn",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "amountForEachTokensIn",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "address[]",
+				"name": "poolAddressesOut",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "percentForEachTokenOut",
+				"type": "uint256[]"
+			}
+		],
+		"name": "swapMultipleTokensForMultipleTokensByPercent",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapFrom",
+				"type": "tuple[]"
+			},
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapTo",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "_poolAddressesIn",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_amountForEachTokensIn",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "address[]",
+				"name": "_poolAddressesOut",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_percentForEachTokenOut",
+				"type": "uint256[]"
+			}
+		],
+		"name": "swapTokensAndEthForMultipleTokensByPercent",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapFrom",
+				"type": "tuple[]"
+			},
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapTo",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"indexed": false,
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapFrom",
+				"type": "tuple[]"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "swapToAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "SwapTokensForEthEvent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"indexed": false,
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapFrom",
+				"type": "tuple[]"
+			},
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"indexed": false,
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapTo",
+				"type": "tuple[]"
+			}
+		],
+		"name": "SwapTokensForTokensAndEthEvent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"indexed": false,
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapFrom",
+				"type": "tuple[]"
+			},
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"indexed": false,
+				"internalType": "struct Multiswap.SwapObject[]",
+				"name": "swapTo",
+				"type": "tuple[]"
+			}
+		],
+		"name": "SwapTokensForTokensEvent",
+		"type": "event"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "fallback"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			}
+		],
+		"name": "allowanceERC20",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "contractOwner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "ethAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "poolAddresses",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "percentForEachToken",
+				"type": "uint256[]"
+			}
+		],
+		"name": "getAmountsOutEthForMultipleTokensByPercent",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "poolAddresses",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "amountForEachTokens",
+				"type": "uint256[]"
+			}
+		],
+		"name": "getAmountsOutMultipleTokensForEth",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "_poolAddressesIn",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_amountForEachTokensIn",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "address[]",
+				"name": "_poolAddressesOut",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_percentForEachTokenOut",
+				"type": "uint256[]"
+			}
+		],
+		"name": "getAmountsOutMultipleTokensForMultipleTokensAndEthByPercent",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "poolAddressesIn",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "amountForEachTokensIn",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "address[]",
+				"name": "poolAddressesOut",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "percentForEachTokenOut",
+				"type": "uint256[]"
+			}
+		],
+		"name": "getAmountsOutMultipleTokensForMultipleTokensByPercent",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "_poolAddressesIn",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_amountForEachTokensIn",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "address[]",
+				"name": "_poolAddressesOut",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_percentForEachTokenOut",
+				"type": "uint256[]"
+			}
+		],
+		"name": "getAmountsOutTokensAndEthForMultipleTokensByPercent",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "WETH",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]

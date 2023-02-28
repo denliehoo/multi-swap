@@ -15,6 +15,9 @@ const removeSwapTo = (payload) => ({
   type: 'REMOVE_SWAP_TO',
   payload,
 })
+const resetSwap = () => ({
+  type: 'RESET_SWAP',
+})
 // initial state
 const initialState = {
   swapFrom: [
@@ -25,7 +28,7 @@ const initialState = {
       balance: 0,
       amount: '',
       decimals: 0,
-      imgUrl: ''
+      imgUrl: '',
     },
   ],
   swapTo: [
@@ -36,7 +39,7 @@ const initialState = {
       balance: 0,
       amount: 100,
       decimals: 0,
-      imgUrl: ''
+      imgUrl: '',
     },
   ],
 }
@@ -68,10 +71,42 @@ const swapReducer = (state = initialState, action) => {
       return { ...state, swapTo: action.payload }
     case 'REMOVE_SWAP_TO':
       return { ...state, swapTo: action.payload }
+    case 'RESET_SWAP':
+      return {
+        swapFrom: [
+          {
+            index: 0,
+            symbol: '',
+            address: '',
+            balance: 0,
+            amount: '',
+            decimals: 0,
+            imgUrl: '',
+          },
+        ],
+        swapTo: [
+          {
+            index: 0,
+            symbol: '',
+            address: '',
+            balance: 0,
+            amount: 100,
+            decimals: 0,
+            imgUrl: '',
+          },
+        ],
+      }
     default:
       return state
   }
 }
 
 // export the actions and the reducer
-export { addSwapFrom, removeSwapFrom, addSwapTo, removeSwapTo, swapReducer }
+export {
+  addSwapFrom,
+  removeSwapFrom,
+  addSwapTo,
+  removeSwapTo,
+  swapReducer,
+  resetSwap,
+}

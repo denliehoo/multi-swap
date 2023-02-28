@@ -21,8 +21,8 @@ const changeChainCustomTokenReducer = (payload) => ({
 
 // initial state
 const initialState = {
-  // chain: 'ftm', //might need change this default?
-  chain: 'goerli',
+  chain: 'ftm', //might need change this default?
+  // chain: 'goerli',
   eth: [],
   ftm: [],
   goerli: [],
