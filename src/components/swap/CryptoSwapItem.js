@@ -13,6 +13,7 @@ import {
   removeSwapTo,
 } from '../../reducers/swapReducer'
 import { formatNumber } from '../../utils/format/formatNumber'
+import { useWindowSize } from '../../hooks/useWindowSize'
 
 const CryptoSwapItemTest = ({
   props,
@@ -31,6 +32,7 @@ const CryptoSwapItemTest = ({
   const [percentInput, setPercentInput] = useState(props.percent)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [inputIsFocused, setInputIsFocused] = useState(false)
+  const {width} = useWindowSize()
 
   useEffect(() => {
     props.type === 'from'
@@ -152,10 +154,10 @@ const CryptoSwapItemTest = ({
       )}
 
       <Row justify="space-between" align="middle">
-        <Col style={{ fontSize: '2em' }}>
+        <Col style={{ fontSize: '2em', }} span={12}>
           {props.type === 'from' ? (
             <input
-              className={classes.inputBox}
+            className={[classes.inputBox , classes.numberInput].join(" ")}
               onChange={changeAmountInputHandler}
               value={amount}
               placeholder={'0.0'}
@@ -164,7 +166,8 @@ const CryptoSwapItemTest = ({
               onBlur={onInputBlur}
             />
           ) : (
-            <span>
+            <Row style={{ width: '200%'}}>
+              <Col >
               <input
                 className={classes.inputBox}
                 onChange={changeAmountInputHandler}
@@ -176,8 +179,11 @@ const CryptoSwapItemTest = ({
                 onFocus={onInputFocus}
                 onBlur={onInputBlur}
               />
-              %
-            </span>
+              </Col>
+              <Col >
+              <span>%</span>
+              </Col>
+            </Row>
           )}
         </Col>
 
@@ -221,7 +227,7 @@ const CryptoSwapItemTest = ({
           <Col>Balance: {props.asset && formatNumber(balance, 'crypto')}</Col>
         </Row>
       ) : (
-        <Row>
+        <Row style={{marginTop: '5px'}}>
           <input
             type="range"
             id="points"

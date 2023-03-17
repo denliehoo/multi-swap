@@ -53,9 +53,13 @@
     background-color: transparent !important ;
 }
 
-.ant-menu-item-selected{
+.ant-menu-item-selected, .ant-menu-submenu-title{
     color: #86C232 !important;
     background-color: transparent !important;
+}
+
+.ant-menu-submenu-arrow {
+    color: #86C232 !important;
 }
 
 /* antd button primary type; i.e. type='primary' */
@@ -137,4 +141,18 @@
 .ant-notification-notice-message{
     color: #86C232 !important;
     font-weight: 700;
+}
+
+/* Drawer */
+.ant-drawer-close {
+    position: absolute;
+    /* top: 0; */
+    right: 0;
+    background-color: #222629 !important;
+  }
+.ant-drawer-header{
+    background-color: #222629 !important;
+}
+.ant-drawer-body{
+    background-color: #222629 !important;
 }

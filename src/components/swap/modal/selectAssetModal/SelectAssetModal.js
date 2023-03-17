@@ -11,6 +11,7 @@ import { ftmDefaultAssetInfo } from '../../../../utils/ftmDefaultAssetInfo'
 import { goerliDefaultAssetInfo } from '../../../../utils/goerliDefaultAssetInfo'
 import { getTokenBalances } from '../../../../api/api'
 import { connect } from 'react-redux'
+import { useWindowSize } from '../../../../hooks/useWindowSize'
 import SearchInputComponent from '../../shared/SearchInputComponent'
 
 const SelectAssetModal = ({
@@ -30,6 +31,7 @@ const SelectAssetModal = ({
   )
   const [searchInput, setSearchInput] = useState('')
   const [searchInputResults, setSearchInputResults] = useState([])
+  const { width } = useWindowSize()
 
   useEffect(() => {
     props.isModalOpen && address && getCombinedListOfAssets(chain, address)
@@ -119,8 +121,8 @@ const SelectAssetModal = ({
       >
         <ArrowLeftOutlined />
       </Col>
-      <Col span={4}>Manage</Col>
-      <Col span={10} />
+      <Col span={8}>Manage</Col>
+      <Col span={6} />
     </Row>
   )
 
@@ -195,7 +197,9 @@ const SelectAssetModal = ({
                 {(searchInput ? searchInputResults : combinedAssetList).map(
                   (i) => (
                     <SelectAssetItem
-                      icon={<IconComponent imgUrl={i.imgUrl} />}
+                      icon={<IconComponent 
+                      // size={ width > 480 ? 32 : width > 420 ? 28 : width > 360 ? 24 : 20} 
+                      imgUrl={i.imgUrl} />}
                       symbol={i.symbol}
                       name={i.name}
                       balance={i.bal}

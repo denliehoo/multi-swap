@@ -13,6 +13,7 @@ import {
   addCustomToken,
   removeAllCustomToken,
 } from '../../../../reducers/customTokenReducer'
+import { useWindowSize } from '../../../../hooks/useWindowSize'
 
 const ManageCustomToken = ({
   ethCustomTokens,
@@ -28,6 +29,7 @@ const ManageCustomToken = ({
   const [customTokenData, setCustomTokenData] = useState({})
   const [renderComponent, setRenderComponent] = useState(false)
   const [inputIsFocused, setInputIsFocused] = useState(false)
+  const { width } = useWindowSize()
 
   /* 
     Problem: Parent component (this comp) isn't aware of the global state changes
@@ -145,15 +147,15 @@ const ManageCustomToken = ({
       {showImportToken ? (
         <div className={classes.importTokenContainer}>
           <Row align="middle">
-            <Col span={2}>
+            <Col span={width > 490 ? 2 :  width > 360 ? 3 : 4}>
               <IconComponent imgUrl={customTokenData.logo} />
             </Col>
-            <Col span={10}>
+            <Col span={width > 490 ? 10 :  width > 360 ? 9 : 10}>
               <span className="fw-700">{customTokenData.symbol}</span>
               <span> </span>
               <span>{customTokenData.name}</span>
             </Col>
-            <Col span={12}>
+            <Col span={width > 360 ? 12 : 10}>
               <Row justify="end" align="middle">
                 <Button
                   shape="round"

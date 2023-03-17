@@ -13,6 +13,11 @@
     outline-width: 0;
 }
 
+.numberInput{
+    width: 90%;
+
+}
+
 
 
 input[type='range'] {
@@ -47,3 +52,12 @@ input[type=number]::-webkit-outer-spin-button {
     -moz-appearance: none;
     appearance: none; 
 }
+
+
+
+
+@media only screen and (max-width: 494px) {
+    .numberInput{
+        width: 200%;
+    }
+  }

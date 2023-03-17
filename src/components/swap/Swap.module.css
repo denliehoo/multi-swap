@@ -44,3 +44,9 @@
 .errorMessagesContainer > div > .errorMessage {
     /* padding: 5px; */
 }
+
+@media only screen and (max-width: 800px) {
+    .card {
+      width: 90%;
+    }
+  }

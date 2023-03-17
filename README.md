@@ -74,6 +74,7 @@ REACT_APP_FTMSCAN_API_KEY=XXXX
 
 # Framework Explaination
 - Antd is used to create multiple components
+- Note: to see what is the classname that we should change, we can right click and inspect the element and see the classname. Then in the framework.css, we use that classname and overwrite it
 ## Styling / CSS
 - css modules are used
 ```Javascript
@@ -94,5 +95,11 @@ className={classes["form-control"]}
 # To do list / Progress:
 Check TODOANDPROGRESS.md
 ---
-Deployment instructions refer to: 
+# Deployment instructions refer to: 
 https://hackernoon.com/how-to-deploy-a-react-application-with-firebase-hosting-p92m37b7
+
+# Redeploy instructions
+npm run build
+firebase use <project-id>
+firebase serve     <- to test first
+firebase deploy    <- to deploy

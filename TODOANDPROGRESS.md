@@ -1,7 +1,7 @@
 # To do list / Progress:
 ## To do
 - -----Start Of Phase 3: Ability to use different chains-----
-- optimise CSS for different screen sizes
+- If asset already exists in select asset modal, then user shouldn't be able to import it 
 - get the chain from the connected metamask and store it in the connectWalletReducer. Need ensure that the change chain in the nav bar works too
 - changing the chains should cause the tokens/custom tokens displayed to change accordingly
 - create similar smart contracts for other chains (e.g. ftm testnet / kovan)
@@ -163,3 +163,5 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
   - If a swap has occured / custom token imported, remove from local
 - 28/02/23: Preparing to launch phase 2
 - -----End Of Phase 2: Swap ETH/ERC20 tokens to ETH/ERC20 tokens-----
+- 17/03/23: optimise CSS for different screen sizes
+

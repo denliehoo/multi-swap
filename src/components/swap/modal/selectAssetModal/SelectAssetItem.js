@@ -8,6 +8,7 @@ import {
   removeSwapTo,
 } from '../../../../reducers/swapReducer'
 import { formatNumber } from '../../../../utils/format/formatNumber'
+import { useWindowSize } from '../../../../hooks/useWindowSize'
 
 const SelectAssetItem = ({
   props,
@@ -16,6 +17,7 @@ const SelectAssetItem = ({
   swapFrom,
   swapTo,
 }) => {
+  const { width } = useWindowSize()
   const addSwapHandler = (type, balance) => {
     const newAssetDetails = {
       index: props.index,
@@ -52,8 +54,8 @@ const SelectAssetItem = ({
         props.onClickHandler(props.symbol, props.balance)
       }}
     >
-      <Col span={2}>{props.icon}</Col>
-      <Col span={18}>
+      <Col span={width >460 ? 2 : width>350 ? 3 : 4}>{props.icon}</Col>
+      <Col span={width >460 ? 18 : width>350 ? 17 : 16}>
         <Row>{props.name}</Row>
         <Row>
           {props.symbol}
@@ -68,7 +70,7 @@ const SelectAssetItem = ({
         </Row>
       </Col>
       <Col span={4}>
-        <Row justify="end">{formatNumber(props.balance, "crypto")}</Row>
+        <Row justify="end">{formatNumber(props.balance, 'crypto')}</Row>
       </Col>
     </Row>
   )

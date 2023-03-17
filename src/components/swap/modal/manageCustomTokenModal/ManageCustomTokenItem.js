@@ -5,6 +5,7 @@ import { DeleteOutlined, ScanOutlined } from '@ant-design/icons'
 
 import { connect } from 'react-redux'
 import { removeCustomToken } from '../../../../reducers/customTokenReducer'
+import { useWindowSize } from '../../../../hooks/useWindowSize'
 
 const ManageCustomTokenItem = ({
   props,
@@ -13,6 +14,7 @@ const ManageCustomTokenItem = ({
   goerliCustomTokens,
   removeCustomToken,
 }) => {
+  const { width } = useWindowSize()
   const getCustomTokens = (chain) => {
     if (chain === 'eth') {
       return ethCustomTokens
@@ -72,10 +74,10 @@ const ManageCustomTokenItem = ({
       justify="space-evenly"
       className={classes.manageCustomTokenItemContainer}
     >
-      <Col span={2}>
+      <Col span={width > 470 ? 2 :  width > 360 ? 3 : 4}>
         <IconComponent imgUrl={props.icon} />
       </Col>
-      <Col span={18}>
+      <Col span={ width> 470 ? 18 : width > 360 ? 17 : 16}>
         <Row>
           {props.symbol} {props.name}
         </Row>
