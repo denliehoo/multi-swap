@@ -66,10 +66,10 @@ const ManageCustomToken = ({
     }
 
     if (name) {
-      const currentCustomTokens = getCustomTokens(chain)
+      const currentCustomTokens = getCustomTokens(chain).concat(props.defaultAssets)
       const currentCustomTokensSymbol = currentCustomTokens.map((i) => i.symbol)
       if (currentCustomTokensSymbol.includes(symbol)) {
-        setCustomTokenErrorMessage('Token has already been imported')
+        setCustomTokenErrorMessage('Token already exists')
       } else {
         setCustomTokenData({
           name: name,

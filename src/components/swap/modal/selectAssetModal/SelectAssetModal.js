@@ -178,6 +178,7 @@ const SelectAssetModal = ({
           </Row>
         ) : isManageCustomToken ? (
           <ManageCustomToken
+            defaultAssets={getDefaultAssets(chain)}
             setToggleChangesInCustomToken={() => {
               setToggleChangesInCustomToken(!toggleChangesInCustomToken)
             }}
