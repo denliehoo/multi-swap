@@ -27,13 +27,29 @@
 }
 
 .leftItem {
-  margin-right: auto;
+  flex: 2;
 }
 
 .rightItems {
-  margin-left: 20px;
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
+
 }
 
 .hamburgerMenu{
   cursor: pointer;
+}
+
+
+@media (min-width: 500px) {
+  .antdMenu{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .rightItems {
+    flex: 4;
+  }
+  
 }

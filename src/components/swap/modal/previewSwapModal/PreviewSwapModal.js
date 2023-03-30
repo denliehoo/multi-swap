@@ -19,7 +19,7 @@ import {
   UINT_256_MAX_AMOUNT,
   MULTISWAP_ADDRESS,
   localStorageKey,
-} from '../../../../cofig/config'
+} from '../../../../config/config'
 
 const PreviewSwapModal = ({
   props,

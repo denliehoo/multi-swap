@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { localStorageKey } from '../cofig/config'
+import { localStorageKey } from '../config/config'
 
 const getAssetPrice = async (chain, asset, address) => {
   if (asset === 'ETH') {
@@ -77,7 +77,7 @@ const getTokenBalances = async (chain, walletAddress, tokenAddresses) => {
         return data[chain]
       }
     }
-    // else if it has been more than 60s, we get token balance from API
+    // else if it has been more than 60s || diff chain, we remove from local and get token balance from API
     localStorage.removeItem(localStorageKey)
   }
 

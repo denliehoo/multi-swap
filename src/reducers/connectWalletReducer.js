@@ -7,7 +7,7 @@ import Web3 from 'web3'
 // import Multiswap from '../utils/deployedContractsABI/ftmABI.json'
 import Multiswap_goerli from '../utils/deployedContractsABI/phase2/goerliABI.json'
 import Multiswap_ftm from "../utils/deployedContractsABI/phase2/ftmABI.json"
-import { MULTISWAP_ADDRESS } from '../cofig/config'
+import { MULTISWAP_ADDRESS } from '../config/config'
 
 // config for chain ids
 const chainIds = {
@@ -82,15 +82,26 @@ const attemptToConnectWallet = (chain) => {
       const web3 = new Web3(window.ethereum)
       const accounts = await web3.eth.getAccounts()
       const networkId = await web3.eth.net.getId() // int type
+
+      console.log("from reducer:")
+      console.log(networkId)
+      console.log(chain)
+      console.log(chainIds[chain])
       
       let onCorrectChain = true;
       // if network id not equal to the goerli, attempt to change chain
       // if connect to ganache instead, think just hardcode chainIds[chain] to that of ganache instead
       if(web3.utils.toHex(networkId) !== chainIds[chain]){
+        console.log('on wrong chain')
         // attempt to connect
         onCorrectChain = await attemptToChangeChain(chain)
-        !onCorrectChain && dispatch(disconnectWalletAction())
+        console.log(onCorrectChain)
+        if(!onCorrectChain){
+          dispatch(disconnectWalletAction())
+          return false
+        }
       }
+      console.log('this is happening')
       await dispatch(connectWalletAction({ address: accounts[0], web3: web3 }))
 
 
@@ -123,14 +134,17 @@ const attemptToConnectWallet = (chain) => {
 
         console.log(multiswap.methods)
         dispatch(connectSmartContractAction(multiswap))
+        return true
       } else {
         // if no network...
         console.log('Error: Wrong chain or no network detected')
         dispatch(disconnectWalletAction())
+        return false
       }
     } catch (error) {
       console.log(error)
       dispatch(disconnectWalletAction())
+      return false
     }
 
     ///
@@ -148,13 +162,16 @@ const attemptToChangeChain = async (chain) => {
   } catch {
     // if user dont have the chain then we add it
     try {
-      await window.ethereum.request({
+      const results = await window.ethereum.request({
         jsonrpc: '2.0',
         method: 'wallet_addEthereumChain',
         params: [chainConfig[chain]],
         id: 0,
       })
+
+      if (!results) return false
       return true
+
     } catch {
       console.log('User rejected')
       return false
@@ -193,5 +210,5 @@ export {
   disconnectWalletAction,
   connectSmartContractAction,
   attemptToConnectWallet,
-  // changeChainConnectWalletReducer
+  changeChainConnectWalletReducer
 }

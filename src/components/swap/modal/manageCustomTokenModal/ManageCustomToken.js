@@ -7,7 +7,7 @@ import IconComponent from '../../shared/IconComponent'
 import { SearchOutlined } from '@ant-design/icons'
 import ManageCustomTokenItem from './ManageCustomTokenItem'
 import { getDetailsForCustomToken } from '../../../../api/api'
-import { localStorageKey } from '../../../../cofig/config'
+import { localStorageKey } from '../../../../config/config'
 import { connect } from 'react-redux'
 import {
   addCustomToken,

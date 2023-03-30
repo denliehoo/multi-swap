@@ -1,12 +1,7 @@
 # To do list / Progress:
 ## To do
-- get the chain from the connected metamask and store it in the connectWalletReducer. Need ensure that the change chain in the nav bar works too
-- changing the chains should cause the tokens/custom tokens displayed to change accordingly
-- create similar smart contracts for other chains (e.g. ftm testnet / kovan)
-- allow for multiple chains to be connected (e.g. ftm testnet/kovan) on the frontend
-- hardcode common assets for the new chain
-- ensure to seprate custom tokens for diff chains
 - ensure swap functionalities are working
+- clean/refactor code
 - -----End Of Phase 3: Ability to use different chains-----
 
 <br />
@@ -164,4 +159,8 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - -----Start Of Phase 3: Ability to use different chains-----
 - 17/03/23: optimise CSS for different screen sizes
 - 17/03/23: If asset already exists in select asset modal, then user shouldn't be able to import it 
-
+- 30/03/23: create similar smart contracts for other chains 
+- 30/03/23: Ensure user can change chain in nav bar
+  - changing the chains should cause the tokens/custom tokens displayed to change accordingly
+  - changing chain should change the displayed chain in the nav bar accordingly
+  - the smart contract connected for swapping should change too
