@@ -1,12 +1,8 @@
 # To do list / Progress:
 ## To do
-- ensure swap functionalities are working
-- clean/refactor code
-- -----End Of Phase 3: Ability to use different chains-----
-
-<br />
-
 - -----Start Of Phase 4: Continuous Improvements-----
+- C# backend
+- refactor and clean code
 - work on setting for swaps
   - e.g. slippage (need control on smartcontracts too)
 - work on light mode dark mode css theme
@@ -20,10 +16,7 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
   - Solution is TBC
 
 ## Note / KIV: 
-- In phase 1 release, have removed all the other assets from select asset modal in swap from except for the native asset (e.g. ETH or FTM) to ensure user doesn't select anything else from swap from
-  - To revert the change, Search for the comment: // setCombinedAssetList(combinedAssetListTemp)
-  - uncomment the that line
-  - comment out the line below that
+
 
 ## Low Priority Items: 
 - error in the return value in event for some swaps (currently for sure case 2 is effected). The token swapfrom value amount is showing the amount of ETH it is swapped for when it should show the amount of the original tokens being swapped instead. Currently, swap from portion is still working since we take the swap from value from frontend itself. Ensure that the swapfrom values for all cases are correct. 
@@ -164,3 +157,6 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
   - changing the chains should cause the tokens/custom tokens displayed to change accordingly
   - changing chain should change the displayed chain in the nav bar accordingly
   - the smart contract connected for swapping should change too
+- 9/04/23: ensure swap functionalities are working
+- 9/04/23: Preparing to launch phase 3
+- -----End Of Phase 3: Ability to use different chains-----

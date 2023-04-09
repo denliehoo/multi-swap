@@ -82,26 +82,18 @@ const attemptToConnectWallet = (chain) => {
       const web3 = new Web3(window.ethereum)
       const accounts = await web3.eth.getAccounts()
       const networkId = await web3.eth.net.getId() // int type
-
-      console.log("from reducer:")
-      console.log(networkId)
-      console.log(chain)
-      console.log(chainIds[chain])
       
       let onCorrectChain = true;
       // if network id not equal to the goerli, attempt to change chain
       // if connect to ganache instead, think just hardcode chainIds[chain] to that of ganache instead
       if(web3.utils.toHex(networkId) !== chainIds[chain]){
-        console.log('on wrong chain')
         // attempt to connect
         onCorrectChain = await attemptToChangeChain(chain)
-        console.log(onCorrectChain)
         if(!onCorrectChain){
           dispatch(disconnectWalletAction())
           return false
         }
       }
-      console.log('this is happening')
       await dispatch(connectWalletAction({ address: accounts[0], web3: web3 }))
 
 

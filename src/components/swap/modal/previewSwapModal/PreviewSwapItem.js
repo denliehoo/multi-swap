@@ -2,8 +2,6 @@ import IconComponent from '../../shared/IconComponent'
 import { Row, Col } from 'antd'
 import { formatNumber } from '../../../../utils/format/formatNumber'
 const PreviewSwapItem = (props) => {
-  console.log(props.amount*props.price)
-  console.log(typeof props.amount*props.price)
   return (
     <div className='mt-10 pr-15 pt-5'>
       <Row justify="space-between">
