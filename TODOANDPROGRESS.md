@@ -1,13 +1,26 @@
 # To do list / Progress:
 ## To do
-- -----Start Of Phase 4: Continuous Improvements-----
 - C# backend
+  - Start with get contract abi api
+  - Ensure able to call the API from etherscan to get the abi (just need call api and get the ABI)
+  - Add in entity framework and a databse to store the abi
+  - Task of the API: 
+    - add parms (chain and address)
+    - check DB if have the ABI given the chain and address
+    - If dont have the abi, call the api, store the abi and return the abi
+    - If have abi, return the stored abi
+    - Error handling for if dont have the abi from the API (etherscan)
+  - Tasks TBC
 - refactor and clean code
 - work on setting for swaps
   - e.g. slippage (need control on smartcontracts too)
 - work on light mode dark mode css theme
 
 ## Pending Bug Fixes
+- Issue when changing change back to fantom and the RPC url is different (i think)
+  - To recreate (TBC): change to goerli chain on frontend
+  - Ensure that ftm network is already added, but diff RPC url from the code (ankr)
+  - Try to change back network, and it should prompt user to add network (which isn't desirable)
 - In CryptoSwapItem.js[ cant seem to recreate this issue. KIV]
   - if add 3 assets, if edit the 2nd one and then 3rd then 1st, gives errors. maybe check selectassetitem.js to fix
 or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo, but keep it with empty values except for index:
@@ -160,3 +173,5 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - 9/04/23: ensure swap functionalities are working
 - 9/04/23: Preparing to launch phase 3
 - -----End Of Phase 3: Ability to use different chains-----
+- -----Start Of Phase 4: Continuous Improvements-----
+- 10/04/23: Added basic C# api structure and restructured folders to separate between client and api

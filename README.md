@@ -8,9 +8,14 @@ For smart contract:
   - truffle migrate --reset
 
 - to start frontend:
+  - cd client
   - npm start
 
-- Steps to run the application:
+- to start api:
+  - cd api
+  - dotnet run
+
+- Steps to run the application: (Note: from the client folder)
   1. Start up ganache-cli (if smart contract fork is to be deployed through truffle)
     - ganache-cli --fork NODEURLHERE
   2. Deploy the smart contract (if smart contract fork is to be deployed through truffle)
@@ -99,7 +104,7 @@ Check TODOANDPROGRESS.md
 https://hackernoon.com/how-to-deploy-a-react-application-with-firebase-hosting-p92m37b7
 
 # Redeploy instructions
-npm run build
-firebase use <project-id>
-firebase serve     <- to test first
-firebase deploy    <- to deploy
+- npm run build
+- firebase use <project-id>  <- Note: can be found in firebase console in the project. e.g. for this case it is multiswap-b2243
+- firebase serve     <- to test first
+- firebase deploy    <- to deploy
