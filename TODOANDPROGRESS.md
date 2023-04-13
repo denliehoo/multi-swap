@@ -1,16 +1,13 @@
 # To do list / Progress:
 ## To do
-- C# backend
-  - Start with get contract abi api
-  - Ensure able to call the API from etherscan to get the abi (just need call api and get the ABI)
-  - Add in entity framework and a databse to store the abi
-  - Task of the API: 
-    - add parms (chain and address)
-    - check DB if have the ABI given the chain and address
-    - If dont have the abi, call the api, store the abi and return the abi
-    - If have abi, return the stored abi
-    - Error handling for if dont have the abi from the API (etherscan)
-  - Tasks TBC
+- Add in entityframework and a database to store the ABI
+- Enhance the API created to store the ABI
+- Ensure the API is able to do this: 
+  - add parms (chain and address)
+  - check DB if have the ABI given the chain and address
+  - If dont have the abi, call the api, store the abi and return the abi
+  - If have abi, return the stored abi
+  - Error handling for if dont have the abi from the API (etherscan) 
 - refactor and clean code
 - work on setting for swaps
   - e.g. slippage (need control on smartcontracts too)
@@ -175,3 +172,5 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - -----End Of Phase 3: Ability to use different chains-----
 - -----Start Of Phase 4: Continuous Improvements-----
 - 10/04/23: Added basic C# api structure and restructured folders to separate between client and api
+- 13/04/23: Reconfigure server folder structure and configure environmental variables
+- 13/04/23: Ensure able to call server API and return the ABI by calling the etherscan/ftmscan API from the server

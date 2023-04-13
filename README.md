@@ -12,7 +12,7 @@ For smart contract:
   - npm start
 
 - to start api:
-  - cd api
+  - cd server
   - dotnet run
 
 - Steps to run the application: (Note: from the client folder)
@@ -48,11 +48,29 @@ Note: can get free nodes here: https://www.quicknode.com/endpoints or https://in
   - npm i -g truffle ganache-cli
 
 Environmental Values:
+- For .env (root of client)
 ```Javascript
 REACT_APP_MORALIS_API_KEY=XXXXX
 REACT_APP_ETHERSCAN_API_KEY=XXXX
 REACT_APP_FTMSCAN_API_KEY=XXXX
 ```
+
+- For appsettings.Development.json (root of server)
+```Javascript
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "ApiKeys": {
+    "EtherscanApiKey" : "XXX",
+    "FtmscanApiKey" : "XXX"
+  }
+}
+```
+
 # Product Road Map:
 - Phase 1: Swap ETH for multiple token + Basic UI Done
 - Phase 2: Swap multiple ETH/ERC20 tokens for ETH/ERC20 tokens
@@ -103,7 +121,8 @@ Check TODOANDPROGRESS.md
 # Deployment instructions refer to: 
 https://hackernoon.com/how-to-deploy-a-react-application-with-firebase-hosting-p92m37b7
 
-# Redeploy instructions
+# Redeploy instructions (frontend)
+- cd client
 - npm run build
 - firebase use <project-id>  <- Note: can be found in firebase console in the project. e.g. for this case it is multiswap-b2243
 - firebase serve     <- to test first
