@@ -1,24 +1,25 @@
-import classes from './Swap.module.css'
-import { Row, Col } from 'antd/lib/grid'
-import { Button, notification } from 'antd'
+import classes from "./Swap.module.css";
+import { Row, Col } from "antd/lib/grid";
+import { Button, notification } from "antd";
 import {
   DownCircleOutlined,
   PlusCircleOutlined,
   ExclamationCircleOutlined,
   LoadingOutlined,
-} from '@ant-design/icons'
-import { useEffect, useState } from 'react'
-import CryptoSwapItem from './CryptoSwapItem'
-import PreviewSwapModal from './modal/previewSwapModal/PreviewSwapModal'
+} from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import CryptoSwapItem from "./CryptoSwapItem";
+import PreviewSwapModal from "./modal/previewSwapModal/PreviewSwapModal";
 
-import { connect } from 'react-redux'
+import { connect } from "react-redux";
 import {
   addSwapFrom,
   removeSwapFrom,
   addSwapTo,
   removeSwapTo,
-} from '../../reducers/swapReducer'
-import { attemptToConnectWallet } from '../../reducers/connectWalletReducer'
+} from "../../reducers/swapReducer";
+import { attemptToConnectWallet } from "../../reducers/connectWalletReducer";
+import ConnectWalletPopup from "../shared/ConnectWalletPopup";
 
 // Swap > CryptoSwapItem > SelectAssetModal > SelectAssetItem
 
@@ -33,161 +34,166 @@ const Swap = ({
   attemptToConnectWallet,
   chain,
 }) => {
-  const [swapToPercentages, setSwapToPercentages] = useState([100])
-  const [showPercentageError, setShowPercentageError] = useState(false)
-  const [showTokenNotSelectedError, setShowTokenNotSelectedError] = useState(
-    false,
-  )
-  const [showAmountError, setShowAmountError] = useState(false)
+  const [swapToPercentages, setSwapToPercentages] = useState([100]);
+  const [showPercentageError, setShowPercentageError] = useState(false);
+  const [showTokenNotSelectedError, setShowTokenNotSelectedError] =
+    useState(false);
+  const [showAmountError, setShowAmountError] = useState(false);
   const [
     showAmountGreaterThanBalanceError,
     setShowAmountGreaterThanBalanceError,
-  ] = useState(false)
-  const [toggleAssetSelected, setToggleAssetSelected] = useState(true)
-  const [showPreviewSwapModal, setShowPreviewSwapModal] = useState(false)
-  const [swapIsLoading, setSwapIsLoading] = useState(false)
-  const [api, contextHolder] = notification.useNotification()
+  ] = useState(false);
+  const [toggleAssetSelected, setToggleAssetSelected] = useState(true);
+  const [showPreviewSwapModal, setShowPreviewSwapModal] = useState(false);
+  const [swapIsLoading, setSwapIsLoading] = useState(false);
+  const [api, contextHolder] = notification.useNotification();
 
   const percentageError = (
     <div>
       Please ensure that percentages add up to 100% and that none of the items
       are 0%
     </div>
-  )
+  );
 
   const tokenNotSelectedError = (
     <div>Please ensure to select a token before swapping</div>
-  )
+  );
 
-  const amountError = <div>Please ensure amount from is more than zero</div>
+  const amountError = <div>Please ensure amount from is more than zero</div>;
   const amountGreaterThanBalanceError = (
     <div>Please ensure that amount is less than balance</div>
-  )
+  );
 
   const changeSwapToPercentHandler = (i, percent) => {
-    let newSwapToPercentages = [...swapToPercentages]
-    newSwapToPercentages[i] = percent
-    setSwapToPercentages(newSwapToPercentages)
+    let newSwapToPercentages = [...swapToPercentages];
+    newSwapToPercentages[i] = percent;
+    setSwapToPercentages(newSwapToPercentages);
     if (showPercentageError) {
-      setShowPercentageError(false)
+      setShowPercentageError(false);
     }
-  }
+  };
 
   // in basis points; i.e. 10,000 = 100% ; 5000 = 50%, etc...
   const validatePercentageArray = () => {
-    const arrayHasZero = swapToPercentages.includes(0)
+    const arrayHasZero = swapToPercentages.includes(0);
     const sumOfArray = swapToPercentages.reduce(
       (partialSum, a) => partialSum + a,
-      0,
-    )
-    const valid = arrayHasZero || sumOfArray !== 100 ? false : true
+      0
+    );
+    const valid = arrayHasZero || sumOfArray !== 100 ? false : true;
     if (!valid) {
-      setShowPercentageError(true)
+      setShowPercentageError(true);
     }
-    return valid
-  }
+    return valid;
+  };
 
   const validateTokenSelected = () => {
-    const swapToSymbols = swapTo.map((i) => i.symbol)
-    const swapFromSymbols = swapFrom.map((i) => i.symbol)
+    const swapToSymbols = swapTo.map((i) => i.symbol);
+    const swapFromSymbols = swapFrom.map((i) => i.symbol);
     const valid =
-      swapToSymbols.includes('') || swapFromSymbols.includes('') ? false : true
+      swapToSymbols.includes("") || swapFromSymbols.includes("") ? false : true;
     if (!valid) {
-      setShowTokenNotSelectedError(true)
+      setShowTokenNotSelectedError(true);
     }
-    return valid
-  }
+    return valid;
+  };
 
   const validateAmount = () => {
-    const swapFromAmount = swapFrom.map((i) => i.amount)
-    const arrayContainsNaN =(arr)=>{
-      let results = false
-      for(let i in arr){
-        if(!arr[i]){results = true}
+    const swapFromAmount = swapFrom.map((i) => i.amount);
+    const arrayContainsNaN = (arr) => {
+      let results = false;
+      for (let i in arr) {
+        if (!arr[i]) {
+          results = true;
+        }
       }
-      return results
-    }
-    const valid = (swapFromAmount.includes(0) || swapFromAmount.includes('') || arrayContainsNaN(swapFromAmount)) ? false : true
+      return results;
+    };
+    const valid =
+      swapFromAmount.includes(0) ||
+      swapFromAmount.includes("") ||
+      arrayContainsNaN(swapFromAmount)
+        ? false
+        : true;
     if (!valid) {
-      setShowAmountError(true)
+      setShowAmountError(true);
     }
-    return valid
-  }
+    return valid;
+  };
 
   const validateAmountLesserThanBalance = () => {
-    const swapFromAmount = swapFrom.map((i) => i.amount)
-    const swapFromBalance = swapFrom.map((i) => i.balance)
+    const swapFromAmount = swapFrom.map((i) => i.amount);
+    const swapFromBalance = swapFrom.map((i) => i.balance);
 
-    let valid = true
+    let valid = true;
     for (let i in swapFrom) {
       if (swapFromAmount[i] > swapFromBalance[i]) {
-        valid = false
-        setShowAmountGreaterThanBalanceError(true)
+        valid = false;
+        setShowAmountGreaterThanBalanceError(true);
         // error message
-        break
+        break;
       }
     }
-    return valid
-  }
+    return valid;
+  };
 
   const toggleAssetSelectedState = () => {
-    setToggleAssetSelected(!toggleAssetSelected)
-  }
+    setToggleAssetSelected(!toggleAssetSelected);
+  };
 
   const amountHasChanged = () => {
-    setShowAmountError(false)
-    setShowAmountGreaterThanBalanceError(false)
-  }
+    setShowAmountError(false);
+    setShowAmountGreaterThanBalanceError(false);
+  };
 
   const changePercentageFromMinus = (index) => {
-    let newSwapToPercentage = [...swapToPercentages]
-    newSwapToPercentage.splice(index, 1)
-    setSwapToPercentages(newSwapToPercentage)
-  }
+    let newSwapToPercentage = [...swapToPercentages];
+    newSwapToPercentage.splice(index, 1);
+    setSwapToPercentages(newSwapToPercentage);
+  };
 
   const addSwapState = (type, index, newAssetDetails) => {
-    if (type === 'from') {
+    if (type === "from") {
       if (!swapFrom[index]) {
-        let newSwapFrom = [...swapFrom]
-        newSwapFrom.push(newAssetDetails)
-        addSwapFrom(newSwapFrom)
+        let newSwapFrom = [...swapFrom];
+        newSwapFrom.push(newAssetDetails);
+        addSwapFrom(newSwapFrom);
       }
-    } else if (type === 'to') {
+    } else if (type === "to") {
       if (!swapTo[index]) {
-        let newSwapTo = [...swapTo]
-        newSwapTo.push(newAssetDetails)
-        addSwapTo(newSwapTo)
+        let newSwapTo = [...swapTo];
+        newSwapTo.push(newAssetDetails);
+        addSwapTo(newSwapTo);
       }
     }
-  }
+  };
 
   const swapButtonHandler = () => {
-    console.log(swapToPercentages)
-    console.log(swapFrom)
-    console.log(swapTo)
-    const validPercentages = validatePercentageArray()
-    const tokensSelected = validateTokenSelected()
-    const validAmount = validateAmount()
-    const amountLesserThanBalance = validateAmountLesserThanBalance()
+    console.log(swapToPercentages);
+    console.log(swapFrom);
+    console.log(swapTo);
+    const validPercentages = validatePercentageArray();
+    const tokensSelected = validateTokenSelected();
+    const validAmount = validateAmount();
+    const amountLesserThanBalance = validateAmountLesserThanBalance();
     if (
       validPercentages &&
       tokensSelected &&
       validAmount &&
       amountLesserThanBalance
     ) {
-      setShowPreviewSwapModal(true)
+      setShowPreviewSwapModal(true);
+    } else {
+      window.scrollTo(0, 0);
     }
-    else{
-      window.scrollTo(0, 0)
-    }
-  }
+  };
 
   const showNotificationHandler = (
     message,
     description,
     icon,
     placement,
-    duration,
+    duration
   ) => {
     api.open({
       message: message,
@@ -195,15 +201,15 @@ const Swap = ({
       icon: icon,
       placement: placement,
       duration: duration,
-    })
-  }
+    });
+  };
   //
 
   useEffect(() => {
     if (showTokenNotSelectedError) {
-      setShowTokenNotSelectedError(false)
+      setShowTokenNotSelectedError(false);
     }
-  }, [toggleAssetSelected])
+  }, [toggleAssetSelected]);
 
   return (
     // follow uniswap style for swap component
@@ -212,9 +218,9 @@ const Swap = ({
       <div className={classes.card}>
         <Row
           justify="space-between"
-          style={{ width: '100%', marginBottom: '15px' }}
+          style={{ width: "100%", marginBottom: "15px" }}
         >
-          <Col style={{ fontWeight: '700', fontSize: 'large' }}>Swap</Col>
+          <Col style={{ fontWeight: "700", fontSize: "large" }}>Swap</Col>
           {/* <Col><SettingOutlined /></Col> */}
         </Row>
 
@@ -225,7 +231,9 @@ const Swap = ({
           <Row className={classes.errorMessagesContainer} align="middle">
             <Col span={4}>
               <Row justify="center">
-                <ExclamationCircleOutlined style={{ fontSize: '200%', padding: '10px' }} />
+                <ExclamationCircleOutlined
+                  style={{ fontSize: "200%", padding: "10px" }}
+                />
               </Row>
             </Col>
             <Col span={20}>
@@ -258,7 +266,7 @@ const Swap = ({
               amount={i.amount}
               key={`fromAsset${index}`}
               index={index}
-              type={'from'}
+              type={"from"}
               assetHasBeenSelected={toggleAssetSelectedState}
               amountHasChanged={amountHasChanged}
               asset={i.symbol}
@@ -277,21 +285,21 @@ const Swap = ({
               icon={<PlusCircleOutlined />}
               onClick={() => {
                 // setFromAssets([...fromAssets, { amount: 0 }])
-                addSwapState('from', swapFrom.length, {
+                addSwapState("from", swapFrom.length, {
                   index: swapFrom.length,
-                  symbol: '',
-                  address: '',
+                  symbol: "",
+                  address: "",
                   balance: 0,
-                  amount: '',
+                  amount: "",
                   decimals: 0,
-                  imgUrl: '',
-                })
+                  imgUrl: "",
+                });
               }}
             />
           </Row>
         </div>
-        <div style={{ margin: '5px' }}>
-          <DownCircleOutlined style={{ fontSize: '200%' }} />
+        <div style={{ margin: "5px" }}>
+          <DownCircleOutlined style={{ fontSize: "200%" }} />
         </div>
         {/* Swap to portion */}
         {/* <Row>You Get</Row> */}
@@ -301,7 +309,7 @@ const Swap = ({
               percent={i.amount}
               key={`toAssets${index}`}
               index={index}
-              type={'to'}
+              type={"to"}
               changeSwapToPercent={changeSwapToPercentHandler}
               assetHasBeenSelected={toggleAssetSelectedState}
               asset={i.symbol}
@@ -321,24 +329,24 @@ const Swap = ({
               type="primary"
               icon={<PlusCircleOutlined />}
               onClick={() => {
-                addSwapState('to', swapTo.length, {
+                addSwapState("to", swapTo.length, {
                   index: swapTo.length,
-                  symbol: '',
-                  address: '',
+                  symbol: "",
+                  address: "",
                   balance: 0,
                   amount: 100,
                   decimals: 0,
-                  imgUrl: '',
-                })
-                let newSwapToPercentages = [...swapToPercentages]
-                newSwapToPercentages.push(100)
-                setSwapToPercentages(newSwapToPercentages)
+                  imgUrl: "",
+                });
+                let newSwapToPercentages = [...swapToPercentages];
+                newSwapToPercentages.push(100);
+                setSwapToPercentages(newSwapToPercentages);
               }}
             />
           </Row>
         </div>
 
-        <Row style={{ width: '100%', marginTop: '15px' }}>
+        <Row style={{ width: "100%", marginTop: "15px" }}>
           <Button
             size="large"
             block
@@ -346,17 +354,17 @@ const Swap = ({
             shape="round"
             disabled={swapIsLoading ? true : false}
             onClick={() => {
-              address ? swapButtonHandler() : attemptToConnectWallet(chain)
+              address ? swapButtonHandler() : attemptToConnectWallet(chain);
             }}
           >
             {address ? (
               swapIsLoading ? (
                 <LoadingOutlined />
               ) : (
-                'Preview Swap'
+                "Preview Swap"
               )
             ) : (
-              'Connect Wallet'
+              <ConnectWalletPopup placement="top" />
             )}
           </Button>
         </Row>
@@ -366,26 +374,28 @@ const Swap = ({
         // also remember to change percentage array to just [100] and any other relevant
         <PreviewSwapModal
           closePreviewAssetModal={() => {
-            setShowPreviewSwapModal(false)
+            setShowPreviewSwapModal(false);
           }}
           visible={showPreviewSwapModal}
           showNotificationInSwapJs={showNotificationHandler}
           setSwapIsLoading={(trueOrFalse) => {
-            setSwapIsLoading(trueOrFalse)
+            setSwapIsLoading(trueOrFalse);
           }}
-          resetPercentageArray={()=>{setSwapToPercentages([100])}}
+          resetPercentageArray={() => {
+            setSwapToPercentages([100]);
+          }}
         />
       }
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = ({ swapReducer, connectWalletReducer }) => ({
   swapFrom: swapReducer.swapFrom,
   swapTo: swapReducer.swapTo,
   address: connectWalletReducer.address,
   chain: connectWalletReducer.chain,
-})
+});
 
 const mapDispatchToProps = (dispatch) => ({
   addSwapFrom: (payload) => dispatch(addSwapFrom(payload)),
@@ -393,6 +403,6 @@ const mapDispatchToProps = (dispatch) => ({
   addSwapTo: (payload) => dispatch(addSwapTo(payload)),
   removeSwapTo: (payload) => dispatch(removeSwapTo(payload)),
   attemptToConnectWallet: (chain) => dispatch(attemptToConnectWallet(chain)),
-})
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Swap)
+export default connect(mapStateToProps, mapDispatchToProps)(Swap);

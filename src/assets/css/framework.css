@@ -156,3 +156,15 @@
 .ant-drawer-body{
     background-color: #222629 !important;
 }
+
+/* popconfirmation */
+.ant-popover-inner-content, .ant-popover-arrow-content::before {
+    background-color: #222629 !important;
+    border: 1px solid #86C232 !important ;
+}
+.ant-popover-message{
+    color: #86C232 !important;
+}
+.ant-popover-buttons{
+    width: max-content;    
+}
