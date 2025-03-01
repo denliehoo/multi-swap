@@ -6,13 +6,18 @@ import React, { useEffect, useState } from "react";
 import SelectAssetItem from "./SelectAssetItem";
 import IconComponent from "../../shared/IconComponent";
 import ManageCustomToken from "../manageCustomTokenModal/ManageCustomToken";
-import { ethDefaultAssetInfo } from "../../../../utils/ethDefaultAssetInfo";
-import { ftmDefaultAssetInfo } from "../../../../utils/ftmDefaultAssetInfo";
-import { goerliDefaultAssetInfo } from "../../../../utils/goerliDefaultAssetInfo";
-import { getTokenBalances } from "../../../../api/api";
+import {
+  ethDefaultAssetInfo,
+  ftmDefaultAssetInfo,
+  goerliDefaultAssetInfo,
+  IDefaultAssetInfo,
+} from "@src/constants/default-asset-info";
+import { getTokenBalances } from "@src/api";
 import { connect } from "react-redux";
-import { useWindowSize } from "../../../../hooks/useWindowSize";
+import { useWindowSize } from "@src/hooks/useWindowSize";
 import SearchInputComponent from "../../shared/SearchInputComponent";
+import { RootState } from "@src/store";
+import { ICustomToken } from "@src/reducers/custom-token";
 
 const SelectAssetModal = ({
   props,
@@ -24,7 +29,9 @@ const SelectAssetModal = ({
 }) => {
   const [selectedAsset, setSelectedAsset] = useState("");
   const [isManageCustomToken, setIsManageCustomToken] = useState(false);
-  const [combinedAssetList, setCombinedAssetList] = useState([]);
+  const [combinedAssetList, setCombinedAssetList] = useState<
+    IDefaultAssetInfo[]
+  >([]);
   const [isLoading, setIsLoading] = useState(true);
   const [toggleChangesInCustomToken, setToggleChangesInCustomToken] =
     useState(false);
@@ -54,18 +61,19 @@ const SelectAssetModal = ({
     } else if (chain === "goerli") {
       return goerliDefaultAssetInfo;
     }
+    return [];
   };
 
   const getCombinedListOfAssets = async (chain, address) => {
     const defaultAssets = getDefaultAssets(chain);
     const customTokens = getCustomTokens(chain);
-    const formattedCustomTokens = customTokens.map((i) => ({
+    const formattedCustomTokens = customTokens.map((i: ICustomToken) => ({
       symbol: i.symbol,
       name: i.name,
       imgUrl: i.logo,
       address: i.address,
       isDefaultAsset: false,
-      bal: 123,
+      bal: 0,
       decimals: i.decimals,
     }));
     let combinedAssetListTemp = defaultAssets.concat(formattedCustomTokens);
@@ -244,7 +252,7 @@ const SelectAssetModal = ({
 };
 
 const mapStateToProps = (
-  { customTokenReducer, connectWalletReducer },
+  { customTokenReducer, connectWalletReducer }: RootState,
   ownProps
 ) => ({
   ethCustomTokens: customTokenReducer.eth,

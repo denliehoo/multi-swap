@@ -1,15 +1,15 @@
-import classes from "./SelectAssetItem.module.css";
-import { Row, Col } from "antd/lib/grid";
-import { connect } from "react-redux";
+import { useWindowSize } from "@src/hooks/useWindowSize";
 import {
+  ISwapDetails,
   addSwapFrom,
   removeSwapFrom,
   addSwapTo,
   removeSwapTo,
-  ISwapDetails,
-} from "../../../../reducers/swap";
-import { formatNumber } from "../../../../utils/format/formatNumber";
-import { useWindowSize } from "../../../../hooks/useWindowSize";
+} from "@src/reducers/swap";
+import { formatNumber } from "@src/utils/format/formatNumber";
+import classes from "./SelectAssetItem.module.css";
+import { Row, Col } from "antd/lib/grid";
+import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
 const SelectAssetItem = ({

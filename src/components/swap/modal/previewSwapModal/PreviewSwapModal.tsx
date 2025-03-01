@@ -2,7 +2,6 @@ import classes from "./PreviewSwapModal.module.css";
 import { Button, Modal, Row, Col, notification } from "antd";
 import { useEffect, useState, useRef, FC } from "react";
 import PreviewSwapItem from "./PreviewSwapItem";
-import { resetSwap } from "../../../../reducers/swap";
 import { connect } from "react-redux";
 import {
   ExclamationCircleOutlined,
@@ -11,18 +10,18 @@ import {
   CheckCircleOutlined,
   ScanOutlined,
 } from "@ant-design/icons";
-import { formatNumber } from "../../../../utils/format/formatNumber";
-import { getContractABI } from "../../../../api/api";
+import { NotificationPlacement } from "antd/lib/notification";
+import { ISwapDetails, resetSwap } from "@src/reducers/swap";
+import { getContractABI } from "@src/api";
 import {
   NATIVE_ADDRESS,
   WETH_ADDRESS,
-  UINT_256_MAX_AMOUNT,
-  MULTISWAP_ADDRESS,
   localStorageKey,
-} from "../../../../config/config";
-import { NotificationPlacement } from "antd/lib/notification";
-import { EBlockchainNetwork } from "../../../../enum";
-import { ISwapDetails } from "../../../../reducers/swap";
+  MULTISWAP_ADDRESS,
+  UINT_256_MAX_AMOUNT,
+} from "@src/config";
+import { EBlockchainNetwork } from "@src/enum";
+import { formatNumber } from "@src/utils/format/formatNumber";
 
 interface ISwapItemDetails
   extends Omit<ISwapDetails, "index" | "address" | "balance"> {

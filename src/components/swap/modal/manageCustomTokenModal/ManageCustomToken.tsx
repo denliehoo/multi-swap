@@ -5,17 +5,17 @@ import { Input, Button } from "antd";
 import IconComponent from "../../shared/IconComponent";
 import { SearchOutlined } from "@ant-design/icons";
 import ManageCustomTokenItem from "./ManageCustomTokenItem";
-import { getDetailsForCustomToken } from "../../../../api/api";
-import { localStorageKey } from "../../../../config/config";
 import { connect } from "react-redux";
+import { getDetailsForCustomToken } from "@src/api";
+import { localStorageKey } from "@src/config";
+import { EBlockchainNetwork } from "@src/enum";
+import { useWindowSize } from "@src/hooks/useWindowSize";
 import {
-  addCustomToken,
   ICustomToken,
+  addCustomToken,
   removeAllCustomToken,
-} from "../../../../reducers/custom-token/";
-import { useWindowSize } from "../../../../hooks/useWindowSize";
-import { EBlockchainNetwork } from "../../../../enum";
-import { AppDispatch, RootState } from "../../../../store";
+} from "@src/reducers/custom-token";
+import { RootState, AppDispatch } from "@src/store";
 
 // TODO: Redux - Proper typing for custom tokens once redux revamped
 

@@ -1,15 +1,14 @@
-import { changeChainCustomTokenReducer } from "../../reducers/custom-token";
+import { EBlockchainNetwork } from "@src/enum";
 import {
   changeWalletAction,
   disconnectWalletAction,
+  changeChainConnectWalletReducer,
   connectSmartContractAction,
   attemptToConnectWallet,
-  changeChainConnectWalletReducer,
-} from "../../reducers/connect-wallet";
-
+} from "@src/reducers/connect-wallet";
+import { changeChainCustomTokenReducer } from "@src/reducers/custom-token";
+import { RootState } from "@src/store";
 import { Dispatch } from "redux";
-import { EBlockchainNetwork } from "../../enum";
-import { RootState } from "../../store";
 
 export const mapStateToProps = ({ connectWalletReducer }: RootState) => ({
   address: connectWalletReducer.address,

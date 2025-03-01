@@ -4,18 +4,19 @@ import { Button } from "antd";
 import SelectAssetModal from "./modal/selectAssetModal/SelectAssetModal";
 import React, { useState, useEffect } from "react";
 import { MinusCircleOutlined, DownOutlined } from "@ant-design/icons";
-import { getAssetPrice } from "../../api/api";
 import { connect } from "react-redux";
+
+import { Dispatch } from "redux";
+import { useWindowSize } from "@src/hooks/useWindowSize";
 import {
+  ISwapDetails,
   addSwapFrom,
   removeSwapFrom,
   addSwapTo,
   removeSwapTo,
-  ISwapDetails,
-} from "../../reducers/swap";
-import { formatNumber } from "../../utils/format/formatNumber";
-import { useWindowSize } from "../../hooks/useWindowSize";
-import { Dispatch } from "redux";
+} from "@src/reducers/swap";
+import { formatNumber } from "@src/utils/format/formatNumber";
+import { getAssetPrice } from "@src/api";
 
 const CryptoSwapItemTest = ({
   props,

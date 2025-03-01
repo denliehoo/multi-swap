@@ -4,11 +4,11 @@ import { connect } from "react-redux";
 
 import { FC, useEffect, useRef, useState } from "react";
 
-import fantomLogo from "../../assets/images/fantomLogo.svg";
-import goerliLogo from "../../assets/images/goerliLogo.svg";
+import fantomLogo from "@src/assets/images/fantomLogo.svg";
+import goerliLogo from "@src/assets/images/goerliLogo.svg";
 import IconComponent from "../swap/shared/IconComponent";
 import multiswapLogo from "../../assets/images/multiswapLogo.png";
-import { useWindowSize } from "../../hooks/useWindowSize";
+import { useWindowSize } from "@src/hooks/useWindowSize";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import ConnectWalletPopup from "../shared/ConnectWalletPopup";
 import { mapDispatchToProps, mapStateToProps } from "./utils";

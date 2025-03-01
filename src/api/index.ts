@@ -1,5 +1,5 @@
 import axios from "axios";
-import { localStorageKey } from "../config/config";
+import { localStorageKey } from "../config";
 
 const getAssetPrice = async (chain: string, asset: string, address: string) => {
   if (asset === "ETH") {

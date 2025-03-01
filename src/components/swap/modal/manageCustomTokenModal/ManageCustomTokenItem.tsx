@@ -2,15 +2,12 @@ import classes from "./ManageCustomTokenItem.module.css";
 import { Row, Col } from "antd";
 import IconComponent from "../../shared/IconComponent";
 import { DeleteOutlined, ScanOutlined } from "@ant-design/icons";
+import { FC } from "react";
 
 import { connect } from "react-redux";
-import {
-  ICustomToken,
-  removeCustomToken,
-} from "../../../../reducers/custom-token";
-import { useWindowSize } from "../../../../hooks/useWindowSize";
-import { FC } from "react";
-import { EBlockchainNetwork } from "../../../../enum";
+import { EBlockchainNetwork } from "@src/enum";
+import { useWindowSize } from "@src/hooks/useWindowSize";
+import { ICustomToken, removeCustomToken } from "@src/reducers/custom-token";
 
 const ManageCustomTokenItem: FC<any> = ({
   props,

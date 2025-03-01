@@ -12,11 +12,11 @@ import CryptoSwapItem from "./CryptoSwapItem";
 import PreviewSwapModal from "./modal/previewSwapModal/PreviewSwapModal";
 
 import { connect } from "react-redux";
-import { addSwapFrom, addSwapTo, ISwapDetails } from "../../reducers/swap";
-import { attemptToConnectWallet } from "../../reducers/connect-wallet";
 import ConnectWalletPopup from "../shared/ConnectWalletPopup";
 import { Dispatch } from "redux";
-import { EBlockchainNetwork } from "../../enum";
+import { EBlockchainNetwork } from "@src/enum";
+import { attemptToConnectWallet } from "@src/reducers/connect-wallet";
+import { ISwapDetails, addSwapFrom, addSwapTo } from "@src/reducers/swap";
 
 // Swap > CryptoSwapItem > SelectAssetModal > SelectAssetItem
 

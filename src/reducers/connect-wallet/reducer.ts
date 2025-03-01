@@ -7,7 +7,7 @@ import Web3 from "web3";
 // import Multiswap from '../utils/deployedContractsABI/ftmABI.json'
 import Multiswap_goerli from "../../utils/deployedContractsABI/phase2/goerliABI.json";
 import Multiswap_ftm from "../../utils/deployedContractsABI/phase2/ftmABI.json";
-import { MULTISWAP_ADDRESS } from "../../config/config";
+import { MULTISWAP_ADDRESS } from "../../config";
 import { EBlockchainNetwork } from "../../enum";
 import { IConnectWalletState } from "./interface";
 import {

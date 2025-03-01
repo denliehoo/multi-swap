@@ -1,6 +1,6 @@
+import { formatNumber } from "@src/utils/format/formatNumber";
 import IconComponent from "../../shared/IconComponent";
 import { Row, Col } from "antd";
-import { formatNumber } from "../../../../utils/format/formatNumber";
 import { FC } from "react";
 
 interface IPreviewSwapItem {

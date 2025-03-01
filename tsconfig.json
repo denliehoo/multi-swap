@@ -12,6 +12,10 @@
       "esModuleInterop": true,
       "forceConsistentCasingInFileNames": true,
       "allowSyntheticDefaultImports": true,
+      "paths": {
+        "@src/*": ["./src/*"],
+        
+    }
     },
     "include": [
     "src", 
