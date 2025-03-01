@@ -12,22 +12,17 @@ import CryptoSwapItem from "./CryptoSwapItem";
 import PreviewSwapModal from "./modal/previewSwapModal/PreviewSwapModal";
 
 import { connect } from "react-redux";
-import {
-  addSwapFrom,
-  removeSwapFrom,
-  addSwapTo,
-  removeSwapTo,
-} from "../../reducers/swapReducer";
-import { attemptToConnectWallet } from "../../reducers/connectWalletReducer";
+import { addSwapFrom, addSwapTo, ISwapDetails } from "../../reducers/swap";
+import { attemptToConnectWallet } from "../../reducers/connect-wallet";
 import ConnectWalletPopup from "../shared/ConnectWalletPopup";
+import { Dispatch } from "redux";
+import { EBlockchainNetwork } from "../../enum";
 
 // Swap > CryptoSwapItem > SelectAssetModal > SelectAssetItem
 
 const Swap = ({
   addSwapFrom,
-  removeSwapFrom,
   addSwapTo,
-  removeSwapTo,
   swapFrom,
   swapTo,
   address,
@@ -407,12 +402,11 @@ const mapStateToProps = ({ swapReducer, connectWalletReducer }) => ({
   chain: connectWalletReducer.chain,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  addSwapFrom: (payload) => dispatch(addSwapFrom(payload)),
-  removeSwapFrom: (payload) => dispatch(removeSwapFrom(payload)),
-  addSwapTo: (payload) => dispatch(addSwapTo(payload)),
-  removeSwapTo: (payload) => dispatch(removeSwapTo(payload)),
-  attemptToConnectWallet: (chain) => dispatch(attemptToConnectWallet(chain)),
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  addSwapFrom: (payload: ISwapDetails) => dispatch(addSwapFrom(payload)),
+  addSwapTo: (payload: ISwapDetails) => dispatch(addSwapTo(payload)),
+  attemptToConnectWallet: (chain: EBlockchainNetwork) =>
+    dispatch(attemptToConnectWallet(chain)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Swap);

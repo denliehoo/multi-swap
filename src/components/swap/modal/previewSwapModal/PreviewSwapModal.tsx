@@ -2,7 +2,7 @@ import classes from "./PreviewSwapModal.module.css";
 import { Button, Modal, Row, Col, notification } from "antd";
 import { useEffect, useState, useRef, FC } from "react";
 import PreviewSwapItem from "./PreviewSwapItem";
-import { resetSwap } from "../../../../reducers/swapReducer";
+import { resetSwap } from "../../../../reducers/swap";
 import { connect } from "react-redux";
 import {
   ExclamationCircleOutlined,
@@ -22,13 +22,11 @@ import {
 } from "../../../../config/config";
 import { NotificationPlacement } from "antd/lib/notification";
 import { EBlockchainNetwork } from "../../../../enum";
+import { ISwapDetails } from "../../../../reducers/swap";
 
-interface ISwapDetails {
-  amount: number;
-  symbol: string;
+interface ISwapItemDetails
+  extends Omit<ISwapDetails, "index" | "address" | "balance"> {
   price: number;
-  decimals: number;
-  imgUrl: string;
 }
 
 enum ESwapType {
@@ -73,8 +71,10 @@ const PreviewSwapModal: FC<any> = ({
   resetSwap,
 }) => {
   const [modalContent, setModalContent] = useState("loading");
-  const [swapFromDetails, setSwapFromDetails] = useState<ISwapDetails[]>([]);
-  const [swapToDetails, setSwapToDetails] = useState<ISwapDetails[]>([]);
+  const [swapFromDetails, setSwapFromDetails] = useState<ISwapItemDetails[]>(
+    []
+  );
+  const [swapToDetails, setSwapToDetails] = useState<ISwapItemDetails[]>([]);
   const [swapType, setSwapType] = useState("");
   const [swapObject, setSwapObject] = useState<ISwapObject | undefined>(
     undefined
@@ -113,8 +113,8 @@ const PreviewSwapModal: FC<any> = ({
   const loadingSpinner = <LoadingOutlined style={{ fontSize: "128px" }} />;
 
   const setSwapDetails = (
-    swapFromDetails: ISwapDetails[],
-    swapToDetails: ISwapDetails[],
+    swapFromDetails: ISwapItemDetails[],
+    swapToDetails: ISwapItemDetails[],
     swapType: ESwapType,
     swapObject: ISwapObject,
     tokensRequiringApproval: any

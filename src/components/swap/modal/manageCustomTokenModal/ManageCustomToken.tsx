@@ -10,22 +10,40 @@ import { localStorageKey } from "../../../../config/config";
 import { connect } from "react-redux";
 import {
   addCustomToken,
+  ICustomToken,
   removeAllCustomToken,
-} from "../../../../reducers/customTokenReducer";
+} from "../../../../reducers/custom-token/";
 import { useWindowSize } from "../../../../hooks/useWindowSize";
 import { EBlockchainNetwork } from "../../../../enum";
+import { AppDispatch, RootState } from "../../../../store";
 
 // TODO: Redux - Proper typing for custom tokens once redux revamped
 
-interface ICustomToken {
-  name: string;
-  symbol: string;
-  decimals: number;
-  logo: string;
-  address: string;
+interface IMapStateToProps {
+  ethCustomTokens: ICustomToken[];
+  ftmCustomTokens: ICustomToken[];
+  goerliCustomTokens: ICustomToken[];
+  chain: EBlockchainNetwork;
 }
 
-const ManageCustomToken: FC<any> = ({
+// Define the type for the dispatch props
+interface IMapDispatchToProps {
+  addCustomToken: (payload: ICustomToken[]) => void;
+  removeAllCustomToken: () => void;
+}
+
+interface IOwnProps {
+  defaultAssets: any;
+  setToggleChangesInCustomToken: any;
+}
+
+interface IManageCustomTokenProps
+  extends IMapStateToProps,
+    IMapDispatchToProps {
+  props: IOwnProps;
+}
+
+const ManageCustomToken: FC<IManageCustomTokenProps> = ({
   ethCustomTokens,
   addCustomToken,
   removeAllCustomToken,
@@ -81,13 +99,13 @@ const ManageCustomToken: FC<any> = ({
     }
 
     if (name) {
-      const currentCustomTokens = getCustomTokens(chain).concat(
+      const currentCustomTokens = getCustomTokens(chain)?.concat(
         props.defaultAssets
       );
-      const currentCustomTokensSymbol = currentCustomTokens.map(
+      const currentCustomTokensSymbol = currentCustomTokens?.map(
         (i: { symbol: any }) => i.symbol
       );
-      if (currentCustomTokensSymbol.includes(symbol)) {
+      if (currentCustomTokensSymbol?.includes(symbol)) {
         setCustomTokenErrorMessage("Token already exists");
       } else {
         setCustomTokenData({
@@ -117,6 +135,9 @@ const ManageCustomToken: FC<any> = ({
   };
 
   const importTokenHandler = (chain: EBlockchainNetwork) => {
+    if (!customTokenData) {
+      return;
+    }
     if (chain === EBlockchainNetwork.ETH) {
       addCustomToken([...ethCustomTokens, customTokenData]);
     } else if (chain === EBlockchainNetwork.FTM) {
@@ -135,7 +156,7 @@ const ManageCustomToken: FC<any> = ({
   };
 
   const deleteAllHandler = () => {
-    removeAllCustomToken([]);
+    removeAllCustomToken();
     props.setToggleChangesInCustomToken();
   };
 
@@ -198,9 +219,9 @@ const ManageCustomToken: FC<any> = ({
 
       {/* <hr /> */}
       <div className={classes.customTokenContainer}>
-        {getCustomTokens(chain).length ? (
+        {getCustomTokens(chain)?.length ? (
           <Row justify="space-between">
-            <Col>You have {getCustomTokens(chain).length} custom tokens</Col>
+            <Col>You have {getCustomTokens(chain)?.length} custom tokens</Col>
             <Col>
               {/* <Button onClick={deleteAllHandler}>Clear All</Button> */}
               <div className={classes.clearAll} onClick={deleteAllHandler}>
@@ -212,8 +233,8 @@ const ManageCustomToken: FC<any> = ({
           <span></span>
         )}
 
-        {getCustomTokens(chain).length ? (
-          getCustomTokens(chain).map(
+        {getCustomTokens(chain)?.length ? (
+          getCustomTokens(chain)?.map(
             (i: { name: any; symbol: any; logo: any; address: any }) => (
               <ManageCustomTokenItem
                 name={i.name}
@@ -239,8 +260,8 @@ const ManageCustomToken: FC<any> = ({
 };
 
 const mapStateToProps = (
-  { customTokenReducer, connectWalletReducer }: any,
-  ownProps: any
+  { customTokenReducer, connectWalletReducer }: RootState,
+  ownProps: IOwnProps
 ) => ({
   ethCustomTokens: customTokenReducer.eth,
   ftmCustomTokens: customTokenReducer.ftm,
@@ -249,10 +270,10 @@ const mapStateToProps = (
   props: ownProps,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
-  addCustomToken: (payload: any) => dispatch(addCustomToken(payload)),
-  removeAllCustomToken: (payload: any) =>
-    dispatch(removeAllCustomToken(payload)),
+const mapDispatchToProps = (dispatch: AppDispatch) => ({
+  addCustomToken: (payload: ICustomToken[]) =>
+    dispatch(addCustomToken(payload)),
+  removeAllCustomToken: () => dispatch(removeAllCustomToken()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageCustomToken);

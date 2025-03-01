@@ -1,27 +1,13 @@
 // 0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9
 // actions
-const addCustomToken = (payload: any) => ({
-  type: "ADD_CUSTOM_TOKEN",
-  payload,
-});
 
-const removeCustomToken = (payload: any) => ({
-  type: "REMOVE_CUSTOM_TOKEN",
-  payload,
-});
-const removeAllCustomToken = (payload: any) => ({
-  type: "REMOVE_ALL_CUSTOM_TOKEN",
-  payload,
-});
-
-const changeChainCustomTokenReducer = (payload: any) => ({
-  type: "CHANGE_CHAIN",
-  payload,
-});
+import { EBlockchainNetwork } from "../../enum";
+import { ECustomTokenAction } from "./action";
+import { ICustomTokenState } from "./interface";
 
 // initial state
-const initialState = {
-  chain: "ftm", //might need change this default?
+const initialState: ICustomTokenState = {
+  chain: EBlockchainNetwork.FTM, //might need change this default?
   // chain: 'goerli',
   eth: [],
   ftm: [],
@@ -31,13 +17,13 @@ const initialState = {
 // the reducer
 const customTokenReducer = (state = initialState, action: any) => {
   switch (action.type) {
-    case "ADD_CUSTOM_TOKEN":
+    case ECustomTokenAction.ADD_CUSTOM_TOKEN:
       return { ...state, [state.chain]: action.payload };
-    case "REMOVE_CUSTOM_TOKEN":
+    case ECustomTokenAction.REMOVE_CUSTOM_TOKEN:
       return { ...state, [state.chain]: action.payload };
-    case "REMOVE_ALL_CUSTOM_TOKEN":
-      return { ...state, [state.chain]: action.payload };
-    case "CHANGE_CHAIN":
+    case ECustomTokenAction.REMOVE_ALL_CUSTOM_TOKEN:
+      return { ...state, [state.chain]: [] };
+    case ECustomTokenAction.CHANGE_CHAIN:
       return { ...state, chain: action.payload };
     default:
       return state;
@@ -45,13 +31,7 @@ const customTokenReducer = (state = initialState, action: any) => {
 };
 
 // export the actions and the reducer
-export {
-  addCustomToken,
-  removeCustomToken,
-  removeAllCustomToken,
-  changeChainCustomTokenReducer,
-  customTokenReducer,
-};
+export { customTokenReducer };
 
 /* state becomes this eventually
 structure would be:

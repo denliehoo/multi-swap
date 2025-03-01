@@ -4,7 +4,10 @@ import IconComponent from "../../shared/IconComponent";
 import { DeleteOutlined, ScanOutlined } from "@ant-design/icons";
 
 import { connect } from "react-redux";
-import { removeCustomToken } from "../../../../reducers/customTokenReducer";
+import {
+  ICustomToken,
+  removeCustomToken,
+} from "../../../../reducers/custom-token";
 import { useWindowSize } from "../../../../hooks/useWindowSize";
 import { FC } from "react";
 import { EBlockchainNetwork } from "../../../../enum";
@@ -109,7 +112,8 @@ const mapStateToProps = ({ customTokenReducer }: any, ownProps: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-  removeCustomToken: (payload: any) => dispatch(removeCustomToken(payload)),
+  removeCustomToken: (payload: ICustomToken) =>
+    dispatch(removeCustomToken(payload)),
 });
 
 export default connect(

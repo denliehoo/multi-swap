@@ -1,31 +1,32 @@
-import { changeChainCustomTokenReducer } from "../../reducers/customTokenReducer";
+import { changeChainCustomTokenReducer } from "../../reducers/custom-token";
 import {
-  connectWalletAction,
   changeWalletAction,
   disconnectWalletAction,
   connectSmartContractAction,
   attemptToConnectWallet,
   changeChainConnectWalletReducer,
-} from "../../reducers/connectWalletReducer";
+} from "../../reducers/connect-wallet";
 
 import { Dispatch } from "redux";
+import { EBlockchainNetwork } from "../../enum";
+import { RootState } from "../../store";
 
-export const mapStateToProps = ({ connectWalletReducer }: any) => ({
+export const mapStateToProps = ({ connectWalletReducer }: RootState) => ({
   address: connectWalletReducer.address,
   walletConnected: connectWalletReducer.walletConnected,
   chain: connectWalletReducer.chain,
 });
 
 export const mapDispatchToProps = (dispatch: Dispatch) => ({
-  connectWalletAction: (payload: any) => dispatch(connectWalletAction(payload)),
-  changeWalletAction: (payload: any) => dispatch(changeWalletAction(payload)),
+  changeWalletAction: (payload: string) =>
+    dispatch(changeWalletAction(payload)),
   disconnectWalletAction: () => dispatch(disconnectWalletAction()),
-  changeChainCustomTokenReducer: (payload: any) =>
+  changeChainCustomTokenReducer: (payload: EBlockchainNetwork) =>
     dispatch(changeChainCustomTokenReducer(payload)),
   changeChainConnectWalletReducer: (payload: any) =>
     dispatch(changeChainConnectWalletReducer(payload)),
   connectSmartContractAction: (payload: any) =>
     dispatch(connectSmartContractAction(payload)),
-  attemptToConnectWallet: (chain: any) =>
+  attemptToConnectWallet: (chain: EBlockchainNetwork) =>
     dispatch(attemptToConnectWallet(chain)),
 });

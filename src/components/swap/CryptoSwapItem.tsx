@@ -11,9 +11,11 @@ import {
   removeSwapFrom,
   addSwapTo,
   removeSwapTo,
-} from "../../reducers/swapReducer";
+  ISwapDetails,
+} from "../../reducers/swap";
 import { formatNumber } from "../../utils/format/formatNumber";
 import { useWindowSize } from "../../hooks/useWindowSize";
+import { Dispatch } from "redux";
 
 const CryptoSwapItemTest = ({
   props,
@@ -80,10 +82,10 @@ const CryptoSwapItemTest = ({
     }
     if (props.type === "from") {
       removeSwapFrom(newSwap);
-      setAmount(newSwap[index].amount);
+      setAmount(newSwap[index]?.amount);
     } else if (props.type === "to") {
       removeSwapTo(newSwap);
-      setPercentInput(newSwap[index].amount);
+      setPercentInput(newSwap[index]?.amount);
       props.changePercentageFromMinus(props.index);
     }
     props.assetHasBeenSelected();
@@ -254,11 +256,11 @@ const mapStateToProps = ({ swapReducer, connectWalletReducer }, ownProps) => ({
   chain: connectWalletReducer.chain,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  addSwapFrom: (payload) => dispatch(addSwapFrom(payload)),
-  removeSwapFrom: (payload) => dispatch(removeSwapFrom(payload)),
-  addSwapTo: (payload) => dispatch(addSwapTo(payload)),
-  removeSwapTo: (payload) => dispatch(removeSwapTo(payload)),
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  addSwapFrom: (payload: ISwapDetails) => dispatch(addSwapFrom(payload)),
+  removeSwapFrom: (payload: ISwapDetails) => dispatch(removeSwapFrom(payload)),
+  addSwapTo: (payload: ISwapDetails) => dispatch(addSwapTo(payload)),
+  removeSwapTo: (payload: ISwapDetails) => dispatch(removeSwapTo(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CryptoSwapItemTest);

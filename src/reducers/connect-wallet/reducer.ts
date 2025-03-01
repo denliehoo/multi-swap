@@ -5,10 +5,18 @@ import Web3 from "web3";
 // import from utils if deployed through remix
 // import Multiswap from '../utils/deployedContractsABI/goerliABI.json'
 // import Multiswap from '../utils/deployedContractsABI/ftmABI.json'
-import Multiswap_goerli from "../utils/deployedContractsABI/phase2/goerliABI.json";
-import Multiswap_ftm from "../utils/deployedContractsABI/phase2/ftmABI.json";
-import { MULTISWAP_ADDRESS } from "../config/config";
-import { EBlockchainNetwork } from "../enum";
+import Multiswap_goerli from "../../utils/deployedContractsABI/phase2/goerliABI.json";
+import Multiswap_ftm from "../../utils/deployedContractsABI/phase2/ftmABI.json";
+import { MULTISWAP_ADDRESS } from "../../config/config";
+import { EBlockchainNetwork } from "../../enum";
+import { IConnectWalletState } from "./interface";
+import {
+  connectSmartContractAction,
+  connectWalletAction,
+  disconnectWalletAction,
+  EWalletAction,
+} from "./actions";
+import { Dispatch } from "redux";
 
 // config for chain ids
 const chainIds: Record<EBlockchainNetwork, string> = {
@@ -38,14 +46,7 @@ const chainConfig: any = {
   },
 };
 
-interface IConnectWalletProps {
-  address: string;
-  walletConnected: boolean;
-  chain: EBlockchainNetwork;
-  multiswap: any;
-  web3: any;
-}
-const initialState: IConnectWalletProps = {
+const initialState: IConnectWalletState = {
   address: "",
   walletConnected: false,
   chain: EBlockchainNetwork.FTM,
@@ -55,41 +56,9 @@ const initialState: IConnectWalletProps = {
   web3: {},
 };
 
-enum EWalletAction {
-  CONNECT_WALLET = "CONNECT_WALLET",
-  CHANGE_WALLET = "CHANGE_WALLET",
-  DISCONNECT_WALLET = "DISCONNECT_WALLET",
-  CONNECT_SMART_CONTRACT = "CONNECT_SMART_CONTRACT",
-  CHANGE_CHAIN = "CHANGE_CHAIN",
-}
-
-// actions here
-const connectWalletAction = (payload: { address: string; web3: any }) => ({
-  type: EWalletAction.CONNECT_WALLET,
-  payload,
-});
-
-const changeWalletAction = (payload: string) => ({
-  type: EWalletAction.CHANGE_WALLET,
-  payload,
-});
-
-const disconnectWalletAction = () => ({
-  type: EWalletAction.DISCONNECT_WALLET,
-});
-
-const connectSmartContractAction = (payload: any) => ({
-  type: EWalletAction.CONNECT_SMART_CONTRACT,
-  payload,
-});
-
-const changeChainConnectWalletReducer = (payload: EBlockchainNetwork) => ({
-  type: EWalletAction.CHANGE_CHAIN,
-  payload,
-});
-
+// TODO: Refactor this somewhere else
 const attemptToConnectWallet = (chain: EBlockchainNetwork): any => {
-  return async (dispatch: any) => {
+  return async (dispatch: Dispatch) => {
     ///
     try {
       // Request account access if needed
@@ -212,12 +181,4 @@ const connectWalletReducer = (
   }
 };
 
-export {
-  connectWalletReducer,
-  connectWalletAction,
-  changeWalletAction,
-  disconnectWalletAction,
-  connectSmartContractAction,
-  attemptToConnectWallet,
-  changeChainConnectWalletReducer,
-};
+export { connectWalletReducer, attemptToConnectWallet };
