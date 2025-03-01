@@ -1,83 +1,90 @@
-import classes from './ManageCustomTokenItem.module.css'
-import { Row, Col } from 'antd'
-import IconComponent from '../../shared/IconComponent'
-import { DeleteOutlined, ScanOutlined } from '@ant-design/icons'
+import classes from "./ManageCustomTokenItem.module.css";
+import { Row, Col } from "antd";
+import IconComponent from "../../shared/IconComponent";
+import { DeleteOutlined, ScanOutlined } from "@ant-design/icons";
 
-import { connect } from 'react-redux'
-import { removeCustomToken } from '../../../../reducers/customTokenReducer'
-import { useWindowSize } from '../../../../hooks/useWindowSize'
+import { connect } from "react-redux";
+import { removeCustomToken } from "../../../../reducers/customTokenReducer";
+import { useWindowSize } from "../../../../hooks/useWindowSize";
+import { FC } from "react";
+import { EBlockchainNetwork } from "../../../../enum";
 
-const ManageCustomTokenItem = ({
+const ManageCustomTokenItem: FC<any> = ({
   props,
   ethCustomTokens,
   ftmCustomTokens,
   goerliCustomTokens,
   removeCustomToken,
 }) => {
-  const { width } = useWindowSize()
-  const getCustomTokens = (chain) => {
-    if (chain === 'eth') {
-      return ethCustomTokens
-    } else if (chain === 'ftm') {
-      return ftmCustomTokens
-    } else if (chain == 'goerli') {
-      return goerliCustomTokens
+  const { width } = useWindowSize();
+  const getCustomTokens = (chain: EBlockchainNetwork) => {
+    if (chain === EBlockchainNetwork.ETH) {
+      return ethCustomTokens;
+    } else if (chain === EBlockchainNetwork.FTM) {
+      return ftmCustomTokens;
+    } else if (chain === EBlockchainNetwork.GOERLI) {
+      return goerliCustomTokens;
     }
-  }
+  };
   const deleteHandler = () => {
-    const customTokens = getCustomTokens(props.chain)
-    const customTokenSymbols = customTokens.map((i) => i.symbol)
-    const indexOfAsset = customTokenSymbols.indexOf(props.symbol)
-    customTokens.splice(indexOfAsset, 1) // remove the entire {asset} from the customTokens array
-    removeCustomToken(customTokens)
+    const customTokens = getCustomTokens(props.chain);
+    const customTokenSymbols = customTokens.map(
+      (i: { symbol: any }) => i.symbol
+    );
+    const indexOfAsset = customTokenSymbols.indexOf(props.symbol);
+    customTokens.splice(indexOfAsset, 1); // remove the entire {asset} from the customTokens array
+    removeCustomToken(customTokens);
     // props.onClickDeleteHandler(customTokens)
-    props.onClickDelete()
-    props.setToggleChangesInCustomToken()
+    props.onClickDelete();
+    props.setToggleChangesInCustomToken();
 
     // find the array index of the props.symbol -> remove this from the custom token array
     // -> call removeCustomToken and return the new array
-  }
+  };
 
   const tokenContractWebsiteHandler = () => {
-    if (props.chain == 'eth') {
+    if (props.chain === EBlockchainNetwork.ETH) {
       return (
         <a
           href={`https://etherscan.io/address/${props.address}`}
           target="_blank"
+          rel="noreferrer"
         >
           <ScanOutlined className={classes.icon} />
         </a>
-      )
-    } else if (props.chain == 'ftm') {
+      );
+    } else if (props.chain === EBlockchainNetwork.FTM) {
       return (
         <a
           href={`https://ftmscan.com/address/${props.address}`}
           target="_blank"
+          rel="noreferrer"
         >
           <ScanOutlined className={classes.icon} />
         </a>
-      )
-    } else if (props.chain == 'goerli') {
+      );
+    } else if (props.chain === EBlockchainNetwork.GOERLI) {
       return (
         <a
           href={`https://goerli.etherscan.io/address/${props.address}`}
           target="_blank"
+          rel="noreferrer"
         >
           <ScanOutlined className={classes.icon} />
         </a>
-      )
+      );
     }
-  }
+  };
   return (
     <Row
       align="middle"
       justify="space-evenly"
       className={classes.manageCustomTokenItemContainer}
     >
-      <Col span={width > 470 ? 2 :  width > 360 ? 3 : 4}>
+      <Col span={width && width > 470 ? 2 : width && width > 360 ? 3 : 4}>
         <IconComponent imgUrl={props.icon} />
       </Col>
-      <Col span={ width> 470 ? 18 : width > 360 ? 17 : 16}>
+      <Col span={width && width > 470 ? 18 : width && width > 360 ? 17 : 16}>
         <Row>
           {props.symbol} {props.name}
         </Row>
@@ -91,24 +98,24 @@ const ManageCustomTokenItem = ({
         <Row justify="end">{tokenContractWebsiteHandler()}</Row>
       </Col>
     </Row>
-  )
-}
+  );
+};
 
-const mapStateToProps = ({ customTokenReducer }, ownProps) => ({
+const mapStateToProps = ({ customTokenReducer }: any, ownProps: any) => ({
   ethCustomTokens: customTokenReducer.eth,
   ftmCustomTokens: customTokenReducer.ftm,
   goerliCustomTokens: customTokenReducer.goerli,
   props: ownProps,
-})
+});
 
-const mapDispatchToProps = (dispatch) => ({
-  removeCustomToken: (payload) => dispatch(removeCustomToken(payload)),
-})
+const mapDispatchToProps = (dispatch: any) => ({
+  removeCustomToken: (payload: any) => dispatch(removeCustomToken(payload)),
+});
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
-)(ManageCustomTokenItem)
+  mapDispatchToProps
+)(ManageCustomTokenItem);
 
 /*
 Note: if a component have it's own props we also need to put ownProps as a 2nd param

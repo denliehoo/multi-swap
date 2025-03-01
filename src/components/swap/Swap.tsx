@@ -237,20 +237,30 @@ const Swap = ({
               </Row>
             </Col>
             <Col span={20}>
-              <div className={showAmountError && classes.errorMessage}>
+              <div
+                className={showAmountError ? classes.errorMessage : undefined}
+              >
                 {showAmountError && amountError}
               </div>
-              <div className={showPercentageError && classes.errorMessage}>
+              <div
+                className={
+                  showPercentageError ? classes.errorMessage : undefined
+                }
+              >
                 {showPercentageError && percentageError}
               </div>
               <div
-                className={showTokenNotSelectedError && classes.errorMessage}
+                className={
+                  showTokenNotSelectedError ? classes.errorMessage : undefined
+                }
               >
                 {showTokenNotSelectedError && tokenNotSelectedError}
               </div>
               <div
                 className={
-                  showAmountGreaterThanBalanceError && classes.errorMessage
+                  showAmountGreaterThanBalanceError
+                    ? classes.errorMessage
+                    : undefined
                 }
               >
                 {showAmountGreaterThanBalanceError &&

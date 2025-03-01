@@ -1,16 +1,9 @@
 import classes from "./NavBar.module.css";
 import { Menu, Drawer } from "antd";
 import { connect } from "react-redux";
-import {
-  connectWalletAction,
-  changeWalletAction,
-  disconnectWalletAction,
-  connectSmartContractAction,
-  attemptToConnectWallet,
-  changeChainConnectWalletReducer,
-} from "../../reducers/connectWalletReducer";
-import { useEffect, useRef, useState } from "react";
-import { changeChainCustomTokenReducer } from "../../reducers/customTokenReducer";
+
+import { FC, useEffect, useRef, useState } from "react";
+
 import fantomLogo from "../../assets/images/fantomLogo.svg";
 import goerliLogo from "../../assets/images/goerliLogo.svg";
 import IconComponent from "../swap/shared/IconComponent";
@@ -18,14 +11,13 @@ import multiswapLogo from "../../assets/images/multiswapLogo.png";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import ConnectWalletPopup from "../shared/ConnectWalletPopup";
+import { mapDispatchToProps, mapStateToProps } from "./utils";
 
-const NavBar = ({
-  connectWalletAction,
+const NavBar: FC<any> = ({
   changeWalletAction,
   disconnectWalletAction,
   changeChainCustomTokenReducer,
   changeChainConnectWalletReducer,
-  connectSmartContractAction,
   attemptToConnectWallet,
   address,
   walletConnected,
@@ -58,7 +50,7 @@ const NavBar = ({
   }, []);
 
   useEffect(() => {
-    width > 500 && closeDrawer();
+    width && width > 500 && closeDrawer();
   }, [width]);
 
   useEffect(() => {
@@ -67,10 +59,10 @@ const NavBar = ({
 
   useEffect(() => {
     if (walletConnected && window.ethereum) {
-      window.ethereum.on("accountsChanged", (accounts) => {
+      window.ethereum.on("accountsChanged", (accounts: string[]) => {
         changeWalletAction(accounts[0]);
       });
-      window.ethereum.on("chainChanged", async (chainId) => {
+      window.ethereum.on("chainChanged", async () => {
         if (!userClickNetworkRef.current) {
           // console.log(`Chain changed to ${chainId}`)
           disconnectWalletAction();
@@ -118,7 +110,7 @@ const NavBar = ({
         }
       : { label: addressOrConnectButton, key: "connectWallet" };
 
-  const networkLabels = (_chain, _isHeader) => {
+  const networkLabels = (_chain: string, _isHeader: boolean) => {
     let _chainLogo, _chainName;
     if (_chain === "goerli") {
       _chainLogo = goerliLogo;
@@ -161,7 +153,7 @@ const NavBar = ({
     }
   };
 
-  const rightItems = [
+  const rightItems: any = [
     {
       label: networkLabels(chain, true),
       // label: <span>[Logo] Goerli</span>,
@@ -194,7 +186,7 @@ const NavBar = ({
       </div>
 
       <div className={classes.rightItems}>
-        {width < 500 ? (
+        {width && width < 500 ? (
           <>
             <div className={classes.hamburgerMenu} onClick={openDrawer}>
               <MenuOutlined />
@@ -246,24 +238,5 @@ const NavBar = ({
     </nav>
   );
 };
-
-const mapStateToProps = ({ connectWalletReducer }) => ({
-  address: connectWalletReducer.address,
-  walletConnected: connectWalletReducer.walletConnected,
-  chain: connectWalletReducer.chain,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  connectWalletAction: (payload) => dispatch(connectWalletAction(payload)),
-  changeWalletAction: (payload) => dispatch(changeWalletAction(payload)),
-  disconnectWalletAction: () => dispatch(disconnectWalletAction()),
-  changeChainCustomTokenReducer: (payload) =>
-    dispatch(changeChainCustomTokenReducer(payload)),
-  changeChainConnectWalletReducer: (payload) =>
-    dispatch(changeChainConnectWalletReducer(payload)),
-  connectSmartContractAction: (payload) =>
-    dispatch(connectSmartContractAction(payload)),
-  attemptToConnectWallet: (chain) => dispatch(attemptToConnectWallet(chain)),
-});
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

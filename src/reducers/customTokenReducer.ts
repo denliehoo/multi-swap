@@ -1,48 +1,48 @@
 // 0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9
 // actions
-const addCustomToken = (payload) => ({
-  type: 'ADD_CUSTOM_TOKEN',
+const addCustomToken = (payload: any) => ({
+  type: "ADD_CUSTOM_TOKEN",
   payload,
-})
+});
 
-const removeCustomToken = (payload) => ({
-  type: 'REMOVE_CUSTOM_TOKEN',
+const removeCustomToken = (payload: any) => ({
+  type: "REMOVE_CUSTOM_TOKEN",
   payload,
-})
-const removeAllCustomToken = (payload) => ({
-  type: 'REMOVE_ALL_CUSTOM_TOKEN',
+});
+const removeAllCustomToken = (payload: any) => ({
+  type: "REMOVE_ALL_CUSTOM_TOKEN",
   payload,
-})
+});
 
-const changeChainCustomTokenReducer = (payload) => ({
-  type: 'CHANGE_CHAIN',
+const changeChainCustomTokenReducer = (payload: any) => ({
+  type: "CHANGE_CHAIN",
   payload,
-})
+});
 
 // initial state
 const initialState = {
-  chain: 'ftm', //might need change this default?
+  chain: "ftm", //might need change this default?
   // chain: 'goerli',
   eth: [],
   ftm: [],
   goerli: [],
-}
+};
 
 // the reducer
-const customTokenReducer = (state = initialState, action) => {
+const customTokenReducer = (state = initialState, action: any) => {
   switch (action.type) {
-    case 'ADD_CUSTOM_TOKEN':
-      return { ...state, [state.chain]: action.payload }
-    case 'REMOVE_CUSTOM_TOKEN':
-      return { ...state, [state.chain]: action.payload }
-    case 'REMOVE_ALL_CUSTOM_TOKEN':
-      return { ...state, [state.chain]: action.payload }
-    case 'CHANGE_CHAIN':
-      return { ...state, chain: action.payload }
+    case "ADD_CUSTOM_TOKEN":
+      return { ...state, [state.chain]: action.payload };
+    case "REMOVE_CUSTOM_TOKEN":
+      return { ...state, [state.chain]: action.payload };
+    case "REMOVE_ALL_CUSTOM_TOKEN":
+      return { ...state, [state.chain]: action.payload };
+    case "CHANGE_CHAIN":
+      return { ...state, chain: action.payload };
     default:
-      return state
+      return state;
   }
-}
+};
 
 // export the actions and the reducer
 export {
@@ -51,7 +51,7 @@ export {
   removeAllCustomToken,
   changeChainCustomTokenReducer,
   customTokenReducer,
-}
+};
 
 /* state becomes this eventually
 structure would be:
