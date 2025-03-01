@@ -21,7 +21,7 @@ import {
   UINT_256_MAX_AMOUNT,
 } from "@src/config";
 import { EBlockchainNetwork } from "@src/enum";
-import { formatNumber } from "@src/utils/format/formatNumber";
+import { formatNumber } from "@src/utils/format/number";
 
 interface ISwapItemDetails
   extends Omit<ISwapDetails, "index" | "address" | "balance"> {

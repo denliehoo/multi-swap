@@ -15,7 +15,7 @@ import {
   addSwapTo,
   removeSwapTo,
 } from "@src/reducers/swap";
-import { formatNumber } from "@src/utils/format/formatNumber";
+import { formatNumber } from "@src/utils/format/number";
 import { getAssetPrice } from "@src/api";
 
 const CryptoSwapItemTest = ({

@@ -6,7 +6,7 @@ import {
   addSwapTo,
   removeSwapTo,
 } from "@src/reducers/swap";
-import { formatNumber } from "@src/utils/format/formatNumber";
+import { formatNumber } from "@src/utils/format/number";
 import classes from "./SelectAssetItem.module.css";
 import { Row, Col } from "antd/lib/grid";
 import { connect } from "react-redux";

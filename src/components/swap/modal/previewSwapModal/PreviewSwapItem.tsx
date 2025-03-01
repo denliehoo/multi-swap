@@ -1,4 +1,4 @@
-import { formatNumber } from "@src/utils/format/formatNumber";
+import { formatNumber } from "@src/utils/format/number";
 import IconComponent from "../../shared/IconComponent";
 import { Row, Col } from "antd";
 import { FC } from "react";
