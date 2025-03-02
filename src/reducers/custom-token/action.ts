@@ -13,7 +13,8 @@ export const addCustomToken = (payload: ICustomToken[]) => ({
   payload,
 });
 
-export const removeCustomToken = (payload: ICustomToken) => ({
+// TODO: Should update this to remove only 1 custom token
+export const removeCustomToken = (payload: ICustomToken[]) => ({
   type: ECustomTokenAction.REMOVE_CUSTOM_TOKEN,
   payload,
 });

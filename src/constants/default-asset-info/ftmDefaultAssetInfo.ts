@@ -1,4 +1,4 @@
-import { IDefaultAssetInfo } from ".";
+import { IDefaultAssetInfo } from "@src/interface";
 
 export const ftmDefaultAssetInfo: IDefaultAssetInfo[] = [
   {

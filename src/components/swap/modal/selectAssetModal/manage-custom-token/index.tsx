@@ -1,10 +1,9 @@
-import classes from "./ManageCustomToken.module.css";
+import classes from "./index.module.css";
 import { Row, Col } from "antd/lib/grid";
 import { useState, useEffect, FC } from "react";
 import { Input, Button } from "antd";
-import IconComponent from "../../shared/IconComponent";
 import { SearchOutlined } from "@ant-design/icons";
-import ManageCustomTokenItem from "./ManageCustomTokenItem";
+import ManageCustomTokenItem from "./item";
 import { connect } from "react-redux";
 import { getDetailsForCustomToken } from "@src/api";
 import { localStorageKey } from "@src/config";
@@ -16,8 +15,8 @@ import {
   removeAllCustomToken,
 } from "@src/reducers/custom-token";
 import { RootState, AppDispatch } from "@src/store";
-
-// TODO: Redux - Proper typing for custom tokens once redux revamped
+import { IDefaultAssetInfo } from "@src/interface";
+import IconComponent from "@src/components/swap/shared/IconComponent";
 
 interface IMapStateToProps {
   ethCustomTokens: ICustomToken[];
@@ -26,14 +25,13 @@ interface IMapStateToProps {
   chain: EBlockchainNetwork;
 }
 
-// Define the type for the dispatch props
 interface IMapDispatchToProps {
   addCustomToken: (payload: ICustomToken[]) => void;
   removeAllCustomToken: () => void;
 }
 
 interface IOwnProps {
-  defaultAssets: any;
+  defaultAssets: IDefaultAssetInfo[];
   setToggleChangesInCustomToken: any;
 }
 
@@ -99,13 +97,12 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = ({
     }
 
     if (name) {
-      const currentCustomTokens = getCustomTokens(chain)?.concat(
-        props.defaultAssets
-      );
-      const currentCustomTokensSymbol = currentCustomTokens?.map(
-        (i: { symbol: any }) => i.symbol
-      );
-      if (currentCustomTokensSymbol?.includes(symbol)) {
+      const currentCustomTokensSymbol = [
+        ...getCustomTokens(chain),
+        ...props.defaultAssets,
+      ].map((i) => i.symbol);
+
+      if (currentCustomTokensSymbol.includes(symbol)) {
         setCustomTokenErrorMessage("Token already exists");
       } else {
         setCustomTokenData({
@@ -130,6 +127,8 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = ({
     } else if (chain === EBlockchainNetwork.FTM) {
       return ftmCustomTokens;
     } else if (chain === EBlockchainNetwork.GOERLI) {
+      return goerliCustomTokens;
+    } else {
       return goerliCustomTokens;
     }
   };
@@ -165,7 +164,6 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = ({
       <Input
         placeholder="Paste Token Address"
         size="large"
-        // TODO: Fix issue with ant icon requiring unncessary props
         prefix={<SearchOutlined />}
         className={`class-name-custom-ant-input ${
           inputIsFocused && "glowing-border"

@@ -1,6 +1,5 @@
-import classes from "./ManageCustomTokenItem.module.css";
+import classes from "./index.module.css";
 import { Row, Col } from "antd";
-import IconComponent from "../../shared/IconComponent";
 import { DeleteOutlined, ScanOutlined } from "@ant-design/icons";
 import { FC } from "react";
 
@@ -8,8 +7,34 @@ import { connect } from "react-redux";
 import { EBlockchainNetwork } from "@src/enum";
 import { useWindowSize } from "@src/hooks/useWindowSize";
 import { ICustomToken, removeCustomToken } from "@src/reducers/custom-token";
+import IconComponent from "@src/components/swap/shared/IconComponent";
+import { AppDispatch, RootState } from "@src/store";
 
-const ManageCustomTokenItem: FC<any> = ({
+interface IOwnProps {
+  chain: EBlockchainNetwork;
+  symbol: string;
+  onClickDelete: () => void;
+  setToggleChangesInCustomToken: () => void;
+  address: string;
+  icon: string;
+  name: string;
+}
+
+interface IMapStateToProps {
+  ethCustomTokens: ICustomToken[];
+  ftmCustomTokens: ICustomToken[];
+  goerliCustomTokens: ICustomToken[];
+}
+
+interface IMapDispatchToProps {
+  removeCustomToken: (customToken: ICustomToken[]) => void;
+}
+
+interface IManageCustomTokenItem extends IMapStateToProps, IMapDispatchToProps {
+  props: IOwnProps;
+}
+
+const ManageCustomTokenItem: FC<IManageCustomTokenItem> = ({
   props,
   ethCustomTokens,
   ftmCustomTokens,
@@ -25,21 +50,16 @@ const ManageCustomTokenItem: FC<any> = ({
     } else if (chain === EBlockchainNetwork.GOERLI) {
       return goerliCustomTokens;
     }
+    return goerliCustomTokens;
   };
   const deleteHandler = () => {
     const customTokens = getCustomTokens(props.chain);
-    const customTokenSymbols = customTokens.map(
-      (i: { symbol: any }) => i.symbol
-    );
+    const customTokenSymbols = customTokens.map((i) => i.symbol);
     const indexOfAsset = customTokenSymbols.indexOf(props.symbol);
     customTokens.splice(indexOfAsset, 1); // remove the entire {asset} from the customTokens array
     removeCustomToken(customTokens);
-    // props.onClickDeleteHandler(customTokens)
     props.onClickDelete();
     props.setToggleChangesInCustomToken();
-
-    // find the array index of the props.symbol -> remove this from the custom token array
-    // -> call removeCustomToken and return the new array
   };
 
   const tokenContractWebsiteHandler = () => {
@@ -101,15 +121,18 @@ const ManageCustomTokenItem: FC<any> = ({
   );
 };
 
-const mapStateToProps = ({ customTokenReducer }: any, ownProps: any) => ({
+const mapStateToProps = (
+  { customTokenReducer }: RootState,
+  ownProps: IOwnProps
+) => ({
   ethCustomTokens: customTokenReducer.eth,
   ftmCustomTokens: customTokenReducer.ftm,
   goerliCustomTokens: customTokenReducer.goerli,
   props: ownProps,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
-  removeCustomToken: (payload: ICustomToken) =>
+const mapDispatchToProps = (dispatch: AppDispatch) => ({
+  removeCustomToken: (payload: ICustomToken[]) =>
     dispatch(removeCustomToken(payload)),
 });
 

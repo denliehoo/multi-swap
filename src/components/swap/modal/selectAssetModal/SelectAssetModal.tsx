@@ -5,12 +5,11 @@ import { Button, Modal } from "antd";
 import React, { useEffect, useState } from "react";
 import SelectAssetItem from "./SelectAssetItem";
 import IconComponent from "../../shared/IconComponent";
-import ManageCustomToken from "../manageCustomTokenModal/ManageCustomToken";
+import ManageCustomToken from "./manage-custom-token";
 import {
   ethDefaultAssetInfo,
   ftmDefaultAssetInfo,
   goerliDefaultAssetInfo,
-  IDefaultAssetInfo,
 } from "@src/constants/default-asset-info";
 import { getTokenBalances } from "@src/api";
 import { connect } from "react-redux";
@@ -18,6 +17,7 @@ import { useWindowSize } from "@src/hooks/useWindowSize";
 import SearchInputComponent from "../../shared/SearchInputComponent";
 import { RootState } from "@src/store";
 import { ICustomToken } from "@src/reducers/custom-token";
+import { IDefaultAssetInfo } from "@src/interface";
 
 const SelectAssetModal = ({
   props,

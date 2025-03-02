@@ -1,10 +1,10 @@
 import { EBlockchainNetwork } from "../../enum";
 
 export interface ICustomToken {
-  name: string;
   symbol: string;
-  decimals: number;
+  name: string;
   logo: string;
+  decimals: number;
   address: string;
 }
 
