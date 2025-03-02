@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import CryptoSwapItem from "./CryptoSwapItem";
-import PreviewSwapModal from "./modal/previewSwapModal/PreviewSwapModal";
+import PreviewSwapModal from "./modal/swap";
 
 import { connect } from "react-redux";
 import ConnectWalletPopup from "../shared/ConnectWalletPopup";

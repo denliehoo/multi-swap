@@ -6,6 +6,7 @@ export interface ISwapDetails {
   amount: number; // percentage => number , amount => string
   decimals: number;
   imgUrl: string;
+  price?: number;
 }
 
 export interface ISwapState {

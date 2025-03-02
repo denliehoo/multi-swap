@@ -7,7 +7,7 @@ interface IPreviewSwapItem {
   imgUrl: string;
   symbol: string;
   amount: number;
-  price: number;
+  price?: number;
 }
 
 const PreviewSwapItem: FC<IPreviewSwapItem> = ({
@@ -26,7 +26,7 @@ const PreviewSwapItem: FC<IPreviewSwapItem> = ({
         <Row align="middle">
           <Col>
             <Row justify="end" className="fs-xs">
-              {formatNumber(amount * price, "fiat")}
+              {formatNumber(amount * (price || 0), "fiat")}
             </Row>
             <Row justify="end">{formatNumber(amount, "crypto")}</Row>
           </Col>
