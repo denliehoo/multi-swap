@@ -14,7 +14,7 @@ import PreviewSwapModal from "./modal/swap";
 import { connect } from "react-redux";
 import ConnectWalletPopup from "../shared/ConnectWalletPopup";
 import { Dispatch } from "redux";
-import { EBlockchainNetwork } from "@src/enum";
+import { EBlockchainNetwork, ESWapDirection } from "@src/enum";
 import { attemptToConnectWallet } from "@src/reducers/connect-wallet";
 import { ISwapDetails, addSwapFrom, addSwapTo } from "@src/reducers/swap";
 
@@ -148,13 +148,13 @@ const Swap = ({
   };
 
   const addSwapState = (type, index, newAssetDetails) => {
-    if (type === "from") {
+    if (type === ESWapDirection.FROM) {
       if (!swapFrom[index]) {
         let newSwapFrom = [...swapFrom];
         newSwapFrom.push(newAssetDetails);
         addSwapFrom(newSwapFrom);
       }
-    } else if (type === "to") {
+    } else if (type === ESWapDirection.TO) {
       if (!swapTo[index]) {
         let newSwapTo = [...swapTo];
         newSwapTo.push(newAssetDetails);
@@ -403,8 +403,8 @@ const mapStateToProps = ({ swapReducer, connectWalletReducer }) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  addSwapFrom: (payload: ISwapDetails) => dispatch(addSwapFrom(payload)),
-  addSwapTo: (payload: ISwapDetails) => dispatch(addSwapTo(payload)),
+  addSwapFrom: (payload: ISwapDetails[]) => dispatch(addSwapFrom(payload)),
+  addSwapTo: (payload: ISwapDetails[]) => dispatch(addSwapTo(payload)),
   attemptToConnectWallet: (chain: EBlockchainNetwork) =>
     dispatch(attemptToConnectWallet(chain)),
 });

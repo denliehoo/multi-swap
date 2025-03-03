@@ -1,18 +1,38 @@
 import { useWindowSize } from "@src/hooks/useWindowSize";
-import {
-  ISwapDetails,
-  addSwapFrom,
-  removeSwapFrom,
-  addSwapTo,
-  removeSwapTo,
-} from "@src/reducers/swap";
+import { ISwapDetails, addSwapFrom, addSwapTo } from "@src/reducers/swap";
 import { formatNumber } from "@src/utils/format/number";
-import classes from "./SelectAssetItem.module.css";
+import classes from "./index.module.css";
 import { Row, Col } from "antd/lib/grid";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
+import { IDefaultAssetInfo } from "@src/interface";
+import { FC, ReactNode } from "react";
+import { RootState } from "@src/store";
+import { ESWapDirection } from "@src/enum";
 
-const SelectAssetItem = ({
+interface IOwnProps extends IDefaultAssetInfo {
+  icon: ReactNode;
+  index: number;
+  type: ESWapDirection;
+  amount: number;
+  onClickHandler: (bal: number) => void;
+}
+
+interface IMapStateToProps {
+  swapFrom: ISwapDetails[];
+  swapTo: ISwapDetails[];
+}
+
+interface IMapDispatchToProps {
+  addSwapFrom: (customToken: ISwapDetails[]) => void;
+  addSwapTo: (customToken: ISwapDetails[]) => void;
+}
+
+interface ISelectAssetItem extends IMapStateToProps, IMapDispatchToProps {
+  props: IOwnProps;
+}
+
+const SelectAssetItem: FC<ISelectAssetItem> = ({
   props,
   addSwapFrom,
   addSwapTo,
@@ -20,7 +40,7 @@ const SelectAssetItem = ({
   swapTo,
 }) => {
   const { width } = useWindowSize();
-  const addSwapHandler = (type, balance) => {
+  const addSwapHandler = (type: ESWapDirection, balance: number) => {
     const newAssetDetails = {
       index: props.index,
       symbol: props.symbol,
@@ -30,14 +50,14 @@ const SelectAssetItem = ({
       decimals: props.decimals,
       imgUrl: props.imgUrl,
     };
-    if (type === "from") {
+    if (type === ESWapDirection.FROM) {
       // if they are the same index, we change the details
       if (props.index === swapFrom[props.index].index) {
         let newSwapFrom = [...swapFrom];
         newSwapFrom[props.index] = newAssetDetails;
         addSwapFrom(newSwapFrom);
       }
-    } else if (type === "to") {
+    } else if (type === ESWapDirection.TO) {
       let newSwapTo = [...swapTo];
       if (props.index === swapTo[props.index].index) {
         newSwapTo[props.index] = newAssetDetails;
@@ -52,8 +72,8 @@ const SelectAssetItem = ({
       justify="space-evenly"
       className={classes.selectAssetItemContainer}
       onClick={() => {
-        addSwapHandler(props.type, props.balance);
-        props.onClickHandler(props.symbol, props.balance);
+        addSwapHandler(props.type, props.bal);
+        props.onClickHandler(props.bal);
       }}
     >
       <Col span={width && width > 460 ? 2 : width && width > 350 ? 3 : 4}>
@@ -74,23 +94,21 @@ const SelectAssetItem = ({
         </Row>
       </Col>
       <Col span={4}>
-        <Row justify="end">{formatNumber(props.balance, "crypto")}</Row>
+        <Row justify="end">{formatNumber(props.bal, "crypto")}</Row>
       </Col>
     </Row>
   );
 };
 
-const mapStateToProps = ({ swapReducer }, ownProps) => ({
+const mapStateToProps = ({ swapReducer }: RootState, ownProps: IOwnProps) => ({
   swapFrom: swapReducer.swapFrom,
   swapTo: swapReducer.swapTo,
   props: ownProps,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  addSwapFrom: (payload: ISwapDetails) => dispatch(addSwapFrom(payload)),
-  removeSwapFrom: (payload: ISwapDetails) => dispatch(removeSwapFrom(payload)),
-  addSwapTo: (payload: ISwapDetails) => dispatch(addSwapTo(payload)),
-  removeSwapTo: (payload: ISwapDetails) => dispatch(removeSwapTo(payload)),
+  addSwapFrom: (payload: ISwapDetails[]) => dispatch(addSwapFrom(payload)),
+  addSwapTo: (payload: ISwapDetails[]) => dispatch(addSwapTo(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelectAssetItem);

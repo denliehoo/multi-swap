@@ -1,9 +1,9 @@
-import classes from "./SelectAssetModal.module.css";
+import classes from "./index.module.css";
 import { Row, Col } from "antd/lib/grid";
 import { ArrowLeftOutlined, LoadingOutlined } from "@ant-design/icons";
 import { Button, Modal } from "antd";
-import React, { useEffect, useState } from "react";
-import SelectAssetItem from "./SelectAssetItem";
+import { FC, useEffect, useState } from "react";
+import SelectAssetItem from "./asset-item";
 import IconComponent from "../../shared/IconComponent";
 import ManageCustomToken from "./manage-custom-token";
 import {
@@ -13,13 +13,36 @@ import {
 } from "@src/constants/default-asset-info";
 import { getTokenBalances } from "@src/api";
 import { connect } from "react-redux";
-import { useWindowSize } from "@src/hooks/useWindowSize";
 import SearchInputComponent from "../../shared/SearchInputComponent";
 import { RootState } from "@src/store";
 import { ICustomToken } from "@src/reducers/custom-token";
 import { IDefaultAssetInfo } from "@src/interface";
+import { EBlockchainNetwork, ESWapDirection } from "@src/enum";
 
-const SelectAssetModal = ({
+interface IMapStateToProps {
+  ethCustomTokens: ICustomToken[];
+  ftmCustomTokens: ICustomToken[];
+  goerliCustomTokens: ICustomToken[];
+  chain: EBlockchainNetwork;
+  address: string;
+}
+
+interface IOwnProps {
+  isModalOpen: boolean;
+  index: number;
+  type: ESWapDirection;
+  amount: number;
+  passBalanceToParent: (bal: number) => void;
+  assetHasBeenSelected: () => void;
+  asset: string; // TODO: Rename this to symbol for consistency
+  closeModal: () => void;
+}
+
+interface ISelectAssetModal extends IMapStateToProps {
+  props: IOwnProps;
+}
+
+const SelectAssetModal: FC<ISelectAssetModal> = ({
   props,
   ethCustomTokens,
   ftmCustomTokens,
@@ -27,7 +50,6 @@ const SelectAssetModal = ({
   chain,
   address,
 }) => {
-  const [selectedAsset, setSelectedAsset] = useState("");
   const [isManageCustomToken, setIsManageCustomToken] = useState(false);
   const [combinedAssetList, setCombinedAssetList] = useState<
     IDefaultAssetInfo[]
@@ -36,35 +58,40 @@ const SelectAssetModal = ({
   const [toggleChangesInCustomToken, setToggleChangesInCustomToken] =
     useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const [searchInputResults, setSearchInputResults] = useState([]);
-  const { width } = useWindowSize();
+  const [searchInputResults, setSearchInputResults] = useState<
+    IDefaultAssetInfo[]
+  >([]);
 
   useEffect(() => {
     props.isModalOpen && address && getCombinedListOfAssets(chain, address);
   }, [address, props.isModalOpen, toggleChangesInCustomToken]);
 
-  const getCustomTokens = (chain) => {
-    if (chain === "eth") {
+  const getCustomTokens = (chain: EBlockchainNetwork) => {
+    if (chain === EBlockchainNetwork.ETH) {
       return ethCustomTokens;
-    } else if (chain === "ftm") {
+    } else if (chain === EBlockchainNetwork.FTM) {
       return ftmCustomTokens;
-    } else if (chain === "goerli") {
+    } else if (chain === EBlockchainNetwork.GOERLI) {
       return goerliCustomTokens;
     }
+    return goerliCustomTokens;
   };
 
-  const getDefaultAssets = (chain) => {
-    if (chain === "eth") {
+  const getDefaultAssets = (chain: EBlockchainNetwork) => {
+    if (chain === EBlockchainNetwork.ETH) {
       return ethDefaultAssetInfo;
-    } else if (chain === "ftm") {
+    } else if (chain === EBlockchainNetwork.FTM) {
       return ftmDefaultAssetInfo;
-    } else if (chain === "goerli") {
+    } else if (chain === EBlockchainNetwork.GOERLI) {
       return goerliDefaultAssetInfo;
     }
     return [];
   };
 
-  const getCombinedListOfAssets = async (chain, address) => {
+  const getCombinedListOfAssets = async (
+    chain: EBlockchainNetwork,
+    address: string
+  ) => {
     const defaultAssets = getDefaultAssets(chain);
     const customTokens = getCustomTokens(chain);
     const formattedCustomTokens = customTokens.map((i: ICustomToken) => ({
@@ -88,25 +115,17 @@ const SelectAssetModal = ({
       combinedAssetListTemp[i].bal = balancesArray[i];
     }
     setCombinedAssetList(combinedAssetListTemp);
-    // props.type === 'from' ? setCombinedAssetList([combinedAssetListTemp[0]]) : setCombinedAssetList(combinedAssetListTemp)
     setIsLoading(false);
     return combinedAssetListTemp;
   };
 
-  const chooseAssetHandler = (symbol, bal) => {
-    //.... choose symbol
-    setSelectedAsset(symbol);
-
-    // pass balance to parent
+  const chooseAssetHandler = (bal: number) => {
     props.assetHasBeenSelected();
     props.passBalanceToParent(bal);
-
-    // closes the modal
     closeModalHandler();
   };
 
   const closeModalHandler = () => {
-    setSelectedAsset("");
     setIsManageCustomToken(false);
     setCombinedAssetList([]);
     setIsLoading(true);
@@ -132,33 +151,6 @@ const SelectAssetModal = ({
       <Col span={6} />
     </Row>
   );
-
-  // const commonTokens = (
-  //   <div>
-  //     <Row justify="space-evenly">
-  //       <Button
-  //         style={{ padding: '0', width: '70px' }}
-  //         onClick={() => {
-  //           chooseAssetHandler()
-  //         }}
-  //       >
-  //         <IconComponent
-  //           imgUrl={
-  //             'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880'
-  //           }
-  //         />
-  //         ETH
-  //       </Button>
-  //       <Button>DAI</Button>
-  //       <Button>USDC</Button>
-  //     </Row>
-  //     <Row justify="space-evenly">
-  //       <Button>USDT</Button>
-  //       <Button>WBTC</Button>
-  //       <Button>WETH</Button>
-  //     </Row>
-  //   </div>
-  // )
 
   return (
     <>
@@ -203,26 +195,21 @@ const SelectAssetModal = ({
             <div>
               <div className={classes.selectAssetsContainer}>
                 {(searchInput ? searchInputResults : combinedAssetList).map(
-                  (i: any) => (
+                  (i) => (
                     <SelectAssetItem
-                      icon={
-                        <IconComponent
-                          // size={ width > 480 ? 32 : width > 420 ? 28 : width > 360 ? 24 : 20}
-                          imgUrl={i.imgUrl}
-                        />
-                      }
+                      icon={<IconComponent imgUrl={i.imgUrl} />}
                       symbol={i.symbol}
                       name={i.name}
-                      balance={i.bal}
+                      bal={i.bal}
                       isDefaultAsset={i.isDefaultAsset}
-                      onClickHandler={chooseAssetHandler}
+                      imgUrl={i.imgUrl}
+                      decimals={i.decimals}
                       address={i.address}
-                      key={i.symbol}
                       index={props.index}
                       type={props.type}
                       amount={props.amount}
-                      decimals={i.decimals}
-                      imgUrl={i.imgUrl}
+                      onClickHandler={chooseAssetHandler}
+                      key={i.symbol}
                     />
                   )
                 )}
@@ -253,7 +240,7 @@ const SelectAssetModal = ({
 
 const mapStateToProps = (
   { customTokenReducer, connectWalletReducer }: RootState,
-  ownProps
+  ownProps: IOwnProps
 ) => ({
   ethCustomTokens: customTokenReducer.eth,
   ftmCustomTokens: customTokenReducer.ftm,
@@ -264,3 +251,30 @@ const mapStateToProps = (
 });
 
 export default connect(mapStateToProps)(SelectAssetModal);
+
+// const commonTokens = (
+//   <div>
+//     <Row justify="space-evenly">
+//       <Button
+//         style={{ padding: '0', width: '70px' }}
+//         onClick={() => {
+//           chooseAssetHandler()
+//         }}
+//       >
+//         <IconComponent
+//           imgUrl={
+//             'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880'
+//           }
+//         />
+//         ETH
+//       </Button>
+//       <Button>DAI</Button>
+//       <Button>USDC</Button>
+//     </Row>
+//     <Row justify="space-evenly">
+//       <Button>USDT</Button>
+//       <Button>WBTC</Button>
+//       <Button>WETH</Button>
+//     </Row>
+//   </div>
+// )

@@ -1,10 +1,10 @@
 import classes from "./CryptoSwapItem.module.css";
 import { Row, Col } from "antd/lib/grid";
 import { Button } from "antd";
-import SelectAssetModal from "./modal/selectAssetModal/SelectAssetModal";
 import React, { useState, useEffect } from "react";
 import { MinusCircleOutlined, DownOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
+import SelectAssetModal from "./modal/select-asset";
 
 import { Dispatch } from "redux";
 import { useWindowSize } from "@src/hooks/useWindowSize";
@@ -18,7 +18,7 @@ import {
 import { formatNumber } from "@src/utils/format/number";
 import { getAssetPrice } from "@src/api";
 
-const CryptoSwapItemTest = ({
+const CryptoSwapItem = ({
   props,
   addSwapFrom,
   addSwapTo,
@@ -28,7 +28,7 @@ const CryptoSwapItemTest = ({
   removeSwapTo,
   chain,
 }) => {
-  const [balance, setBalance] = useState("");
+  const [balance, setBalance] = useState(0);
   const [amount, setAmount] = useState(props.amount);
   const [price, setPrice] = useState(0);
   const [priceIsLoading, setPriceIsLoading] = useState(true);
@@ -258,10 +258,10 @@ const mapStateToProps = ({ swapReducer, connectWalletReducer }, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  addSwapFrom: (payload: ISwapDetails) => dispatch(addSwapFrom(payload)),
+  addSwapFrom: (payload: ISwapDetails[]) => dispatch(addSwapFrom(payload)),
   removeSwapFrom: (payload: ISwapDetails) => dispatch(removeSwapFrom(payload)),
-  addSwapTo: (payload: ISwapDetails) => dispatch(addSwapTo(payload)),
+  addSwapTo: (payload: ISwapDetails[]) => dispatch(addSwapTo(payload)),
   removeSwapTo: (payload: ISwapDetails) => dispatch(removeSwapTo(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CryptoSwapItemTest);
+export default connect(mapStateToProps, mapDispatchToProps)(CryptoSwapItem);
