@@ -5,7 +5,7 @@ export const addSwapFrom = (payload: ISwapDetails[]) => ({
   type: "ADD_SWAP_FROM",
   payload,
 });
-export const removeSwapFrom = (payload: ISwapDetails) => ({
+export const removeSwapFrom = (payload: ISwapDetails[]) => ({
   type: "REMOVE_SWAP_FROM",
   payload,
 });
@@ -13,7 +13,7 @@ export const addSwapTo = (payload: ISwapDetails[]) => ({
   type: "ADD_SWAP_TO",
   payload,
 });
-export const removeSwapTo = (payload: ISwapDetails) => ({
+export const removeSwapTo = (payload: ISwapDetails[]) => ({
   type: "REMOVE_SWAP_TO",
   payload,
 });

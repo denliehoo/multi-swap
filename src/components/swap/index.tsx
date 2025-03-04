@@ -1,4 +1,4 @@
-import classes from "./Swap.module.css";
+import classes from "./index.module.css";
 import { Row, Col } from "antd/lib/grid";
 import { Button, notification } from "antd";
 import {
@@ -8,7 +8,7 @@ import {
   LoadingOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import CryptoSwapItem from "./CryptoSwapItem";
+import CryptoSwapItem from "./item";
 import PreviewSwapModal from "./modal/swap";
 
 import { connect } from "react-redux";

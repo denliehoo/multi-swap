@@ -1,5 +1,8 @@
-export const formatNumber = (num: string | number, type: "fiat" | "crypto") => {
-  if (num === "") {
+export const formatNumber = (
+  num: string | number | undefined,
+  type: "fiat" | "crypto"
+) => {
+  if (num === "" || !num) {
     return 0;
   }
 

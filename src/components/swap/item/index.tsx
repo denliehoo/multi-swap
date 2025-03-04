@@ -1,13 +1,12 @@
-import classes from "./CryptoSwapItem.module.css";
+import classes from "./index.module.css";
 import { Row, Col } from "antd/lib/grid";
 import { Button } from "antd";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FC } from "react";
 import { MinusCircleOutlined, DownOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
-import SelectAssetModal from "./modal/select-asset";
+import SelectAssetModal from "../modal/select-asset";
 
 import { Dispatch } from "redux";
-import { useWindowSize } from "@src/hooks/useWindowSize";
 import {
   ISwapDetails,
   addSwapFrom,
@@ -17,8 +16,40 @@ import {
 } from "@src/reducers/swap";
 import { formatNumber } from "@src/utils/format/number";
 import { getAssetPrice } from "@src/api";
+import { EBlockchainNetwork, ESWapDirection } from "@src/enum";
 
-const CryptoSwapItem = ({
+interface IOwnProps {
+  percent?: number;
+  amount?: number;
+
+  index: number;
+  type: ESWapDirection;
+  changeSwapToPercent: (i: number, percent: number) => void;
+  assetHasBeenSelected: () => void;
+  amountHasChanged?: () => void;
+  asset: string;
+  changePercentageFromMinus?: (index: number) => void;
+  address: string;
+}
+
+interface IMapStateToProps {
+  swapFrom: ISwapDetails[];
+  swapTo: ISwapDetails[];
+  chain: EBlockchainNetwork;
+}
+
+interface IMapDispatchToProps {
+  addSwapFrom: (customToken: ISwapDetails[]) => void;
+  addSwapTo: (customToken: ISwapDetails[]) => void;
+  removeSwapFrom: (customToken: ISwapDetails[]) => void;
+  removeSwapTo: (customToken: ISwapDetails[]) => void;
+}
+
+interface ICryptoSwapItem extends IMapStateToProps, IMapDispatchToProps {
+  props: IOwnProps;
+}
+
+const CryptoSwapItem: FC<ICryptoSwapItem> = ({
   props,
   addSwapFrom,
   addSwapTo,
@@ -35,7 +66,6 @@ const CryptoSwapItem = ({
   const [percentInput, setPercentInput] = useState(props.percent);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputIsFocused, setInputIsFocused] = useState(false);
-  const { width } = useWindowSize();
 
   useEffect(() => {
     props.type === "from"
@@ -47,23 +77,21 @@ const CryptoSwapItem = ({
     getPrice(chain);
   }, [props.asset]);
 
-  const getBalanceFromChild = (bal) => {
+  const getBalanceFromChild = (bal: number) => {
     setBalance(bal);
   };
 
-  const changeAmountInputHandler = (e) => {
-    if (props.type === "from") {
-      setAmount(e.target.value);
-      props.amountHasChanged();
+  const changeAmountInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const amount = parseFloat(e.target.value);
+    if (props.type === ESWapDirection.FROM) {
+      setAmount(amount);
+      props.amountHasChanged && props.amountHasChanged();
       let newSwapFrom = [...swapFrom];
       newSwapFrom[props.index].amount = parseFloat(e.target.value);
       addSwapFrom(newSwapFrom);
-    } else if (props.type === "to") {
+    } else if (props.type === ESWapDirection.TO) {
       const re = /^\d*$/;
-      if (
-        e.target.value === "" ||
-        (re.test(e.target.value) && e.target.value <= 100)
-      ) {
+      if (e.target.value === "" || (re.test(e.target.value) && amount <= 100)) {
         const inputValue = parseFloat(e.target.value);
         setPercentInput(inputValue);
         props.changeSwapToPercent(props.index, inputValue);
@@ -75,47 +103,52 @@ const CryptoSwapItem = ({
   };
 
   const minusHandler = () => {
-    let newSwap = props.type === "from" ? [...swapFrom] : [...swapTo];
+    let newSwap =
+      props.type === ESWapDirection.FROM ? [...swapFrom] : [...swapTo];
     let index = props.index;
     newSwap.splice(index, 1);
     for (let i = index; i < newSwap.length; i++) {
       newSwap[i].index -= 1;
     }
-    if (props.type === "from") {
+    if (props.type === ESWapDirection.FROM) {
       removeSwapFrom(newSwap);
       setAmount(newSwap[index]?.amount);
-    } else if (props.type === "to") {
+    } else if (props.type === ESWapDirection.TO) {
       removeSwapTo(newSwap);
       setPercentInput(newSwap[index]?.amount);
-      props.changePercentageFromMinus(props.index);
+      props.changePercentageFromMinus &&
+        props.changePercentageFromMinus(props.index);
     }
     props.assetHasBeenSelected();
   };
 
-  const getPrice = async (chain) => {
+  const getPrice = async (chain: EBlockchainNetwork) => {
     if (props.asset) {
       const price = await getAssetPrice(chain, props.asset, props.address);
       setPrice(price);
       setPriceIsLoading(false);
 
-      let newSwap = props.type === "from" ? [...swapFrom] : [...swapTo];
+      let newSwap =
+        props.type === ESWapDirection.FROM ? [...swapFrom] : [...swapTo];
       newSwap[props.index].price = price;
-      props.type === "from" ? addSwapFrom(newSwap) : addSwapTo(newSwap);
+      props.type === ESWapDirection.FROM
+        ? addSwapFrom(newSwap)
+        : addSwapTo(newSwap);
     } else {
-      // console.log('empty asset!')
     }
   };
 
-  const onInputFocus = (e) => {
+  const onInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     e.target.addEventListener(
       "wheel",
-      function (e) {
+      function (e: WheelEvent) {
         e.preventDefault();
       },
       { passive: false }
     ); // prevent input from changing on scroll
     setInputIsFocused(true);
   };
+
   const onInputBlur = () => {
     setInputIsFocused(false);
   };
@@ -128,9 +161,10 @@ const CryptoSwapItem = ({
           : classes.cryptoSwapItem
       }
     >
-      {props.type === "from" ? (
-        <React.Fragment>
-          <Row>Amount To Swap</Row>
+      {/* Text and minus icon */}
+      {props.type === ESWapDirection.FROM ? (
+        <Row justify="space-between">
+          <Col>Amount To Swap</Col>
           <Col>
             {swapFrom.length > 1 && (
               <MinusCircleOutlined
@@ -139,26 +173,25 @@ const CryptoSwapItem = ({
               />
             )}
           </Col>
-        </React.Fragment>
+        </Row>
       ) : (
-        <React.Fragment>
-          <Row justify="space-between">
-            <Col>Percentage To Receive</Col>
-            <Col>
-              {swapTo.length > 1 && (
-                <MinusCircleOutlined
-                  className={classes.minus}
-                  onClick={minusHandler}
-                />
-              )}
-            </Col>
-          </Row>
-        </React.Fragment>
+        <Row justify="space-between">
+          <Col>Percentage To Receive</Col>
+          <Col>
+            {swapTo.length > 1 && (
+              <MinusCircleOutlined
+                className={classes.minus}
+                onClick={minusHandler}
+              />
+            )}
+          </Col>
+        </Row>
       )}
 
+      {/* Input and select button */}
       <Row justify="space-between" align="middle">
         <Col style={{ fontSize: "2em" }} span={12}>
-          {props.type === "from" ? (
+          {props.type === ESWapDirection.FROM ? (
             <input
               className={[classes.inputBox, classes.numberInput].join(" ")}
               onChange={changeAmountInputHandler}
@@ -206,7 +239,7 @@ const CryptoSwapItem = ({
               isModalOpen={isModalOpen}
               index={props.index}
               type={props.type}
-              amount={props.type === "from" ? amount : percentInput}
+              amount={props.type === "from" ? amount || 0 : percentInput || 0}
               passBalanceToParent={
                 props.type === "from" ? getBalanceFromChild : () => {}
               }
@@ -220,12 +253,13 @@ const CryptoSwapItem = ({
         </Col>
       </Row>
 
-      {props.type === "from" ? (
+      {/* Price and balance */}
+      {props.type === ESWapDirection.FROM ? (
         <Row justify="space-between">
           <Col>
             {priceIsLoading
               ? "..."
-              : formatNumber(price * props.amount, "fiat")}
+              : formatNumber(price * (props?.amount || 0), "fiat")}
           </Col>
           <Col>Balance: {props.asset && formatNumber(balance, "crypto")}</Col>
         </Row>
@@ -259,9 +293,10 @@ const mapStateToProps = ({ swapReducer, connectWalletReducer }, ownProps) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   addSwapFrom: (payload: ISwapDetails[]) => dispatch(addSwapFrom(payload)),
-  removeSwapFrom: (payload: ISwapDetails) => dispatch(removeSwapFrom(payload)),
+  removeSwapFrom: (payload: ISwapDetails[]) =>
+    dispatch(removeSwapFrom(payload)),
   addSwapTo: (payload: ISwapDetails[]) => dispatch(addSwapTo(payload)),
-  removeSwapTo: (payload: ISwapDetails) => dispatch(removeSwapTo(payload)),
+  removeSwapTo: (payload: ISwapDetails[]) => dispatch(removeSwapTo(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CryptoSwapItem);
