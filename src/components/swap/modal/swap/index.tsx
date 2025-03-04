@@ -80,7 +80,7 @@ interface IOwnProps {
     message: string,
     description: ReactNode,
     icon: ReactNode,
-    placement: string,
+    placement: NotificationPlacement,
     duration?: number
   ) => void;
   setSwapIsLoading: (isLoading: boolean) => void;

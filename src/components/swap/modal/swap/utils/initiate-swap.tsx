@@ -18,7 +18,7 @@ interface IInitiateSwap {
     message: string,
     description: ReactNode,
     icon: ReactNode,
-    placement: string,
+    placement: NotificationPlacement,
     duration?: number
   ) => void;
   swapToDetails: ISwapItemDetails[];
@@ -208,7 +208,7 @@ const userAcceptedTransaction = (
     message: string,
     description: ReactNode,
     icon: ReactNode,
-    placement: string,
+    placement: NotificationPlacement,
     duration?: number
   ) => void,
   swapFromDetails: ISwapItemDetails[],

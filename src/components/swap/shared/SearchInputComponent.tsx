@@ -1,20 +1,34 @@
 import { SearchOutlined } from "@ant-design/icons";
+import { IDefaultAssetInfo } from "@src/interface";
 import { Input } from "antd";
-import { useState } from "react";
-const SearchInputComponent = (props) => {
+import { ChangeEvent, FC, useState } from "react";
+
+interface ISearchInputComponent {
+  setSearchInput: (input: string) => void;
+  searchInput: string;
+  setSearchInputResults: (results: IDefaultAssetInfo[]) => void;
+  itemToFilter: IDefaultAssetInfo[];
+}
+
+const SearchInputComponent: FC<ISearchInputComponent> = ({
+  setSearchInput,
+  searchInput,
+  setSearchInputResults,
+  itemToFilter,
+}) => {
   const [inputIsFocused, setInputIsFocused] = useState(false);
-  const changeSearchInputHandler = (e) => {
-    props.setSearchInput(e.target.value);
+  const changeSearchInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
     const userInput = e.target.value.toLowerCase();
 
-    const filteredResults = props.itemToFilter.filter(
+    const filteredResults = itemToFilter.filter(
       (asset) =>
         asset.symbol.toLowerCase().includes(userInput) ||
         asset.name.toLowerCase().includes(userInput) ||
         (userInput.length > 20 &&
           asset.address.toLowerCase().includes(userInput))
     );
-    props.setSearchInputResults(filteredResults);
+    setSearchInputResults(filteredResults);
   };
 
   return (
@@ -25,7 +39,7 @@ const SearchInputComponent = (props) => {
       className={`class-name-custom-ant-input ${
         inputIsFocused && "glowing-border"
       }`}
-      value={props.searchInput}
+      value={searchInput}
       onChange={changeSearchInputHandler}
       onFocus={() => setInputIsFocused(true)}
       onBlur={() => setInputIsFocused(false)}

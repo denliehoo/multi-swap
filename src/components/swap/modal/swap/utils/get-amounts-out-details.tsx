@@ -11,6 +11,7 @@ import {
 import { EBlockchainNetwork } from "@src/enum";
 import { getContractABI } from "@src/api";
 import { ReactNode } from "react";
+import { NotificationPlacement } from "antd/lib/notification";
 
 interface IGetAmountsOutDetails {
   swapFrom: ISwapDetails[];
@@ -31,7 +32,7 @@ interface IGetAmountsOutDetails {
     message: string,
     description: ReactNode,
     icon: ReactNode,
-    placement: string,
+    placement: NotificationPlacement,
     duration?: number
   ) => void;
 }

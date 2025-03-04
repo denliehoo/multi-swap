@@ -4,10 +4,9 @@ import { Button, notification } from "antd";
 import {
   DownCircleOutlined,
   PlusCircleOutlined,
-  ExclamationCircleOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import CryptoSwapItem from "./item";
 import PreviewSwapModal from "./modal/swap";
 
@@ -17,10 +16,43 @@ import { Dispatch } from "redux";
 import { EBlockchainNetwork, ESWapDirection } from "@src/enum";
 import { attemptToConnectWallet } from "@src/reducers/connect-wallet";
 import { ISwapDetails, addSwapFrom, addSwapTo } from "@src/reducers/swap";
+import {
+  validateAmount,
+  validateAmountLesserThanBalance,
+  validatePercentageArray,
+  validateTokenSelected,
+} from "./validator";
+import { NotificationPlacement } from "antd/lib/notification";
+import ErrorBox from "./error-box";
 
 // Swap > CryptoSwapItem > SelectAssetModal > SelectAssetItem
 
-const Swap = ({
+interface IMapStateToProps {
+  swapFrom: ISwapDetails[];
+  swapTo: ISwapDetails[];
+  chain: EBlockchainNetwork;
+  address: string;
+}
+
+interface IMapDispatchToProps {
+  addSwapFrom: (customToken: ISwapDetails[]) => void;
+  addSwapTo: (customToken: ISwapDetails[]) => void;
+  attemptToConnectWallet: (chain: EBlockchainNetwork) => void;
+}
+
+interface ISwapPage extends IMapStateToProps, IMapDispatchToProps {}
+
+const DEFAULT_SWAP_STATE: ISwapDetails = {
+  index: 0,
+  symbol: "",
+  address: "",
+  balance: 0,
+  amount: 0,
+  decimals: 0,
+  imgUrl: "",
+};
+
+const Swap: FC<ISwapPage> = ({
   addSwapFrom,
   addSwapTo,
   swapFrom,
@@ -43,93 +75,13 @@ const Swap = ({
   const [swapIsLoading, setSwapIsLoading] = useState(false);
   const [api, contextHolder] = notification.useNotification();
 
-  const percentageError = (
-    <div>
-      Please ensure that percentages add up to 100% and that none of the items
-      are 0%
-    </div>
-  );
-
-  const tokenNotSelectedError = (
-    <div>Please ensure to select a token before swapping</div>
-  );
-
-  const amountError = <div>Please ensure amount from is more than zero</div>;
-  const amountGreaterThanBalanceError = (
-    <div>Please ensure that amount is less than balance</div>
-  );
-
-  const changeSwapToPercentHandler = (i, percent) => {
+  const changeSwapToPercentHandler = (i: number, percent: number) => {
     let newSwapToPercentages = [...swapToPercentages];
     newSwapToPercentages[i] = percent;
     setSwapToPercentages(newSwapToPercentages);
     if (showPercentageError) {
       setShowPercentageError(false);
     }
-  };
-
-  // in basis points; i.e. 10,000 = 100% ; 5000 = 50%, etc...
-  const validatePercentageArray = () => {
-    const arrayHasZero = swapToPercentages.includes(0);
-    const sumOfArray = swapToPercentages.reduce(
-      (partialSum, a) => partialSum + a,
-      0
-    );
-    const valid = arrayHasZero || sumOfArray !== 100 ? false : true;
-    if (!valid) {
-      setShowPercentageError(true);
-    }
-    return valid;
-  };
-
-  const validateTokenSelected = () => {
-    const swapToSymbols = swapTo.map((i) => i.symbol);
-    const swapFromSymbols = swapFrom.map((i) => i.symbol);
-    const valid =
-      swapToSymbols.includes("") || swapFromSymbols.includes("") ? false : true;
-    if (!valid) {
-      setShowTokenNotSelectedError(true);
-    }
-    return valid;
-  };
-
-  const validateAmount = () => {
-    const swapFromAmount = swapFrom.map((i) => i.amount);
-    const arrayContainsNaN = (arr) => {
-      let results = false;
-      for (let i in arr) {
-        if (!arr[i]) {
-          results = true;
-        }
-      }
-      return results;
-    };
-    const valid =
-      swapFromAmount.includes(0) ||
-      swapFromAmount.includes("") ||
-      arrayContainsNaN(swapFromAmount)
-        ? false
-        : true;
-    if (!valid) {
-      setShowAmountError(true);
-    }
-    return valid;
-  };
-
-  const validateAmountLesserThanBalance = () => {
-    const swapFromAmount = swapFrom.map((i) => i.amount);
-    const swapFromBalance = swapFrom.map((i) => i.balance);
-
-    let valid = true;
-    for (let i in swapFrom) {
-      if (swapFromAmount[i] > swapFromBalance[i]) {
-        valid = false;
-        setShowAmountGreaterThanBalanceError(true);
-        // error message
-        break;
-      }
-    }
-    return valid;
   };
 
   const toggleAssetSelectedState = () => {
@@ -141,13 +93,17 @@ const Swap = ({
     setShowAmountGreaterThanBalanceError(false);
   };
 
-  const changePercentageFromMinus = (index) => {
+  const changePercentageFromMinus = (index: number) => {
     let newSwapToPercentage = [...swapToPercentages];
     newSwapToPercentage.splice(index, 1);
     setSwapToPercentages(newSwapToPercentage);
   };
 
-  const addSwapState = (type, index, newAssetDetails) => {
+  const addSwapState = (
+    type: ESWapDirection,
+    index: number,
+    newAssetDetails: ISwapDetails
+  ) => {
     if (type === ESWapDirection.FROM) {
       if (!swapFrom[index]) {
         let newSwapFrom = [...swapFrom];
@@ -163,14 +119,42 @@ const Swap = ({
     }
   };
 
+  const onClickAddSwapState = (type: ESWapDirection) => {
+    if (type === ESWapDirection.FROM) {
+      addSwapState(ESWapDirection.FROM, swapFrom.length, {
+        ...DEFAULT_SWAP_STATE,
+        index: swapFrom.length,
+      });
+    } else if (type === ESWapDirection.TO) {
+      addSwapState(ESWapDirection.TO, swapTo.length, {
+        ...DEFAULT_SWAP_STATE,
+        index: swapTo.length,
+        amount: 100,
+      });
+      let newSwapToPercentages = [...swapToPercentages];
+      newSwapToPercentages.push(100);
+      setSwapToPercentages(newSwapToPercentages);
+    }
+  };
+
   const swapButtonHandler = () => {
     console.log(swapToPercentages);
     console.log(swapFrom);
     console.log(swapTo);
-    const validPercentages = validatePercentageArray();
-    const tokensSelected = validateTokenSelected();
-    const validAmount = validateAmount();
-    const amountLesserThanBalance = validateAmountLesserThanBalance();
+    const validPercentages = validatePercentageArray(
+      swapToPercentages,
+      setShowPercentageError
+    );
+    const tokensSelected = validateTokenSelected(
+      swapTo,
+      swapFrom,
+      setShowTokenNotSelectedError
+    );
+    const validAmount = validateAmount(swapFrom, setShowAmountError);
+    const amountLesserThanBalance = validateAmountLesserThanBalance(
+      swapFrom,
+      setShowAmountGreaterThanBalanceError
+    );
     if (
       validPercentages &&
       tokensSelected &&
@@ -184,11 +168,11 @@ const Swap = ({
   };
 
   const showNotificationHandler = (
-    message,
-    description,
-    icon,
-    placement,
-    duration
+    message: string,
+    description: ReactNode,
+    icon: ReactNode,
+    placement: NotificationPlacement,
+    duration?: number
   ) => {
     api.open({
       message: message,
@@ -198,7 +182,6 @@ const Swap = ({
       duration: duration,
     });
   };
-  //
 
   useEffect(() => {
     if (showTokenNotSelectedError) {
@@ -216,54 +199,14 @@ const Swap = ({
           style={{ width: "100%", marginBottom: "15px" }}
         >
           <Col style={{ fontWeight: "700", fontSize: "large" }}>Swap</Col>
-          {/* <Col><SettingOutlined /></Col> */}
         </Row>
 
-        {(showAmountError ||
-          showPercentageError ||
-          showTokenNotSelectedError ||
-          showAmountGreaterThanBalanceError) && (
-          <Row className={classes.errorMessagesContainer} align="middle">
-            <Col span={4}>
-              <Row justify="center">
-                <ExclamationCircleOutlined
-                  style={{ fontSize: "200%", padding: "10px" }}
-                />
-              </Row>
-            </Col>
-            <Col span={20}>
-              <div
-                className={showAmountError ? classes.errorMessage : undefined}
-              >
-                {showAmountError && amountError}
-              </div>
-              <div
-                className={
-                  showPercentageError ? classes.errorMessage : undefined
-                }
-              >
-                {showPercentageError && percentageError}
-              </div>
-              <div
-                className={
-                  showTokenNotSelectedError ? classes.errorMessage : undefined
-                }
-              >
-                {showTokenNotSelectedError && tokenNotSelectedError}
-              </div>
-              <div
-                className={
-                  showAmountGreaterThanBalanceError
-                    ? classes.errorMessage
-                    : undefined
-                }
-              >
-                {showAmountGreaterThanBalanceError &&
-                  amountGreaterThanBalanceError}
-              </div>
-            </Col>
-          </Row>
-        )}
+        <ErrorBox
+          showAmountError={showAmountError}
+          showPercentageError={showPercentageError}
+          showTokenNotSelectedError={showTokenNotSelectedError}
+          showAmountGreaterThanBalanceError={showAmountGreaterThanBalanceError}
+        />
         {/* Swap From */}
         <div className={classes.buySellContainer}>
           {swapFrom.map((i, index) => (
@@ -288,18 +231,7 @@ const Swap = ({
               shape="round"
               type="primary"
               icon={<PlusCircleOutlined />}
-              onClick={() => {
-                // setFromAssets([...fromAssets, { amount: 0 }])
-                addSwapState("from", swapFrom.length, {
-                  index: swapFrom.length,
-                  symbol: "",
-                  address: "",
-                  balance: 0,
-                  amount: "",
-                  decimals: 0,
-                  imgUrl: "",
-                });
-              }}
+              onClick={() => onClickAddSwapState(ESWapDirection.FROM)}
             />
           </Row>
         </div>
@@ -333,20 +265,7 @@ const Swap = ({
               shape="round"
               type="primary"
               icon={<PlusCircleOutlined />}
-              onClick={() => {
-                addSwapState("to", swapTo.length, {
-                  index: swapTo.length,
-                  symbol: "",
-                  address: "",
-                  balance: 0,
-                  amount: 100,
-                  decimals: 0,
-                  imgUrl: "",
-                });
-                let newSwapToPercentages = [...swapToPercentages];
-                newSwapToPercentages.push(100);
-                setSwapToPercentages(newSwapToPercentages);
-              }}
+              onClick={() => onClickAddSwapState(ESWapDirection.TO)}
             />
           </Row>
         </div>
