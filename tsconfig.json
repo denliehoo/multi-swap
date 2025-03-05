@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-      "noImplicitAny": false, // TODO: remove line once redux is removed and proper file types are added
+      // "noImplicitAny": false,
       "target": "es6",
       "module": "esnext",
       "jsx": "react-jsx",

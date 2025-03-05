@@ -17,6 +17,7 @@ import {
 import { formatNumber } from "@src/utils/format/number";
 import { getAssetPrice } from "@src/api";
 import { EBlockchainNetwork, ESWapDirection } from "@src/enum";
+import { RootState } from "@src/store";
 
 interface IOwnProps {
   percent?: number;
@@ -24,7 +25,7 @@ interface IOwnProps {
 
   index: number;
   type: ESWapDirection;
-  changeSwapToPercent: (i: number, percent: number) => void;
+  changeSwapToPercent?: (i: number, percent: number) => void;
   assetHasBeenSelected: () => void;
   amountHasChanged?: () => void;
   asset: string;
@@ -94,7 +95,8 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = ({
       if (e.target.value === "" || (re.test(e.target.value) && amount <= 100)) {
         const inputValue = parseFloat(e.target.value);
         setPercentInput(inputValue);
-        props.changeSwapToPercent(props.index, inputValue);
+        props.changeSwapToPercent &&
+          props.changeSwapToPercent(props.index, inputValue);
         let newSwapTo = [...swapTo];
         newSwapTo[props.index].amount = inputValue;
         addSwapTo(newSwapTo);
@@ -284,7 +286,10 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = ({
   );
 };
 
-const mapStateToProps = ({ swapReducer, connectWalletReducer }, ownProps) => ({
+const mapStateToProps = (
+  { swapReducer, connectWalletReducer }: RootState,
+  ownProps: IOwnProps
+) => ({
   swapFrom: swapReducer.swapFrom,
   swapTo: swapReducer.swapTo,
   props: ownProps,

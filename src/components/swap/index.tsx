@@ -24,6 +24,7 @@ import {
 } from "./validator";
 import { NotificationPlacement } from "antd/lib/notification";
 import ErrorBox from "./error-box";
+import { RootState } from "@src/store";
 
 // Swap > CryptoSwapItem > SelectAssetModal > SelectAssetItem
 
@@ -214,7 +215,7 @@ const Swap: FC<ISwapPage> = ({
               amount={i.amount}
               key={`fromAsset${index}`}
               index={index}
-              type={"from"}
+              type={ESWapDirection.FROM}
               assetHasBeenSelected={toggleAssetSelectedState}
               amountHasChanged={amountHasChanged}
               asset={i.symbol}
@@ -246,7 +247,7 @@ const Swap: FC<ISwapPage> = ({
               percent={i.amount}
               key={`toAssets${index}`}
               index={index}
-              type={"to"}
+              type={ESWapDirection.TO}
               changeSwapToPercent={changeSwapToPercentHandler}
               assetHasBeenSelected={toggleAssetSelectedState}
               asset={i.symbol}
@@ -314,7 +315,7 @@ const Swap: FC<ISwapPage> = ({
   );
 };
 
-const mapStateToProps = ({ swapReducer, connectWalletReducer }) => ({
+const mapStateToProps = ({ swapReducer, connectWalletReducer }: RootState) => ({
   swapFrom: swapReducer.swapFrom,
   swapTo: swapReducer.swapTo,
   address: connectWalletReducer.address,

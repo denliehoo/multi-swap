@@ -365,13 +365,13 @@ const genericPreviewSwapErrorAction = (
 const getTokensToApprove = async (
   poolAddressesIn: string[],
   amountForEachTokensIn: string[],
-  swapFromDetailsTemp: any,
+  swapFromDetailsTemp: ISwapItemDetails[],
   multiswap: any,
   address: string,
   chain: EBlockchainNetwork,
   web3: any
 ) => {
-  let tokensToApprove: any = [];
+  let tokensToApprove: ITokensRequiringApproval[] = [];
   for (let i in poolAddressesIn) {
     const allowance = await multiswap.methods
       .allowanceERC20(poolAddressesIn[i])
@@ -380,8 +380,8 @@ const getTokensToApprove = async (
     if (parseFloat(amountForEachTokensIn[i]) > parseFloat(allowance)) {
       const tokenContractABI = await getContractABI(chain, poolAddressesIn[i]);
       if (!tokenContractABI) {
-        // throw an error here
-        return;
+        // TODO: Throw error
+        return [];
       }
       const tokenContract = new web3.eth.Contract(
         tokenContractABI,

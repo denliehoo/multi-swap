@@ -32,7 +32,7 @@ interface IMapDispatchToProps {
 
 interface IOwnProps {
   defaultAssets: IDefaultAssetInfo[];
-  setToggleChangesInCustomToken: any;
+  setToggleChangesInCustomToken: () => void;
 }
 
 interface IManageCustomTokenProps
@@ -232,21 +232,19 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = ({
         )}
 
         {getCustomTokens(chain)?.length ? (
-          getCustomTokens(chain)?.map(
-            (i: { name: any; symbol: any; logo: any; address: any }) => (
-              <ManageCustomTokenItem
-                name={i.name}
-                symbol={i.symbol}
-                icon={i.logo}
-                chain={chain}
-                address={i.address}
-                onClickDelete={onClickChildDeleteHandler}
-                setToggleChangesInCustomToken={
-                  props.setToggleChangesInCustomToken
-                }
-              />
-            )
-          )
+          getCustomTokens(chain)?.map(({ name, symbol, logo, address }) => (
+            <ManageCustomTokenItem
+              name={name}
+              symbol={symbol}
+              icon={logo}
+              chain={chain}
+              address={address}
+              onClickDelete={onClickChildDeleteHandler}
+              setToggleChangesInCustomToken={
+                props.setToggleChangesInCustomToken
+              }
+            />
+          ))
         ) : (
           <div>You got no custom tokens!</div>
         )}
