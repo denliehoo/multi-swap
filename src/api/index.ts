@@ -79,13 +79,12 @@ const getTokenBalances = async (
     // TODO: Proper type
     const { timestamp, data } = dataFromLocalStorage as any;
     if (timestamp && data[chain]) {
-      // if it has been less than 60s (60000) since balance was last fetched, we return from local
-      // rmemeber to removeItem from local once a swap has been initiated
-      if (Date.now() - timestamp <= 60000) {
+      // if it has been less than 600s (600000) since balance was last fetched, we return from local
+      if (Date.now() - timestamp <= 600000) {
         return data[chain];
       }
     }
-    // else if it has been more than 60s || diff chain, we remove from local and get token balance from API
+    // else if it has been more than 600s || diff chain, we remove from local and get token balance from API
     localStorage.removeItem(localStorageKey);
   }
 
@@ -165,8 +164,6 @@ const getContractABI = async (chain: string, address: string) => {
     // likely means contract not verified
     return null;
   }
-
-  // else if(chain ==='ftm')
 };
 
 export {

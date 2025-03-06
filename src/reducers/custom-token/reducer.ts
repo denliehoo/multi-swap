@@ -1,9 +1,8 @@
 // 0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9
-// actions
 
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { EBlockchainNetwork } from "../../enum";
-import { ECustomTokenAction } from "./action";
-import { ICustomTokenState } from "./interface";
+import { ICustomToken, ICustomTokenState } from "./interface";
 
 // initial state
 const initialState: ICustomTokenState = {
@@ -14,24 +13,34 @@ const initialState: ICustomTokenState = {
   goerli: [],
 };
 
-// the reducer
-const customTokenReducer = (state = initialState, action: any) => {
-  switch (action.type) {
-    case ECustomTokenAction.ADD_CUSTOM_TOKEN:
-      return { ...state, [state.chain]: action.payload };
-    case ECustomTokenAction.REMOVE_CUSTOM_TOKEN:
-      return { ...state, [state.chain]: action.payload };
-    case ECustomTokenAction.REMOVE_ALL_CUSTOM_TOKEN:
-      return { ...state, [state.chain]: [] };
-    case ECustomTokenAction.CHANGE_CHAIN:
-      return { ...state, chain: action.payload };
-    default:
-      return state;
-  }
-};
+const customTokenSlice = createSlice({
+  name: "customTokenReducer",
+  initialState,
+  reducers: {
+    addCustomToken(state, action: PayloadAction<ICustomToken[]>) {
+      state[state.chain] = action.payload;
+    },
+    // TODO: Should update to remove only one token
+    removeCustomToken(state, action: PayloadAction<ICustomToken[]>) {
+      state[state.chain] = action.payload;
+    },
+    removeAllCustomToken(state) {
+      state[state.chain] = [];
+    },
+    changeChainCustomToken(state, action: PayloadAction<EBlockchainNetwork>) {
+      state.chain = action.payload;
+    },
+  },
+});
 
-// export the actions and the reducer
-export { customTokenReducer };
+export const {
+  addCustomToken,
+  removeCustomToken,
+  removeAllCustomToken,
+  changeChainCustomToken,
+} = customTokenSlice.actions;
+
+export default customTokenSlice.reducer;
 
 /* state becomes this eventually
 structure would be:

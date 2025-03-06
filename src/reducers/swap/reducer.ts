@@ -1,4 +1,5 @@
-import { ISwapState } from "./interface";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ISwapDetails, ISwapState } from "./interface";
 
 const INITAL_SWAP_FROM = [
   {
@@ -46,26 +47,35 @@ structure would be:
 }
 */
 
-// the reducer
-const swapReducer = (state = initialState, action: any) => {
-  switch (action.type) {
-    case "ADD_SWAP_FROM":
-      return { ...state, swapFrom: action.payload };
-    case "REMOVE_SWAP_FROM":
-      return { ...state, swapFrom: action.payload };
-    case "ADD_SWAP_TO":
-      return { ...state, swapTo: action.payload };
-    case "REMOVE_SWAP_TO":
-      return { ...state, swapTo: action.payload };
-    case "RESET_SWAP":
-      return {
-        swapFrom: INITAL_SWAP_FROM,
-        swapTo: INITAL_SWAP_TO,
-      };
-    default:
-      return state;
-  }
-};
+const swapSlice = createSlice({
+  name: "swapReducer",
+  initialState,
+  reducers: {
+    addSwapFrom(state, action: PayloadAction<ISwapDetails[]>) {
+      state.swapFrom = action.payload;
+    },
+    removeSwapFrom(state, action: PayloadAction<ISwapDetails[]>) {
+      state.swapFrom = action.payload;
+    },
+    addSwapTo(state, action: PayloadAction<ISwapDetails[]>) {
+      state.swapTo = action.payload;
+    },
+    removeSwapTo(state, action: PayloadAction<ISwapDetails[]>) {
+      state.swapTo = action.payload;
+    },
+    resetSwap(state) {
+      state.swapFrom = INITAL_SWAP_FROM;
+      state.swapTo = INITAL_SWAP_TO;
+    },
+  },
+});
 
-// export the actions and the reducer
-export { swapReducer };
+export const {
+  addSwapFrom,
+  removeSwapFrom,
+  addSwapTo,
+  removeSwapTo,
+  resetSwap,
+} = swapSlice.actions;
+
+export default swapSlice.reducer;

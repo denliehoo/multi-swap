@@ -1,45 +1,33 @@
 import classes from "./NavBar.module.css";
 import { Menu } from "antd";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FC, useEffect, useState } from "react";
 
 import IconComponent from "../../swap/shared/IconComponent";
 import multiswapLogo from "@src/assets/images/multiswapLogo.png";
 import { useWindowSize } from "@src/hooks/useWindowSize";
 import { EBlockchainNetwork } from "@src/enum";
-import {
-  changeWalletAction,
-  disconnectWalletAction,
-  attemptToConnectWallet,
-  changeChainConnectWalletReducer,
-} from "@src/reducers/connect-wallet";
-import { changeChainCustomTokenReducer } from "@src/reducers/custom-token";
-import { RootState } from "@src/store";
-import { Dispatch } from "redux";
 
 import useNetworkHandler from "./hooks";
 import NavBarDrawer from "./NavBarDrawer";
 import { getNetworkPortion, getWalletConnectPortion } from "./utils";
+import {
+  useConnectWalletDispatch,
+  useConnectWalletState,
+} from "@src/reducers/connect-wallet";
+import { useCustomTokenDispatch } from "@src/reducers/custom-token";
 
-interface INavBar {
-  changeWalletAction: (payload: string) => void;
-  disconnectWalletAction: () => void;
-  changeChainCustomTokenReducer: (payload: EBlockchainNetwork) => void;
-  attemptToConnectWallet: (payload: EBlockchainNetwork) => Promise<boolean>;
-  address: string;
-  walletConnected: boolean;
-  chain: EBlockchainNetwork;
-}
+const NavBar: FC = () => {
+  const { address, chain, walletConnected } = useConnectWalletState();
+  const {
+    changeWalletAction,
+    disconnectWalletAction,
+    attemptToConnectWalletAction: attemptToConnectWallet,
+    changeChainConnectWalletReducer,
+  } = useConnectWalletDispatch();
 
-const NavBar: FC<INavBar> = ({
-  changeWalletAction,
-  disconnectWalletAction,
-  changeChainCustomTokenReducer,
-  attemptToConnectWallet,
-  address,
-  walletConnected,
-  chain,
-}) => {
+  const { changeChainCustomTokenReducer } = useCustomTokenDispatch();
+
   const [showDrawer, setShowDrawer] = useState(false);
   const [remainingChains, setRemainingChains] = useState<EBlockchainNetwork[]>([
     EBlockchainNetwork.GOERLI,
@@ -143,22 +131,4 @@ const NavBar: FC<INavBar> = ({
   );
 };
 
-const mapStateToProps = ({ connectWalletReducer }: RootState) => ({
-  address: connectWalletReducer.address,
-  walletConnected: connectWalletReducer.walletConnected,
-  chain: connectWalletReducer.chain,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  changeWalletAction: (payload: string) =>
-    dispatch(changeWalletAction(payload)),
-  disconnectWalletAction: () => dispatch(disconnectWalletAction()),
-  changeChainCustomTokenReducer: (payload: EBlockchainNetwork) =>
-    dispatch(changeChainCustomTokenReducer(payload)),
-  changeChainConnectWalletReducer: (payload: EBlockchainNetwork) =>
-    dispatch(changeChainConnectWalletReducer(payload)),
-  attemptToConnectWallet: (chain: EBlockchainNetwork) =>
-    dispatch(attemptToConnectWallet(chain)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(NavBar);
+export default NavBar;

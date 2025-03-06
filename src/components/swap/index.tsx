@@ -10,12 +10,17 @@ import { FC, ReactNode, useEffect, useState } from "react";
 import CryptoSwapItem from "./item";
 import PreviewSwapModal from "./modal/swap";
 
-import { connect } from "react-redux";
 import ConnectWalletPopup from "../shared/ConnectWalletPopup";
-import { Dispatch } from "redux";
-import { EBlockchainNetwork, ESWapDirection } from "@src/enum";
-import { attemptToConnectWallet } from "@src/reducers/connect-wallet";
-import { ISwapDetails, addSwapFrom, addSwapTo } from "@src/reducers/swap";
+import { ESWapDirection } from "@src/enum";
+import {
+  useConnectWalletDispatch,
+  useConnectWalletState,
+} from "@src/reducers/connect-wallet";
+import {
+  ISwapDetails,
+  useSwapDispatch,
+  useSwapState,
+} from "@src/reducers/swap";
 import {
   validateAmount,
   validateAmountLesserThanBalance,
@@ -24,24 +29,8 @@ import {
 } from "./validator";
 import { NotificationPlacement } from "antd/lib/notification";
 import ErrorBox from "./error-box";
-import { RootState } from "@src/store";
 
 // Swap > CryptoSwapItem > SelectAssetModal > SelectAssetItem
-
-interface IMapStateToProps {
-  swapFrom: ISwapDetails[];
-  swapTo: ISwapDetails[];
-  chain: EBlockchainNetwork;
-  address: string;
-}
-
-interface IMapDispatchToProps {
-  addSwapFrom: (customToken: ISwapDetails[]) => void;
-  addSwapTo: (customToken: ISwapDetails[]) => void;
-  attemptToConnectWallet: (chain: EBlockchainNetwork) => void;
-}
-
-interface ISwapPage extends IMapStateToProps, IMapDispatchToProps {}
 
 const DEFAULT_SWAP_STATE: ISwapDetails = {
   index: 0,
@@ -53,15 +42,14 @@ const DEFAULT_SWAP_STATE: ISwapDetails = {
   imgUrl: "",
 };
 
-const Swap: FC<ISwapPage> = ({
-  addSwapFrom,
-  addSwapTo,
-  swapFrom,
-  swapTo,
-  address,
-  attemptToConnectWallet,
-  chain,
-}) => {
+const Swap: FC = () => {
+  const { swapFrom, swapTo } = useSwapState();
+  const { address, chain } = useConnectWalletState();
+  const { addSwapFromAction: addSwapFrom, addSwapToAction: addSwapTo } =
+    useSwapDispatch();
+  const { attemptToConnectWalletAction: attemptToConnectWallet } =
+    useConnectWalletDispatch();
+
   const [swapToPercentages, setSwapToPercentages] = useState([100]);
   const [showPercentageError, setShowPercentageError] = useState(false);
   const [showTokenNotSelectedError, setShowTokenNotSelectedError] =
@@ -315,18 +303,4 @@ const Swap: FC<ISwapPage> = ({
   );
 };
 
-const mapStateToProps = ({ swapReducer, connectWalletReducer }: RootState) => ({
-  swapFrom: swapReducer.swapFrom,
-  swapTo: swapReducer.swapTo,
-  address: connectWalletReducer.address,
-  chain: connectWalletReducer.chain,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  addSwapFrom: (payload: ISwapDetails[]) => dispatch(addSwapFrom(payload)),
-  addSwapTo: (payload: ISwapDetails[]) => dispatch(addSwapTo(payload)),
-  attemptToConnectWallet: (chain: EBlockchainNetwork) =>
-    dispatch(attemptToConnectWallet(chain)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Swap);
+export default Swap;

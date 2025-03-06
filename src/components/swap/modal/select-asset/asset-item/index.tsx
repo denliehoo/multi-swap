@@ -1,16 +1,13 @@
 import { useWindowSize } from "@src/hooks/useWindowSize";
-import { ISwapDetails, addSwapFrom, addSwapTo } from "@src/reducers/swap";
+import { useSwapDispatch, useSwapState } from "@src/reducers/swap";
 import { formatNumber } from "@src/utils/format/number";
 import classes from "./index.module.css";
 import { Row, Col } from "antd/lib/grid";
-import { connect } from "react-redux";
-import { Dispatch } from "redux";
 import { IDefaultAssetInfo } from "@src/interface";
 import { FC, ReactNode } from "react";
-import { RootState } from "@src/store";
 import { ESWapDirection } from "@src/enum";
 
-interface IOwnProps extends IDefaultAssetInfo {
+interface ISelectAssetItem extends IDefaultAssetInfo {
   icon: ReactNode;
   index: number;
   type: ESWapDirection;
@@ -18,27 +15,11 @@ interface IOwnProps extends IDefaultAssetInfo {
   onClickHandler: (bal: number) => void;
 }
 
-interface IMapStateToProps {
-  swapFrom: ISwapDetails[];
-  swapTo: ISwapDetails[];
-}
+const SelectAssetItem: FC<ISelectAssetItem> = (props) => {
+  const { swapFrom, swapTo } = useSwapState();
+  const { addSwapFromAction: addSwapFrom, addSwapToAction: addSwapTo } =
+    useSwapDispatch();
 
-interface IMapDispatchToProps {
-  addSwapFrom: (customToken: ISwapDetails[]) => void;
-  addSwapTo: (customToken: ISwapDetails[]) => void;
-}
-
-interface ISelectAssetItem extends IMapStateToProps, IMapDispatchToProps {
-  props: IOwnProps;
-}
-
-const SelectAssetItem: FC<ISelectAssetItem> = ({
-  props,
-  addSwapFrom,
-  addSwapTo,
-  swapFrom,
-  swapTo,
-}) => {
   const { width } = useWindowSize();
   const addSwapHandler = (type: ESWapDirection, balance: number) => {
     const newAssetDetails = {
@@ -100,15 +81,4 @@ const SelectAssetItem: FC<ISelectAssetItem> = ({
   );
 };
 
-const mapStateToProps = ({ swapReducer }: RootState, ownProps: IOwnProps) => ({
-  swapFrom: swapReducer.swapFrom,
-  swapTo: swapReducer.swapTo,
-  props: ownProps,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  addSwapFrom: (payload: ISwapDetails[]) => dispatch(addSwapFrom(payload)),
-  addSwapTo: (payload: ISwapDetails[]) => dispatch(addSwapTo(payload)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SelectAssetItem);
+export default SelectAssetItem;

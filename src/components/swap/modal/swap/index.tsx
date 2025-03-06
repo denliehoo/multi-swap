@@ -1,18 +1,20 @@
 import { Modal, notification } from "antd";
 import { useEffect, useState, useRef, FC, ReactNode } from "react";
-import { connect } from "react-redux";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { NotificationPlacement } from "antd/lib/notification";
-import { ISwapDetails, resetSwap } from "@src/reducers/swap";
+import {
+  ISwapDetails,
+  useSwapDispatch,
+  useSwapState,
+} from "@src/reducers/swap";
 import { MULTISWAP_ADDRESS, UINT_256_MAX_AMOUNT } from "@src/config";
-import { EBlockchainNetwork } from "@src/enum";
-import { AppDispatch, RootState } from "@src/store";
 import SwapModalLoadingContent from "./modal-content/loading";
 import SwapModalPreviewSwapContent from "./modal-content/preview-swap";
 import SwapModalPendingConfirmationContent from "./modal-content/pending-confirmation";
 import SwapModalSwapSubmittedContent from "./modal-content/swap-submitted";
 import { getAmountsOutDetails } from "./utils/get-amounts-out-details";
 import { initiateSwap } from "./utils/initiate-swap";
+import { useConnectWalletState } from "@src/reducers/connect-wallet";
 
 export interface ISwapItemDetails
   extends Omit<ISwapDetails, "index" | "address" | "balance"> {}
@@ -60,20 +62,7 @@ export interface ITokensRequiringApproval {
   contract: any;
 }
 
-interface IMapStateToProps {
-  swapFrom: ISwapDetails[];
-  swapTo: ISwapDetails[];
-  multiswap: any;
-  address: string;
-  chain: EBlockchainNetwork;
-  web3: any;
-}
-
-interface IMapDispatchToProps {
-  resetSwap: () => void;
-}
-
-interface IOwnProps {
+interface IPreviewSwapModal {
   visible: boolean;
   resetPercentageArray: () => void;
   showNotificationInSwapJs: (
@@ -87,20 +76,12 @@ interface IOwnProps {
   closePreviewAssetModal: () => void;
 }
 
-interface IPreviewSwapModal extends IMapStateToProps, IMapDispatchToProps {
-  props: IOwnProps;
-}
+const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
+  const { swapFrom, swapTo } = useSwapState();
+  const { multiswap, address, web3, chain } = useConnectWalletState();
 
-const PreviewSwapModal: FC<IPreviewSwapModal> = ({
-  props,
-  swapFrom,
-  swapTo,
-  multiswap,
-  address,
-  chain,
-  web3,
-  resetSwap,
-}) => {
+  const { resetSwapAction: resetSwap } = useSwapDispatch();
+
   const [modalContent, setModalContent] = useState("loading");
   const [swapFromDetails, setSwapFromDetails] = useState<ISwapItemDetails[]>(
     []
@@ -312,19 +293,4 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = ({
   );
 };
 
-const mapStateToProps = (
-  { swapReducer, connectWalletReducer }: RootState,
-  ownProps: IOwnProps
-) => ({
-  swapFrom: swapReducer.swapFrom,
-  swapTo: swapReducer.swapTo,
-  props: ownProps,
-  multiswap: connectWalletReducer.multiswap,
-  address: connectWalletReducer.address,
-  web3: connectWalletReducer.web3,
-  chain: connectWalletReducer.chain,
-});
-const mapDispatchToProps = (dispatch: AppDispatch) => ({
-  resetSwap: () => dispatch(resetSwap()),
-});
-export default connect(mapStateToProps, mapDispatchToProps)(PreviewSwapModal);
+export default PreviewSwapModal;

@@ -1,10 +1,9 @@
-import { createStore, combineReducers, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import { customTokenReducer } from "../reducers/custom-token/reducer";
-import { swapReducer } from "../reducers/swap/reducer";
-import { connectWalletReducer } from "../reducers/connect-wallet";
+import customTokenReducer from "../reducers/custom-token/reducer";
+import connectWalletReducer from "../reducers/connect-wallet/reducer";
+import swapReducer from "../reducers/swap/reducer";
 
 const persistConfig = {
   key: "root",
@@ -19,7 +18,14 @@ const rootReducer = combineReducers({
 });
 const reducer = persistReducer(persistConfig, rootReducer);
 
-let store = createStore(reducer, applyMiddleware(thunk));
+const store = configureStore({
+  reducer: reducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
+
 const persistor = persistStore(store);
 
 export { store, persistor };

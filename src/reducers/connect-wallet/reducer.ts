@@ -10,13 +10,8 @@ import Multiswap_ftm from "../../utils/deployedContractsABI/phase2/ftmABI.json";
 import { MULTISWAP_ADDRESS } from "../../config";
 import { EBlockchainNetwork } from "../../enum";
 import { IConnectWalletState } from "./interface";
-import {
-  connectSmartContractAction,
-  connectWalletAction,
-  disconnectWalletAction,
-  EWalletAction,
-} from "./actions";
 import { Dispatch } from "redux";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // config for chain ids
 const chainIds: Record<EBlockchainNetwork, string> = {
@@ -56,8 +51,50 @@ const initialState: IConnectWalletState = {
   web3: {},
 };
 
+// TODO: Proper typing for web3 and multiswap
+export interface IConnectWalletPayload {
+  address: string;
+  web3: any;
+}
+
+const connectWalletSlice = createSlice({
+  name: "connectWalletReducer",
+  initialState,
+  reducers: {
+    connectWallet(state, action: PayloadAction<IConnectWalletPayload>) {
+      state.address = action.payload.address;
+      state.web3 = action.payload.web3;
+      state.walletConnected = true;
+    },
+    changeWallet(state, action: PayloadAction<string>) {
+      state.address = action.payload;
+      state.walletConnected = true;
+    },
+    disconnectWallet(state) {
+      state.address = "";
+      state.walletConnected = false;
+      state.multiswap = {};
+    },
+    connectSmartContract(state, action: PayloadAction<any>) {
+      state.multiswap = action.payload;
+    },
+    changeChain(state, action: PayloadAction<EBlockchainNetwork>) {
+      state.chain = action.payload;
+    },
+  },
+});
+export const {
+  connectWallet,
+  changeWallet,
+  disconnectWallet,
+  connectSmartContract,
+  changeChain,
+} = connectWalletSlice.actions;
+
+export default connectWalletSlice.reducer;
+
 // TODO: Refactor this somewhere else
-const attemptToConnectWallet = (chain: EBlockchainNetwork): any => {
+export const attemptToConnectWallet = (chain: EBlockchainNetwork): any => {
   return async (dispatch: Dispatch) => {
     ///
     try {
@@ -75,11 +112,11 @@ const attemptToConnectWallet = (chain: EBlockchainNetwork): any => {
         // attempt to connect
         onCorrectChain = await attemptToChangeChain(chain);
         if (!onCorrectChain) {
-          dispatch(disconnectWalletAction());
+          dispatch(disconnectWallet());
           return false;
         }
       }
-      await dispatch(connectWalletAction({ address: accounts[0], web3: web3 }));
+      await dispatch(connectWallet({ address: accounts[0], web3: web3 }));
 
       // ****** DO NOT DELETE THIS COMMENT
       // This is for if smart contract deployed through truffle
@@ -109,17 +146,17 @@ const attemptToConnectWallet = (chain: EBlockchainNetwork): any => {
         // ******
 
         console.log(multiswap.methods);
-        dispatch(connectSmartContractAction(multiswap));
+        dispatch(connectSmartContract(multiswap));
         return true;
       } else {
         // if no network...
         console.log("Error: Wrong chain or no network detected");
-        dispatch(disconnectWalletAction());
+        dispatch(disconnectWallet());
         return false;
       }
     } catch (error) {
       console.log(error);
-      dispatch(disconnectWalletAction());
+      dispatch(disconnectWallet());
       return false;
     }
 
@@ -154,31 +191,3 @@ const attemptToChangeChain = async (chain: EBlockchainNetwork) => {
     }
   }
 };
-
-// reducer here
-const connectWalletReducer = (
-  state = initialState,
-  action: { type: EWalletAction; payload: any }
-) => {
-  switch (action.type) {
-    case EWalletAction.CONNECT_WALLET:
-      return {
-        ...state,
-        address: action.payload.address,
-        web3: action.payload.web3,
-        walletConnected: true,
-      };
-    case EWalletAction.CHANGE_WALLET:
-      return { ...state, address: action.payload, walletConnected: true };
-    case EWalletAction.DISCONNECT_WALLET:
-      return { ...state, address: "", walletConnected: false, multiswap: {} };
-    case EWalletAction.CONNECT_SMART_CONTRACT:
-      return { ...state, multiswap: action.payload };
-    case EWalletAction.CHANGE_CHAIN:
-      return { ...state, chain: action.payload };
-    default:
-      return state;
-  }
-};
-
-export { connectWalletReducer, attemptToConnectWallet };

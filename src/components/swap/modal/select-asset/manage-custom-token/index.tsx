@@ -4,52 +4,37 @@ import { useState, useEffect, FC } from "react";
 import { Input, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import ManageCustomTokenItem from "./item";
-import { connect } from "react-redux";
 import { getDetailsForCustomToken } from "@src/api";
 import { localStorageKey } from "@src/config";
 import { EBlockchainNetwork } from "@src/enum";
 import { useWindowSize } from "@src/hooks/useWindowSize";
 import {
   ICustomToken,
-  addCustomToken,
-  removeAllCustomToken,
+  useCustomTokenDispatch,
+  useCustomTokenState,
 } from "@src/reducers/custom-token";
-import { RootState, AppDispatch } from "@src/store";
 import { IDefaultAssetInfo } from "@src/interface";
 import IconComponent from "@src/components/swap/shared/IconComponent";
+import { useConnectWalletState } from "@src/reducers/connect-wallet";
 
-interface IMapStateToProps {
-  ethCustomTokens: ICustomToken[];
-  ftmCustomTokens: ICustomToken[];
-  goerliCustomTokens: ICustomToken[];
-  chain: EBlockchainNetwork;
-}
-
-interface IMapDispatchToProps {
-  addCustomToken: (payload: ICustomToken[]) => void;
-  removeAllCustomToken: () => void;
-}
-
-interface IOwnProps {
+interface IManageCustomTokenProps {
   defaultAssets: IDefaultAssetInfo[];
   setToggleChangesInCustomToken: () => void;
 }
 
-interface IManageCustomTokenProps
-  extends IMapStateToProps,
-    IMapDispatchToProps {
-  props: IOwnProps;
-}
+const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
+  const {
+    eth: ethCustomTokens,
+    ftm: ftmCustomTokens,
+    goerli: goerliCustomTokens,
+  } = useCustomTokenState();
+  const { chain } = useConnectWalletState();
 
-const ManageCustomToken: FC<IManageCustomTokenProps> = ({
-  ethCustomTokens,
-  addCustomToken,
-  removeAllCustomToken,
-  ftmCustomTokens,
-  goerliCustomTokens,
-  chain,
-  props,
-}) => {
+  const {
+    addCustomTokenAction: addCustomToken,
+    removeAllCustomTokenAction: removeAllCustomToken,
+  } = useCustomTokenDispatch();
+
   const [customTokenErrorMessage, setCustomTokenErrorMessage] = useState("");
   const [showImportToken, setShowImportToken] = useState(false);
   const [customTokenData, setCustomTokenData] = useState<
@@ -255,21 +240,4 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = ({
   );
 };
 
-const mapStateToProps = (
-  { customTokenReducer, connectWalletReducer }: RootState,
-  ownProps: IOwnProps
-) => ({
-  ethCustomTokens: customTokenReducer.eth,
-  ftmCustomTokens: customTokenReducer.ftm,
-  goerliCustomTokens: customTokenReducer.goerli,
-  chain: connectWalletReducer.chain,
-  props: ownProps,
-});
-
-const mapDispatchToProps = (dispatch: AppDispatch) => ({
-  addCustomToken: (payload: ICustomToken[]) =>
-    dispatch(addCustomToken(payload)),
-  removeAllCustomToken: () => dispatch(removeAllCustomToken()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ManageCustomToken);
+export default ManageCustomToken;

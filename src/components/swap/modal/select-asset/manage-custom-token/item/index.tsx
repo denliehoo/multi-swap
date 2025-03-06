@@ -3,14 +3,15 @@ import { Row, Col } from "antd";
 import { DeleteOutlined, ScanOutlined } from "@ant-design/icons";
 import { FC } from "react";
 
-import { connect } from "react-redux";
 import { EBlockchainNetwork } from "@src/enum";
 import { useWindowSize } from "@src/hooks/useWindowSize";
-import { ICustomToken, removeCustomToken } from "@src/reducers/custom-token";
+import {
+  useCustomTokenDispatch,
+  useCustomTokenState,
+} from "@src/reducers/custom-token";
 import IconComponent from "@src/components/swap/shared/IconComponent";
-import { AppDispatch, RootState } from "@src/store";
 
-interface IOwnProps {
+interface IManageCustomTokenItem {
   chain: EBlockchainNetwork;
   symbol: string;
   onClickDelete: () => void;
@@ -20,27 +21,16 @@ interface IOwnProps {
   name: string;
 }
 
-interface IMapStateToProps {
-  ethCustomTokens: ICustomToken[];
-  ftmCustomTokens: ICustomToken[];
-  goerliCustomTokens: ICustomToken[];
-}
+const ManageCustomTokenItem: FC<IManageCustomTokenItem> = (props) => {
+  const {
+    eth: ethCustomTokens,
+    ftm: ftmCustomTokens,
+    goerli: goerliCustomTokens,
+  } = useCustomTokenState();
 
-interface IMapDispatchToProps {
-  removeCustomToken: (customToken: ICustomToken[]) => void;
-}
+  const { removeCustomTokenAction: removeCustomToken } =
+    useCustomTokenDispatch();
 
-interface IManageCustomTokenItem extends IMapStateToProps, IMapDispatchToProps {
-  props: IOwnProps;
-}
-
-const ManageCustomTokenItem: FC<IManageCustomTokenItem> = ({
-  props,
-  ethCustomTokens,
-  ftmCustomTokens,
-  goerliCustomTokens,
-  removeCustomToken,
-}) => {
   const { width } = useWindowSize();
   const getCustomTokens = (chain: EBlockchainNetwork) => {
     if (chain === EBlockchainNetwork.ETH) {
@@ -121,32 +111,4 @@ const ManageCustomTokenItem: FC<IManageCustomTokenItem> = ({
   );
 };
 
-const mapStateToProps = (
-  { customTokenReducer }: RootState,
-  ownProps: IOwnProps
-) => ({
-  ethCustomTokens: customTokenReducer.eth,
-  ftmCustomTokens: customTokenReducer.ftm,
-  goerliCustomTokens: customTokenReducer.goerli,
-  props: ownProps,
-});
-
-const mapDispatchToProps = (dispatch: AppDispatch) => ({
-  removeCustomToken: (payload: ICustomToken[]) =>
-    dispatch(removeCustomToken(payload)),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ManageCustomTokenItem);
-
-/*
-Note: if a component have it's own props we also need to put ownProps as a 2nd param
-in mapStateToProps. Then we define it as props and pass it through our component in the
-object i.e. do this const Comp = ({ props, state, action1, action2 }) => {...
-
-    NOTE: doing this is wrong X const Comp = (props,{state,action1,action2}) => {...
-
-https://react-redux.js.org/api/connect#mapstatetoprops-state-ownprops--object
-*/
+export default ManageCustomTokenItem;

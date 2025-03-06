@@ -12,22 +12,13 @@ import {
   goerliDefaultAssetInfo,
 } from "@src/constants/default-asset-info";
 import { getTokenBalances } from "@src/api";
-import { connect } from "react-redux";
 import SearchInputComponent from "../../shared/SearchInputComponent";
-import { RootState } from "@src/store";
-import { ICustomToken } from "@src/reducers/custom-token";
+import { ICustomToken, useCustomTokenState } from "@src/reducers/custom-token";
 import { IDefaultAssetInfo } from "@src/interface";
 import { EBlockchainNetwork, ESWapDirection } from "@src/enum";
+import { useConnectWalletState } from "@src/reducers/connect-wallet";
 
-interface IMapStateToProps {
-  ethCustomTokens: ICustomToken[];
-  ftmCustomTokens: ICustomToken[];
-  goerliCustomTokens: ICustomToken[];
-  chain: EBlockchainNetwork;
-  address: string;
-}
-
-interface IOwnProps {
+interface ISelectAssetModal {
   isModalOpen: boolean;
   index: number;
   type: ESWapDirection;
@@ -38,18 +29,14 @@ interface IOwnProps {
   closeModal: () => void;
 }
 
-interface ISelectAssetModal extends IMapStateToProps {
-  props: IOwnProps;
-}
+const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
+  const {
+    eth: ethCustomTokens,
+    ftm: ftmCustomTokens,
+    goerli: goerliCustomTokens,
+  } = useCustomTokenState();
+  const { chain, address } = useConnectWalletState();
 
-const SelectAssetModal: FC<ISelectAssetModal> = ({
-  props,
-  ethCustomTokens,
-  ftmCustomTokens,
-  goerliCustomTokens,
-  chain,
-  address,
-}) => {
   const [isManageCustomToken, setIsManageCustomToken] = useState(false);
   const [combinedAssetList, setCombinedAssetList] = useState<
     IDefaultAssetInfo[]
@@ -238,19 +225,7 @@ const SelectAssetModal: FC<ISelectAssetModal> = ({
   );
 };
 
-const mapStateToProps = (
-  { customTokenReducer, connectWalletReducer }: RootState,
-  ownProps: IOwnProps
-) => ({
-  ethCustomTokens: customTokenReducer.eth,
-  ftmCustomTokens: customTokenReducer.ftm,
-  goerliCustomTokens: customTokenReducer.goerli,
-  chain: connectWalletReducer.chain,
-  address: connectWalletReducer.address,
-  props: ownProps,
-});
-
-export default connect(mapStateToProps)(SelectAssetModal);
+export default SelectAssetModal;
 
 // const commonTokens = (
 //   <div>

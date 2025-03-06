@@ -3,26 +3,17 @@ import { Row, Col } from "antd/lib/grid";
 import { Button } from "antd";
 import React, { useState, useEffect, FC } from "react";
 import { MinusCircleOutlined, DownOutlined } from "@ant-design/icons";
-import { connect } from "react-redux";
 import SelectAssetModal from "../modal/select-asset";
 
-import { Dispatch } from "redux";
-import {
-  ISwapDetails,
-  addSwapFrom,
-  removeSwapFrom,
-  addSwapTo,
-  removeSwapTo,
-} from "@src/reducers/swap";
+import { useSwapState, useSwapDispatch } from "@src/reducers/swap";
 import { formatNumber } from "@src/utils/format/number";
 import { getAssetPrice } from "@src/api";
 import { EBlockchainNetwork, ESWapDirection } from "@src/enum";
-import { RootState } from "@src/store";
+import { useConnectWalletState } from "@src/reducers/connect-wallet";
 
-interface IOwnProps {
+interface ICryptoSwapItem {
   percent?: number;
   amount?: number;
-
   index: number;
   type: ESWapDirection;
   changeSwapToPercent?: (i: number, percent: number) => void;
@@ -33,33 +24,17 @@ interface IOwnProps {
   address: string;
 }
 
-interface IMapStateToProps {
-  swapFrom: ISwapDetails[];
-  swapTo: ISwapDetails[];
-  chain: EBlockchainNetwork;
-}
+const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
+  const { swapFrom, swapTo } = useSwapState();
+  const { chain } = useConnectWalletState();
 
-interface IMapDispatchToProps {
-  addSwapFrom: (customToken: ISwapDetails[]) => void;
-  addSwapTo: (customToken: ISwapDetails[]) => void;
-  removeSwapFrom: (customToken: ISwapDetails[]) => void;
-  removeSwapTo: (customToken: ISwapDetails[]) => void;
-}
+  const {
+    addSwapFromAction: addSwapFrom,
+    removeSwapFromAction: removeSwapFrom,
+    addSwapToAction: addSwapTo,
+    removeSwapToAction: removeSwapTo,
+  } = useSwapDispatch();
 
-interface ICryptoSwapItem extends IMapStateToProps, IMapDispatchToProps {
-  props: IOwnProps;
-}
-
-const CryptoSwapItem: FC<ICryptoSwapItem> = ({
-  props,
-  addSwapFrom,
-  addSwapTo,
-  swapFrom,
-  swapTo,
-  removeSwapFrom,
-  removeSwapTo,
-  chain,
-}) => {
   const [balance, setBalance] = useState(0);
   const [amount, setAmount] = useState(props.amount);
   const [price, setPrice] = useState(0);
@@ -87,8 +62,13 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = ({
     if (props.type === ESWapDirection.FROM) {
       setAmount(amount);
       props.amountHasChanged && props.amountHasChanged();
+
       let newSwapFrom = [...swapFrom];
-      newSwapFrom[props.index].amount = parseFloat(e.target.value);
+      newSwapFrom[props.index] = {
+        ...newSwapFrom[props.index],
+        amount: amount,
+      };
+
       addSwapFrom(newSwapFrom);
     } else if (props.type === ESWapDirection.TO) {
       const re = /^\d*$/;
@@ -98,7 +78,10 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = ({
         props.changeSwapToPercent &&
           props.changeSwapToPercent(props.index, inputValue);
         let newSwapTo = [...swapTo];
-        newSwapTo[props.index].amount = inputValue;
+        newSwapTo[props.index] = {
+          ...newSwapTo[props.index],
+          amount: inputValue,
+        };
         addSwapTo(newSwapTo);
       }
     }
@@ -109,9 +92,14 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = ({
       props.type === ESWapDirection.FROM ? [...swapFrom] : [...swapTo];
     let index = props.index;
     newSwap.splice(index, 1);
-    for (let i = index; i < newSwap.length; i++) {
-      newSwap[i].index -= 1;
-    }
+
+    // Update the index
+    newSwap = newSwap.map((item, i) => ({
+      ...item,
+      index: i,
+    }));
+
+    console.log("newSwap after", newSwap);
     if (props.type === ESWapDirection.FROM) {
       removeSwapFrom(newSwap);
       setAmount(newSwap[index]?.amount);
@@ -132,7 +120,10 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = ({
 
       let newSwap =
         props.type === ESWapDirection.FROM ? [...swapFrom] : [...swapTo];
-      newSwap[props.index].price = price;
+      newSwap[props.index] = {
+        ...newSwap[props.index],
+        price: price,
+      };
       props.type === ESWapDirection.FROM
         ? addSwapFrom(newSwap)
         : addSwapTo(newSwap);
@@ -286,22 +277,4 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = ({
   );
 };
 
-const mapStateToProps = (
-  { swapReducer, connectWalletReducer }: RootState,
-  ownProps: IOwnProps
-) => ({
-  swapFrom: swapReducer.swapFrom,
-  swapTo: swapReducer.swapTo,
-  props: ownProps,
-  chain: connectWalletReducer.chain,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  addSwapFrom: (payload: ISwapDetails[]) => dispatch(addSwapFrom(payload)),
-  removeSwapFrom: (payload: ISwapDetails[]) =>
-    dispatch(removeSwapFrom(payload)),
-  addSwapTo: (payload: ISwapDetails[]) => dispatch(addSwapTo(payload)),
-  removeSwapTo: (payload: ISwapDetails[]) => dispatch(removeSwapTo(payload)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CryptoSwapItem);
+export default CryptoSwapItem;
