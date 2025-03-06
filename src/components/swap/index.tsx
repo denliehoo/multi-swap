@@ -176,7 +176,7 @@ const Swap: FC = () => {
     if (showTokenNotSelectedError) {
       setShowTokenNotSelectedError(false);
     }
-  }, [toggleAssetSelected]);
+  }, [showTokenNotSelectedError, toggleAssetSelected]);
 
   return (
     // follow uniswap style for swap component

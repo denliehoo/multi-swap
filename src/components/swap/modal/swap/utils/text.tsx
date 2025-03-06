@@ -52,19 +52,31 @@ const formatAmountsInArrayForSuccessfulSwap = (
 const getLinkToBlockExplorer = (hash: string, chain: EBlockchainNetwork) => {
   if (chain === EBlockchainNetwork.ETH) {
     return (
-      <a href={`https://etherscan.io/tx/${hash}`} target="_blank">
+      <a
+        href={`https://etherscan.io/tx/${hash}`}
+        target="_blank"
+        rel="noreferrer"
+      >
         <ScanOutlined />
       </a>
     );
   } else if (chain === EBlockchainNetwork.FTM) {
     return (
-      <a href={`https://ftmscan.com/tx/${hash}`} target="_blank">
+      <a
+        href={`https://ftmscan.com/tx/${hash}`}
+        target="_blank"
+        rel="noreferrer"
+      >
         <ScanOutlined />
       </a>
     );
   } else if (chain === EBlockchainNetwork.GOERLI) {
     return (
-      <a href={`https://goerli.etherscan.io/tx/${hash}`} target="_blank">
+      <a
+        href={`https://goerli.etherscan.io/tx/${hash}`}
+        target="_blank"
+        rel="noreferrer"
+      >
         <ScanOutlined />
       </a>
     );

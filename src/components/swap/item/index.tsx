@@ -1,7 +1,7 @@
 import classes from "./index.module.css";
 import { Row, Col } from "antd/lib/grid";
 import { Button } from "antd";
-import React, { useState, useEffect, FC } from "react";
+import React, { useState, useEffect, FC, useCallback } from "react";
 import { MinusCircleOutlined, DownOutlined } from "@ant-design/icons";
 import SelectAssetModal from "../modal/select-asset";
 
@@ -42,16 +42,6 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
   const [percentInput, setPercentInput] = useState(props.percent);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputIsFocused, setInputIsFocused] = useState(false);
-
-  useEffect(() => {
-    props.type === "from"
-      ? setAmount(props.amount)
-      : setPercentInput(props.percent);
-  }, [props.amount, props.percent]);
-
-  useEffect(() => {
-    getPrice(chain);
-  }, [props.asset]);
 
   const getBalanceFromChild = (bal: number) => {
     setBalance(bal);
@@ -111,24 +101,36 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
     props.assetHasBeenSelected();
   };
 
-  const getPrice = async (chain: EBlockchainNetwork) => {
-    if (props.asset) {
-      const price = await getAssetPrice(chain, props.asset, props.address);
-      setPrice(price);
-      setPriceIsLoading(false);
+  const getPrice = useCallback(
+    async (chain: EBlockchainNetwork) => {
+      if (props.asset) {
+        const price = await getAssetPrice(chain, props.asset, props.address);
+        setPrice(price);
+        setPriceIsLoading(false);
 
-      let newSwap =
-        props.type === ESWapDirection.FROM ? [...swapFrom] : [...swapTo];
-      newSwap[props.index] = {
-        ...newSwap[props.index],
-        price: price,
-      };
-      props.type === ESWapDirection.FROM
-        ? addSwapFrom(newSwap)
-        : addSwapTo(newSwap);
-    } else {
-    }
-  };
+        let newSwap =
+          props.type === ESWapDirection.FROM ? [...swapFrom] : [...swapTo];
+        newSwap[props.index] = {
+          ...newSwap[props.index],
+          price: price,
+        };
+
+        props.type === ESWapDirection.FROM
+          ? addSwapFrom(newSwap)
+          : addSwapTo(newSwap);
+      }
+    },
+    [
+      props.asset,
+      props.address,
+      props.type,
+      props.index,
+      swapFrom,
+      swapTo,
+      addSwapFrom,
+      addSwapTo,
+    ]
+  );
 
   const onInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     e.target.addEventListener(
@@ -144,6 +146,16 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
   const onInputBlur = () => {
     setInputIsFocused(false);
   };
+
+  useEffect(() => {
+    props.type === "from"
+      ? setAmount(props.amount)
+      : setPercentInput(props.percent);
+  }, [props.amount, props.percent, props.type]);
+
+  useEffect(() => {
+    getPrice(chain);
+  }, [chain, getPrice, props.asset]);
 
   return (
     <div

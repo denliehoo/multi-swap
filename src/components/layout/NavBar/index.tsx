@@ -1,6 +1,5 @@
 import classes from "./NavBar.module.css";
 import { Menu } from "antd";
-import { useDispatch, useSelector } from "react-redux";
 import { FC, useEffect, useState } from "react";
 
 import IconComponent from "../../swap/shared/IconComponent";
@@ -57,7 +56,7 @@ const NavBar: FC = () => {
 
     checkMetaMaskConnection();
     changeChainCustomTokenReducer(chain);
-  }, []);
+  }, [attemptToConnectWallet, chain, changeChainCustomTokenReducer]);
 
   useEffect(() => {
     width && width > 500 && closeDrawer();

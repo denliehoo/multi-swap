@@ -2,7 +2,7 @@ import classes from "./index.module.css";
 import { Row, Col } from "antd/lib/grid";
 import { ArrowLeftOutlined, LoadingOutlined } from "@ant-design/icons";
 import { Button, Modal } from "antd";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import SelectAssetItem from "./asset-item";
 import IconComponent from "../../shared/IconComponent";
 import ManageCustomToken from "./manage-custom-token";
@@ -49,22 +49,21 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
     IDefaultAssetInfo[]
   >([]);
 
-  useEffect(() => {
-    props.isModalOpen && address && getCombinedListOfAssets(chain, address);
-  }, [address, props.isModalOpen, toggleChangesInCustomToken]);
-
-  const getCustomTokens = (chain: EBlockchainNetwork) => {
-    if (chain === EBlockchainNetwork.ETH) {
-      return ethCustomTokens;
-    } else if (chain === EBlockchainNetwork.FTM) {
-      return ftmCustomTokens;
-    } else if (chain === EBlockchainNetwork.GOERLI) {
+  const getCustomTokens = useCallback(
+    (chain: EBlockchainNetwork) => {
+      if (chain === EBlockchainNetwork.ETH) {
+        return ethCustomTokens;
+      } else if (chain === EBlockchainNetwork.FTM) {
+        return ftmCustomTokens;
+      } else if (chain === EBlockchainNetwork.GOERLI) {
+        return goerliCustomTokens;
+      }
       return goerliCustomTokens;
-    }
-    return goerliCustomTokens;
-  };
+    },
+    [ethCustomTokens, ftmCustomTokens, goerliCustomTokens]
+  );
 
-  const getDefaultAssets = (chain: EBlockchainNetwork) => {
+  const getDefaultAssets = useCallback((chain: EBlockchainNetwork) => {
     if (chain === EBlockchainNetwork.ETH) {
       return ethDefaultAssetInfo;
     } else if (chain === EBlockchainNetwork.FTM) {
@@ -73,38 +72,38 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
       return goerliDefaultAssetInfo;
     }
     return [];
-  };
+  }, []);
 
-  const getCombinedListOfAssets = async (
-    chain: EBlockchainNetwork,
-    address: string
-  ) => {
-    const defaultAssets = getDefaultAssets(chain);
-    const customTokens = getCustomTokens(chain);
-    const formattedCustomTokens = customTokens.map((i: ICustomToken) => ({
-      symbol: i.symbol,
-      name: i.name,
-      imgUrl: i.logo,
-      address: i.address,
-      isDefaultAsset: false,
-      bal: 0,
-      decimals: i.decimals,
-    }));
-    let combinedAssetListTemp = defaultAssets.concat(formattedCustomTokens);
-    const arrayOfAssetAddresses = combinedAssetListTemp.map((i) => i.address);
-    const balancesArray = await getTokenBalances(
-      chain,
-      address,
-      arrayOfAssetAddresses
-    );
+  const getCombinedListOfAssets = useCallback(
+    async (chain: EBlockchainNetwork, address: string) => {
+      const defaultAssets = getDefaultAssets(chain);
+      const customTokens = getCustomTokens(chain);
+      const formattedCustomTokens = customTokens.map((i: ICustomToken) => ({
+        symbol: i.symbol,
+        name: i.name,
+        imgUrl: i.logo,
+        address: i.address,
+        isDefaultAsset: false,
+        bal: 0,
+        decimals: i.decimals,
+      }));
+      let combinedAssetListTemp = defaultAssets.concat(formattedCustomTokens);
+      const arrayOfAssetAddresses = combinedAssetListTemp.map((i) => i.address);
+      const balancesArray = await getTokenBalances(
+        chain,
+        address,
+        arrayOfAssetAddresses
+      );
 
-    for (let i in combinedAssetListTemp) {
-      combinedAssetListTemp[i].bal = balancesArray[i];
-    }
-    setCombinedAssetList(combinedAssetListTemp);
-    setIsLoading(false);
-    return combinedAssetListTemp;
-  };
+      for (let i in combinedAssetListTemp) {
+        combinedAssetListTemp[i].bal = balancesArray[i];
+      }
+      setCombinedAssetList(combinedAssetListTemp);
+      setIsLoading(false);
+      return combinedAssetListTemp;
+    },
+    [getDefaultAssets, getCustomTokens]
+  );
 
   const chooseAssetHandler = (bal: number) => {
     props.assetHasBeenSelected();
@@ -138,6 +137,16 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
       <Col span={6} />
     </Row>
   );
+
+  useEffect(() => {
+    props.isModalOpen && address && getCombinedListOfAssets(chain, address);
+  }, [
+    address,
+    chain,
+    getCombinedListOfAssets,
+    props.isModalOpen,
+    toggleChangesInCustomToken,
+  ]);
 
   return (
     <>
