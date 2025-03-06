@@ -99,7 +99,6 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
       index: i,
     }));
 
-    console.log("newSwap after", newSwap);
     if (props.type === ESWapDirection.FROM) {
       removeSwapFrom(newSwap);
       setAmount(newSwap[index]?.amount);

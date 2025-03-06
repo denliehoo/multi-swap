@@ -64,7 +64,6 @@ const NavBar: FC = () => {
   }, [width]);
 
   useEffect(() => {
-    console.log("wallet", walletConnected, window.ethereum);
     if (walletConnected && window.ethereum) {
       window.ethereum.on("accountsChanged", (accounts: string[]) => {
         changeWalletAction(accounts[0]);
