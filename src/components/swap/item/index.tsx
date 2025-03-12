@@ -153,9 +153,15 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
       : setPercentInput(props.percent);
   }, [props.amount, props.percent, props.type]);
 
+  // TODO: Fix infinite loop issue
   useEffect(() => {
     getPrice(chain);
-  }, [chain, getPrice, props.asset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    chain,
+    //  getPrice,
+    props.asset,
+  ]);
 
   return (
     <div
