@@ -1,6 +1,6 @@
 import classes from "./NavBar.module.css";
 import { Menu } from "antd";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 
 import IconComponent from "../../swap/shared/IconComponent";
 import multiswapLogo from "@src/assets/images/multiswapLogo.png";
@@ -45,6 +45,7 @@ const NavBar: FC = () => {
   const openDrawer = () => setShowDrawer(true);
   const closeDrawer = () => setShowDrawer(false);
 
+  // TODO: Solve infinite loop issue, temporarily other dependecies from useEffect
   useEffect(() => {
     const checkMetaMaskConnection = async () => {
       if (window.ethereum) {
@@ -56,7 +57,11 @@ const NavBar: FC = () => {
 
     checkMetaMaskConnection();
     changeChainCustomTokenReducer(chain);
-  }, [attemptToConnectWallet, chain, changeChainCustomTokenReducer]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    // attemptToConnectWallet, changeChainCustomTokenReducer,
+    chain,
+  ]);
 
   useEffect(() => {
     width && width > 500 && closeDrawer();
@@ -82,21 +87,33 @@ const NavBar: FC = () => {
     walletConnected,
   ]);
 
-  const connectWalletHandler = async () => {
+  const connectWalletHandler = useCallback(async () => {
     if (!walletConnected) {
       await attemptToConnectWallet(chain);
     }
-  };
+  }, [walletConnected, attemptToConnectWallet, chain]);
 
-  const menuItems: any = [
-    getNetworkPortion(chain, handleNetworkChange, remainingChains),
-    getWalletConnectPortion(
+  // TODO: Solve infinite loop issue , getNetworkPortion called multiple times
+  const menuItems: any = useMemo(
+    () => [
+      getNetworkPortion(chain, handleNetworkChange, remainingChains),
+      getWalletConnectPortion(
+        walletConnected,
+        address,
+        connectWalletHandler,
+        disconnectWalletAction
+      ),
+    ],
+    [
+      chain,
+      handleNetworkChange,
+      remainingChains,
       walletConnected,
       address,
       connectWalletHandler,
-      disconnectWalletAction
-    ),
-  ];
+      disconnectWalletAction,
+    ]
+  );
 
   return (
     <nav className={classes.navBar}>
