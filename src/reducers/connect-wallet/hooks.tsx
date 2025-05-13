@@ -10,21 +10,40 @@ import {
   IConnectWalletPayload,
 } from "./reducer";
 import { EBlockchainNetwork } from "@src/enum";
+import { useCallback } from "react";
 
 export const useConnectWalletDispatch = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const connectWalletAction = (payload: IConnectWalletPayload) =>
-    dispatch(connectWallet(payload));
-  const changeWalletAction = (address: string) =>
-    dispatch(changeWallet(address));
-  const disconnectWalletAction = () => dispatch(disconnectWallet());
-  const connectSmartContractAction = (contract: any) =>
-    dispatch(connectSmartContract(contract));
-  const changeChainConnectWalletReducer = (chain: EBlockchainNetwork) =>
-    dispatch(changeChain(chain));
-  const attemptToConnectWalletAction = (chain: EBlockchainNetwork) =>
-    dispatch(attemptToConnectWallet(chain));
+  const connectWalletAction = useCallback(
+    (payload: IConnectWalletPayload) => dispatch(connectWallet(payload)),
+    [dispatch]
+  );
+
+  const changeWalletAction = useCallback(
+    (address: string) => dispatch(changeWallet(address)),
+    [dispatch]
+  );
+
+  const disconnectWalletAction = useCallback(
+    () => dispatch(disconnectWallet()),
+    [dispatch]
+  );
+
+  const connectSmartContractAction = useCallback(
+    (contract: any) => dispatch(connectSmartContract(contract)),
+    [dispatch]
+  );
+
+  const changeChainConnectWalletReducer = useCallback(
+    (chain: EBlockchainNetwork) => dispatch(changeChain(chain)),
+    [dispatch]
+  );
+
+  const attemptToConnectWalletAction = useCallback(
+    (chain: EBlockchainNetwork) => dispatch(attemptToConnectWallet(chain)),
+    [dispatch]
+  );
 
   return {
     connectWalletAction,
@@ -35,7 +54,6 @@ export const useConnectWalletDispatch = () => {
     attemptToConnectWalletAction,
   };
 };
-
 export const useConnectWalletState = () => {
   return useSelector((state: RootState) => state.connectWalletReducer);
 };

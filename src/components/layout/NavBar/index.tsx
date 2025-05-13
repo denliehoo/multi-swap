@@ -45,7 +45,6 @@ const NavBar: FC = () => {
   const openDrawer = () => setShowDrawer(true);
   const closeDrawer = () => setShowDrawer(false);
 
-  // TODO: Solve infinite loop issue, temporarily other dependecies from useEffect
   useEffect(() => {
     const checkMetaMaskConnection = async () => {
       if (window.ethereum) {
@@ -57,11 +56,7 @@ const NavBar: FC = () => {
 
     checkMetaMaskConnection();
     changeChainCustomTokenReducer(chain);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    // attemptToConnectWallet, changeChainCustomTokenReducer,
-    chain,
-  ]);
+  }, [attemptToConnectWallet, changeChainCustomTokenReducer, chain]);
 
   useEffect(() => {
     width && width > 500 && closeDrawer();
@@ -93,7 +88,6 @@ const NavBar: FC = () => {
     }
   }, [walletConnected, attemptToConnectWallet, chain]);
 
-  // TODO: Solve infinite loop issue , getNetworkPortion called multiple times
   const menuItems: any = useMemo(
     () => [
       getNetworkPortion(chain, handleNetworkChange, remainingChains),

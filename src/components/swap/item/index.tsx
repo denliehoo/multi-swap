@@ -101,6 +101,7 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
     props.assetHasBeenSelected();
   };
 
+  // getPrice ends up in an infinite loop because we are using swapFrom and swapTo, but also using addSwapFrom and addSwapTo within the same function call, essentially causing an infinite loop
   const getPrice = useCallback(
     async (chain: EBlockchainNetwork) => {
       if (props.asset) {

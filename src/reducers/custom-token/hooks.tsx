@@ -8,20 +8,30 @@ import {
 } from "./reducer";
 import { RootState } from "@src/store";
 import { EBlockchainNetwork } from "@src/enum";
+import { useCallback } from "react";
 
 export const useCustomTokenDispatch = () => {
   const dispatch = useDispatch();
 
-  const addCustomTokenAction = (token: ICustomToken[]) =>
-    dispatch(addCustomToken(token));
+  const addCustomTokenAction = useCallback(
+    (token: ICustomToken[]) => dispatch(addCustomToken(token)),
+    [dispatch]
+  );
 
-  const removeCustomTokenAction = (token: ICustomToken[]) =>
-    dispatch(removeCustomToken(token));
+  const removeCustomTokenAction = useCallback(
+    (token: ICustomToken[]) => dispatch(removeCustomToken(token)),
+    [dispatch]
+  );
 
-  const removeAllCustomTokenAction = () => dispatch(removeAllCustomToken());
+  const removeAllCustomTokenAction = useCallback(
+    () => dispatch(removeAllCustomToken()),
+    [dispatch]
+  );
 
-  const changeChainCustomTokenReducer = (chain: EBlockchainNetwork) =>
-    dispatch(changeChainCustomToken(chain));
+  const changeChainCustomTokenReducer = useCallback(
+    (chain: EBlockchainNetwork) => dispatch(changeChainCustomToken(chain)),
+    [dispatch]
+  );
 
   return {
     addCustomTokenAction,
@@ -30,7 +40,6 @@ export const useCustomTokenDispatch = () => {
     changeChainCustomTokenReducer,
   };
 };
-
 export const useCustomTokenState = () => {
   return useSelector((state: RootState) => state.customTokenReducer);
 };
