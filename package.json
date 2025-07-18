@@ -3,29 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^6.0.0",
     "@reduxjs/toolkit": "^2.6.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
-    "antd": "^4.22.7",
+    "antd": "^5.22.7",
     "axios": "^0.27.2",
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
+    "next": "^15.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
     "web-vitals": "^2.1.4",
     "web3": "^1.8.1"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test",
-    "eject": "react-scripts eject"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "npx serve@latest ./build"
   },
   "eslintConfig": {
     "extends": [
@@ -46,7 +45,7 @@
     ]
   },
   "devDependencies": {
-    "@craco/craco": "^7.1.0",
+    "@biomejs/biome": "1.9.4",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "typescript": "^4.9.5"

@@ -1,15 +1,15 @@
-import classes from "./index.module.css";
-import { Row, Col } from "antd/lib/grid";
-import { Button } from "antd";
-import React, { useState, useEffect, FC, useCallback } from "react";
-import { MinusCircleOutlined, DownOutlined } from "@ant-design/icons";
-import SelectAssetModal from "../modal/select-asset";
+import classes from './index.module.css';
+import { Row, Col } from 'antd/lib/grid';
+import { Button } from 'antd';
+import React, { useState, useEffect, FC, useCallback } from 'react';
+import { MinusCircleOutlined, DownOutlined } from '@ant-design/icons';
+import SelectAssetModal from '../modal/select-asset';
 
-import { useSwapState, useSwapDispatch } from "@src/reducers/swap";
-import { formatNumber } from "@src/utils/format/number";
-import { getAssetPrice } from "@src/api";
-import { EBlockchainNetwork, ESWapDirection } from "@src/enum";
-import { useConnectWalletState } from "@src/reducers/connect-wallet";
+import { useSwapState, useSwapDispatch } from '@src/reducers/swap';
+import { formatNumber } from '@src/utils/format/number';
+import { getAssetPrice } from '@src/api';
+import { EBlockchainNetwork, ESWapDirection } from '@src/enum';
+import { useConnectWalletState } from '@src/reducers/connect-wallet';
 
 interface ICryptoSwapItem {
   percent?: number;
@@ -62,7 +62,7 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
       addSwapFrom(newSwapFrom);
     } else if (props.type === ESWapDirection.TO) {
       const re = /^\d*$/;
-      if (e.target.value === "" || (re.test(e.target.value) && amount <= 100)) {
+      if (e.target.value === '' || (re.test(e.target.value) && amount <= 100)) {
         const inputValue = parseFloat(e.target.value);
         setPercentInput(inputValue);
         props.changeSwapToPercent &&
@@ -130,16 +130,16 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
       swapTo,
       addSwapFrom,
       addSwapTo,
-    ]
+    ],
   );
 
   const onInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     e.target.addEventListener(
-      "wheel",
+      'wheel',
       function (e: WheelEvent) {
         e.preventDefault();
       },
-      { passive: false }
+      { passive: false },
     ); // prevent input from changing on scroll
     setInputIsFocused(true);
   };
@@ -149,7 +149,7 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
   };
 
   useEffect(() => {
-    props.type === "from"
+    props.type === 'from'
       ? setAmount(props.amount)
       : setPercentInput(props.percent);
   }, [props.amount, props.percent, props.type]);
@@ -201,28 +201,28 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
 
       {/* Input and select button */}
       <Row justify="space-between" align="middle">
-        <Col style={{ fontSize: "2em" }} span={12}>
+        <Col style={{ fontSize: '2em' }} span={12}>
           {props.type === ESWapDirection.FROM ? (
             <input
-              className={[classes.inputBox, classes.numberInput].join(" ")}
+              className={[classes.inputBox, classes.numberInput].join(' ')}
               onChange={changeAmountInputHandler}
               value={amount}
-              placeholder={"0.0"}
-              type={"number"}
+              placeholder={'0.0'}
+              type={'number'}
               onFocus={onInputFocus}
               onBlur={onInputBlur}
             />
           ) : (
-            <Row style={{ width: "200%" }}>
+            <Row style={{ width: '200%' }}>
               <Col>
                 <input
                   className={classes.inputBox}
                   onChange={changeAmountInputHandler}
-                  placeholder={"0"}
+                  placeholder={'0'}
                   value={percentInput}
-                  type={"number"}
-                  min={"0"}
-                  max={"100"}
+                  type={'number'}
+                  min={'0'}
+                  max={'100'}
                   onFocus={onInputFocus}
                   onBlur={onInputBlur}
                 />
@@ -237,7 +237,7 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
         <Col>
           <Button
             type="primary"
-            style={{ borderRadius: "10px" }}
+            style={{ borderRadius: '10px' }}
             onClick={() => {
               setIsModalOpen(true);
             }}
@@ -250,9 +250,9 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
               isModalOpen={isModalOpen}
               index={props.index}
               type={props.type}
-              amount={props.type === "from" ? amount || 0 : percentInput || 0}
+              amount={props.type === 'from' ? amount || 0 : percentInput || 0}
               passBalanceToParent={
-                props.type === "from" ? getBalanceFromChild : () => {}
+                props.type === 'from' ? getBalanceFromChild : () => {}
               }
               assetHasBeenSelected={props.assetHasBeenSelected}
               asset={props.asset}
@@ -269,13 +269,13 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
         <Row justify="space-between">
           <Col>
             {priceIsLoading
-              ? "..."
-              : formatNumber(price * (props?.amount || 0), "fiat")}
+              ? '...'
+              : formatNumber(price * (props?.amount || 0), 'fiat')}
           </Col>
-          <Col>Balance: {props.asset && formatNumber(balance, "crypto")}</Col>
+          <Col>Balance: {props.asset && formatNumber(balance, 'crypto')}</Col>
         </Row>
       ) : (
-        <Row style={{ marginTop: "5px" }}>
+        <Row style={{ marginTop: '5px' }}>
           <input
             type="range"
             id="points"

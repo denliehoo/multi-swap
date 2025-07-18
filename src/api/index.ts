@@ -21,7 +21,7 @@ const getAssetPrice = async (chain: string, asset: string, address: string) => {
       params: { chain: chain },
       headers: {
         accept: "application/json",
-        "X-API-Key": process.env.REACT_APP_MORALIS_API_KEY || "",
+        "X-API-Key": process.env.NEXT_PUBLIC_MORALIS_API_KEY || "",
       },
     }
   );
@@ -37,7 +37,7 @@ const getDetailsForCustomToken = async (
     {
       headers: {
         accept: "application/json",
-        "X-API-Key": process.env.REACT_APP_MORALIS_API_KEY || "",
+        "X-API-Key": process.env.NEXT_PUBLIC_MORALIS_API_KEY || "",
       },
     }
   );
@@ -95,7 +95,7 @@ const getTokenBalances = async (
       params: { chain: chain },
       headers: {
         accept: "application/json",
-        "X-API-Key": process.env.REACT_APP_MORALIS_API_KEY || "",
+        "X-API-Key": process.env.NEXT_PUBLIC_MORALIS_API_KEY || "",
       },
     }
   );
@@ -110,7 +110,7 @@ const getTokenBalances = async (
       params: { chain: chain, token_addresses: tokenAddresses },
       headers: {
         accept: "application/json",
-        "X-API-Key": process.env.REACT_APP_MORALIS_API_KEY || "",
+        "X-API-Key": process.env.NEXT_PUBLIC_MORALIS_API_KEY || "",
       },
     }
   );
@@ -151,11 +151,11 @@ const getContractABI = async (chain: string, address: string) => {
   let res;
   if (chain === "goerli") {
     res = await axios.get(
-      `https://api-goerli.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`
+      `https://api-goerli.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY}`
     );
   } else if (chain === "ftm") {
     res = await axios.get(
-      `https://api.ftmscan.com/api?module=contract&action=getabi&address=${address}&apikey=${process.env.REACT_APP_FTMSCAN_API_KEY}`
+      `https://api.ftmscan.com/api?module=contract&action=getabi&address=${address}&apikey=${process.env.NEXT_PUBLIC_FTMSCAN_API_KEY}`
     );
   }
   if (res?.status === 200) {
