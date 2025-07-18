@@ -4,7 +4,7 @@
 
 - Architecture revamp:
   - Migrate npm to pnpm:
-    - Fix issue of using CSR in SSR
+    - Fix issue of using CSR in SSR [in progress]
   - Migrate to Next js: Docs: https://nextjs.org/docs/app/guides/migrating/from-create-react-app#migration-steps
     - Upgrade antd [ok]
     - Ensure stylings are not lost
