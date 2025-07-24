@@ -1,9 +1,9 @@
-import { FC, Ref } from "react";
-import classes from "../index.module.css";
-import { Button, Row } from "antd";
-import PreviewSwapItem from "../item";
-import { CheckCircleOutlined } from "@ant-design/icons";
-import { ISwapItemDetails, ITokensRequiringApproval } from "..";
+import { FC, Ref } from 'react';
+import classes from '../index.module.css';
+import { Button, Row } from 'antd';
+import PreviewSwapItem from '../item';
+import { CheckCircleOutlined } from '@ant-design/icons';
+import { ISwapItemDetails, ITokensRequiringApproval } from '..';
 
 interface ISwapModalPreviewSwapContent {
   previewSwapModalContentRef: Ref<HTMLDivElement>;
@@ -31,7 +31,7 @@ const SwapModalPreviewSwapContent: FC<ISwapModalPreviewSwapContent> = ({
   return (
     <div className={classes.modalContentsContainer}>
       <div
-        style={{ overflow: "auto", height: "50vh" }}
+        style={{ overflow: 'auto', height: '50vh' }}
         ref={previewSwapModalContentRef}
       >
         <span className="fw-700 color-light-grey">
@@ -57,7 +57,7 @@ const SwapModalPreviewSwapContent: FC<ISwapModalPreviewSwapContent> = ({
                     {<CheckCircleOutlined />} Approved {i.symbol}
                   </div>
                 ) : (
-                  <div style={{ display: "inline-block" }}>
+                  <div style={{ display: 'inline-block' }}>
                     <Button
                       type="primary"
                       onClick={() => approveTokenHandler(i, index)}
@@ -67,7 +67,7 @@ const SwapModalPreviewSwapContent: FC<ISwapModalPreviewSwapContent> = ({
                       Approve {i.symbol}
                     </Button>
                   </div>
-                )
+                ),
               )}
             </Row>
           </div>
@@ -106,8 +106,8 @@ const SwapModalPreviewSwapContent: FC<ISwapModalPreviewSwapContent> = ({
           block
         >
           {tokensRequiringApproval.length !== tokensApproved.length
-            ? "Approve All Tokens To Proceed"
-            : "Confirm"}
+            ? 'Approve All Tokens To Proceed'
+            : 'Confirm'}
         </Button>
       }
     </div>

@@ -1,7 +1,7 @@
-import { formatNumber } from "@src/utils/format/number";
-import IconComponent from "../../shared/IconComponent";
-import { Row, Col } from "antd";
-import { FC } from "react";
+import { formatNumber } from '@src/utils/format/number';
+import IconComponent from '../../shared/IconComponent';
+import { Row, Col } from 'antd';
+import { FC } from 'react';
 
 interface IPreviewSwapItem {
   imgUrl: string;
@@ -26,9 +26,9 @@ const PreviewSwapItem: FC<IPreviewSwapItem> = ({
         <Row align="middle">
           <Col>
             <Row justify="end" className="fs-xs">
-              {formatNumber(amount * (price || 0), "fiat")}
+              {formatNumber(amount * (price || 0), 'fiat')}
             </Row>
-            <Row justify="end">{formatNumber(amount, "crypto")}</Row>
+            <Row justify="end">{formatNumber(amount, 'crypto')}</Row>
           </Col>
         </Row>
       </Row>

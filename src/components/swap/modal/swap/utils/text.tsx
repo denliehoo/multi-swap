@@ -1,32 +1,32 @@
-import { formatNumber } from "@src/utils/format/number";
+import { formatNumber } from '@src/utils/format/number';
 import {
   ESwapEventEmitVariable,
   ESwapType,
   ISwapItemDetails,
   ISwapObject,
-} from "..";
+} from '..';
 
-import { ScanOutlined } from "@ant-design/icons";
-import { ISwapDetails } from "@src/reducers/swap";
-import { EBlockchainNetwork } from "@src/enum";
+import { ScanOutlined } from '@ant-design/icons';
+import { ISwapDetails } from '@src/reducers/swap';
+import { EBlockchainNetwork } from '@src/enum';
 
 export const getIndividualSwapText = (arr: ISwapItemDetails[]) => {
-  let returnString = "";
+  let returnString = '';
   if (arr.length > 1) {
     for (let i in arr) {
       if (arr.length - 1 === parseFloat(i)) {
         returnString = returnString.substring(0, returnString.length - 2);
-        returnString += ` and ${formatNumber(arr[i].amount, "crypto")} ${
+        returnString += ` and ${formatNumber(arr[i].amount, 'crypto')} ${
           arr[i].symbol
         }`;
       } else {
-        returnString += `${formatNumber(arr[i].amount, "crypto")} ${
+        returnString += `${formatNumber(arr[i].amount, 'crypto')} ${
           arr[i].symbol
         }, `;
       }
     }
   } else {
-    returnString += `${formatNumber(arr[0].amount, "crypto")} ${arr[0].symbol}`;
+    returnString += `${formatNumber(arr[0].amount, 'crypto')} ${arr[0].symbol}`;
   }
   return returnString;
 };
@@ -35,7 +35,7 @@ const formatAmountsInArrayForSuccessfulSwap = (
   receipt: any,
   arr: any,
   swapType: ESwapEventEmitVariable,
-  swapObject: ISwapObject | undefined
+  swapObject: ISwapObject | undefined,
 ) => {
   if (!swapObject) return [];
   arr = JSON.parse(JSON.stringify(arr)); //deep copy to ensure it doesnt replace the arr
@@ -43,7 +43,7 @@ const formatAmountsInArrayForSuccessfulSwap = (
     arr[i].amount =
       parseInt(
         // receipt.events.SwapEthForTokensEvent.returnValues.swapTo[i][1],
-        receipt.events[swapObject?.event].returnValues[swapType][i][1]
+        receipt.events[swapObject?.event].returnValues[swapType][i][1],
       ) / Math.pow(10, arr[i].decimals);
   }
   return arr;
@@ -107,15 +107,15 @@ export const getSuccessfulSwapText = ({
       receipt,
       swapToDetails,
       ESwapEventEmitVariable.SWAP_TO,
-      swapObject
+      swapObject,
     );
     return (
       <span>
         {`You have successfully swapped ${formatNumber(
           swapFrom[0].amount,
-          "crypto"
+          'crypto',
         )} ${swapFrom[0].symbol} for ${getIndividualSwapText(
-          swapToDetailsTemp
+          swapToDetailsTemp,
         )}`}
         {getLinkToBlockExplorer(receipt.transactionHash, chain)}
       </span>
@@ -124,11 +124,11 @@ export const getSuccessfulSwapText = ({
     return (
       <span>
         {`You have successfully swapped ${getIndividualSwapText(
-          swapFromDetails
+          swapFromDetails,
         )} for ${formatNumber(
           receipt.events[swapObject?.event as any].returnValues.swapToAmount /
             Math.pow(10, swapToDetails[0].decimals),
-          "crypto"
+          'crypto',
         )} ${swapToDetails[0].symbol}`}
         {getLinkToBlockExplorer(receipt.transactionHash, chain)}
       </span>
@@ -138,12 +138,12 @@ export const getSuccessfulSwapText = ({
       receipt,
       swapToDetails,
       ESwapEventEmitVariable.SWAP_TO,
-      swapObject
+      swapObject,
     );
     return (
       <span>
         {`You have successfully swapped ${getIndividualSwapText(
-          swapFromDetails
+          swapFromDetails,
         )} for ${getIndividualSwapText(swapToDetailsTemp)}`}
         {getLinkToBlockExplorer(receipt.transactionHash, chain)}
       </span>
@@ -153,9 +153,9 @@ export const getSuccessfulSwapText = ({
 
 export const getPendingSwapText = (
   swapFromDetails: ISwapItemDetails[],
-  swapToDetails: ISwapItemDetails[]
+  swapToDetails: ISwapItemDetails[],
 ) => {
   return `Swapping ${getIndividualSwapText(
-    swapFromDetails
+    swapFromDetails,
   )} for ${getIndividualSwapText(swapToDetails)}`;
 };

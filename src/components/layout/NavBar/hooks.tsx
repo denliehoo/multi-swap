@@ -1,4 +1,4 @@
-import { EBlockchainNetwork } from "@src/enum";
+import { EBlockchainNetwork } from '@src/enum';
 
 const useNetworkHandler = (
   chain: EBlockchainNetwork,
@@ -6,7 +6,7 @@ const useNetworkHandler = (
   setRemainingChains: (chains: EBlockchainNetwork[]) => void,
   changeChainCustomTokenReducer: (chain: EBlockchainNetwork) => void,
   changeChainConnectWalletReducer: (chain: EBlockchainNetwork) => void,
-  attemptToConnectWallet: (chain: EBlockchainNetwork) => Promise<Boolean>
+  attemptToConnectWallet: (chain: EBlockchainNetwork) => Promise<Boolean>,
 ) => {
   const handleNetworkChange = async (_chain: EBlockchainNetwork) => {
     let networkChanged = await attemptToConnectWallet(_chain);
@@ -17,7 +17,7 @@ const useNetworkHandler = (
       changeChainCustomTokenReducer(_chain);
       changeChainConnectWalletReducer(_chain);
     } else {
-      console.log("Network failed to change");
+      console.log('Network failed to change');
     }
   };
 

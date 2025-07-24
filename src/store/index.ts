@@ -1,14 +1,14 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { persistReducer, persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import customTokenReducer from "../reducers/custom-token/reducer";
-import connectWalletReducer from "../reducers/connect-wallet/reducer";
-import swapReducer from "../reducers/swap/reducer";
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import customTokenReducer from '../reducers/custom-token/reducer';
+import connectWalletReducer from '../reducers/connect-wallet/reducer';
+import swapReducer from '../reducers/swap/reducer';
 
 const persistConfig = {
-  key: "root",
+  key: 'root',
   storage, // ??
-  whitelist: ["customTokenReducer"], // only state for counterReducer will be whitelisted
+  whitelist: ['customTokenReducer'], // only state for counterReducer will be whitelisted
 };
 
 const rootReducer = combineReducers({

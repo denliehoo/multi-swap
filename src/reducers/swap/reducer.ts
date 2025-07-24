@@ -1,27 +1,27 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ISwapDetails, ISwapState } from "./interface";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ISwapDetails, ISwapState } from './interface';
 
 const INITAL_SWAP_FROM = [
   {
     index: 0,
-    symbol: "",
-    address: "",
+    symbol: '',
+    address: '',
     balance: 0,
     amount: 0,
     decimals: 0,
-    imgUrl: "",
+    imgUrl: '',
   },
 ];
 
 const INITAL_SWAP_TO = [
   {
     index: 0,
-    symbol: "",
-    address: "",
+    symbol: '',
+    address: '',
     balance: 0,
     amount: 100,
     decimals: 0,
-    imgUrl: "",
+    imgUrl: '',
   },
 ];
 
@@ -48,7 +48,7 @@ structure would be:
 */
 
 const swapSlice = createSlice({
-  name: "swapReducer",
+  name: 'swapReducer',
   initialState,
   reducers: {
     addSwapFrom(state, action: PayloadAction<ISwapDetails[]>) {

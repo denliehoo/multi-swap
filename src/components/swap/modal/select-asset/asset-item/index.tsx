@@ -1,11 +1,11 @@
-import { useWindowSize } from "@src/hooks/useWindowSize";
-import { useSwapDispatch, useSwapState } from "@src/reducers/swap";
-import { formatNumber } from "@src/utils/format/number";
-import classes from "./index.module.css";
-import { Row, Col } from "antd/lib/grid";
-import { IDefaultAssetInfo } from "@src/interface";
-import { FC, ReactNode } from "react";
-import { ESWapDirection } from "@src/enum";
+import { useWindowSize } from '@src/hooks/useWindowSize';
+import { useSwapDispatch, useSwapState } from '@src/reducers/swap';
+import { formatNumber } from '@src/utils/format/number';
+import classes from './index.module.css';
+import { Row, Col } from 'antd/lib/grid';
+import { IDefaultAssetInfo } from '@src/interface';
+import { FC, ReactNode } from 'react';
+import { ESWapDirection } from '@src/enum';
 
 interface ISelectAssetItem extends IDefaultAssetInfo {
   icon: ReactNode;
@@ -65,17 +65,17 @@ const SelectAssetItem: FC<ISelectAssetItem> = (props) => {
         <Row>
           {props.symbol}
           {props.isDefaultAsset ? (
-            ""
+            ''
           ) : (
             <span>
-              {" "}
+              {' '}
               &nbsp;:<em> Added by user</em>
             </span>
           )}
         </Row>
       </Col>
       <Col span={4}>
-        <Row justify="end">{formatNumber(props.bal, "crypto")}</Row>
+        <Row justify="end">{formatNumber(props.bal, 'crypto')}</Row>
       </Col>
     </Row>
   );

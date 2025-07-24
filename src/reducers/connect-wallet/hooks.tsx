@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "@src/store";
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '@src/store';
 import {
   connectWallet,
   changeWallet,
@@ -8,41 +8,41 @@ import {
   changeChain,
   attemptToConnectWallet,
   IConnectWalletPayload,
-} from "./reducer";
-import { EBlockchainNetwork } from "@src/enum";
-import { useCallback } from "react";
+} from './reducer';
+import { EBlockchainNetwork } from '@src/enum';
+import { useCallback } from 'react';
 
 export const useConnectWalletDispatch = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const connectWalletAction = useCallback(
     (payload: IConnectWalletPayload) => dispatch(connectWallet(payload)),
-    [dispatch]
+    [dispatch],
   );
 
   const changeWalletAction = useCallback(
     (address: string) => dispatch(changeWallet(address)),
-    [dispatch]
+    [dispatch],
   );
 
   const disconnectWalletAction = useCallback(
     () => dispatch(disconnectWallet()),
-    [dispatch]
+    [dispatch],
   );
 
   const connectSmartContractAction = useCallback(
     (contract: any) => dispatch(connectSmartContract(contract)),
-    [dispatch]
+    [dispatch],
   );
 
   const changeChainConnectWalletReducer = useCallback(
     (chain: EBlockchainNetwork) => dispatch(changeChain(chain)),
-    [dispatch]
+    [dispatch],
   );
 
   const attemptToConnectWalletAction = useCallback(
     (chain: EBlockchainNetwork) => dispatch(attemptToConnectWallet(chain)),
-    [dispatch]
+    [dispatch],
   );
 
   return {

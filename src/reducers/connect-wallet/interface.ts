@@ -1,4 +1,4 @@
-import { EBlockchainNetwork } from "../../enum";
+import { EBlockchainNetwork } from '../../enum';
 
 export interface IConnectWalletState {
   address: string;

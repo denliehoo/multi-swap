@@ -1,7 +1,7 @@
-import { Button, Col, Row } from "antd";
-import { FC } from "react";
-import classes from "../index.module.css";
-import { RightCircleOutlined } from "@ant-design/icons";
+import { Button, Col, Row } from 'antd';
+import { FC } from 'react';
+import classes from '../index.module.css';
+import { RightCircleOutlined } from '@ant-design/icons';
 
 interface ISwapModalSwapSubmittedContent {
   resetSwapToDefaultHandler: () => void;
@@ -15,15 +15,15 @@ const SwapModalSwapSubmittedContent: FC<ISwapModalSwapSubmittedContent> = ({
       <Row
         align="middle"
         justify="center"
-        style={{ width: "100%", height: "100%", textAlign: "center" }}
+        style={{ width: '100%', height: '100%', textAlign: 'center' }}
       >
         <Col>
           <Row align="middle" justify="center">
             <RightCircleOutlined
               style={{
-                fontSize: "128px",
-                fontWeight: "normal",
-                padding: "10px",
+                fontSize: '128px',
+                fontWeight: 'normal',
+                padding: '10px',
               }}
             />
           </Row>

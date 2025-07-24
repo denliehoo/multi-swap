@@ -24,7 +24,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "npx serve@latest ./build"
+    "start": "npx serve@latest ./build",
+    "format:write": "pnpm exec biome format --write",
+    "lint:read": "pnpm exec biome lint",
+    "lint:write": "pnpm exec biome lint --write"
   },
   "eslintConfig": {
     "extends": [

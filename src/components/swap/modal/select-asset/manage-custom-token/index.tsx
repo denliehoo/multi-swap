@@ -1,21 +1,21 @@
-import classes from "./index.module.css";
-import { Row, Col } from "antd/lib/grid";
-import { useState, useEffect, FC } from "react";
-import { Input, Button } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import ManageCustomTokenItem from "./item";
-import { getDetailsForCustomToken } from "@src/api";
-import { localStorageKey } from "@src/config";
-import { EBlockchainNetwork } from "@src/enum";
-import { useWindowSize } from "@src/hooks/useWindowSize";
+import classes from './index.module.css';
+import { Row, Col } from 'antd/lib/grid';
+import { useState, useEffect, FC } from 'react';
+import { Input, Button } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import ManageCustomTokenItem from './item';
+import { getDetailsForCustomToken } from '@src/api';
+import { localStorageKey } from '@src/config';
+import { EBlockchainNetwork } from '@src/enum';
+import { useWindowSize } from '@src/hooks/useWindowSize';
 import {
   ICustomToken,
   useCustomTokenDispatch,
   useCustomTokenState,
-} from "@src/reducers/custom-token";
-import { IDefaultAssetInfo } from "@src/interface";
-import IconComponent from "@src/components/swap/shared/IconComponent";
-import { useConnectWalletState } from "@src/reducers/connect-wallet";
+} from '@src/reducers/custom-token';
+import { IDefaultAssetInfo } from '@src/interface';
+import IconComponent from '@src/components/swap/shared/IconComponent';
+import { useConnectWalletState } from '@src/reducers/connect-wallet';
 
 interface IManageCustomTokenProps {
   defaultAssets: IDefaultAssetInfo[];
@@ -35,7 +35,7 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
     removeAllCustomTokenAction: removeAllCustomToken,
   } = useCustomTokenDispatch();
 
-  const [customTokenErrorMessage, setCustomTokenErrorMessage] = useState("");
+  const [customTokenErrorMessage, setCustomTokenErrorMessage] = useState('');
   const [showImportToken, setShowImportToken] = useState(false);
   const [customTokenData, setCustomTokenData] = useState<
     ICustomToken | undefined
@@ -62,9 +62,9 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
 
   const checkIfValidAddress = async (
     tokenAddress: string,
-    chain: EBlockchainNetwork
+    chain: EBlockchainNetwork,
   ) => {
-    setCustomTokenErrorMessage("Loading...");
+    setCustomTokenErrorMessage('Loading...');
     // For ETH:
     // SIS: 0xd38BB40815d2B0c2d2c866e0c72c5728ffC76dd9
     // AAVE: 0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9
@@ -78,7 +78,7 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
     const decimals = await parseFloat(res.data[0].decimals);
     let logo = await res.data[0].logo;
     if (!logo) {
-      logo = "No Logo";
+      logo = 'No Logo';
     }
 
     if (name) {
@@ -88,7 +88,7 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
       ].map((i) => i.symbol);
 
       if (currentCustomTokensSymbol.includes(symbol)) {
-        setCustomTokenErrorMessage("Token already exists");
+        setCustomTokenErrorMessage('Token already exists');
       } else {
         setCustomTokenData({
           name: name,
@@ -97,11 +97,11 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
           logo: logo,
           address: tokenAddress,
         });
-        setCustomTokenErrorMessage("");
+        setCustomTokenErrorMessage('');
         setShowImportToken(true);
       }
     } else {
-      setCustomTokenErrorMessage("Enter valid token address");
+      setCustomTokenErrorMessage('Enter valid token address');
     }
     return;
   };
@@ -132,7 +132,7 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
     localStorage.removeItem(localStorageKey); // remove current balances from cache because of new token
     setShowImportToken(false);
     props.setToggleChangesInCustomToken();
-    setCustomTokenErrorMessage("");
+    setCustomTokenErrorMessage('');
   };
 
   const onClickChildDeleteHandler = () => {
@@ -151,14 +151,14 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
         size="large"
         prefix={<SearchOutlined />}
         className={`class-name-custom-ant-input ${
-          inputIsFocused && "glowing-border"
+          inputIsFocused && 'glowing-border'
         }`}
         onChange={(event) => {
           setShowImportToken(false);
           const inputValue = event.target.value;
           inputValue.length === 42
             ? checkIfValidAddress(inputValue, chain) // eventually do a get chain from global state and replace here
-            : setCustomTokenErrorMessage("Enter valid token address");
+            : setCustomTokenErrorMessage('Enter valid token address');
         }}
         onFocus={() => setInputIsFocused(true)}
         onBlur={() => setInputIsFocused(false)}

@@ -51,7 +51,7 @@
 .ant-menu-item:active,
 .ant-menu-item:hover {
   color: #61892f !important;
-  background-color: transparent !important ;
+  background-color: transparent !important;
 }
 
 .ant-menu-item-selected,
@@ -171,7 +171,7 @@
 .ant-popover-inner-content,
 .ant-popover-arrow-content::before {
   background-color: #222629 !important;
-  border: 1px solid #86c232 !important ;
+  border: 1px solid #86c232 !important;
 }
 .ant-popover-message {
   color: #86c232 !important;

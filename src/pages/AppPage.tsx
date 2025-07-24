@@ -1,5 +1,5 @@
 // import classes from "./AppPage.module.css";
-import Swap from "../components/swap";
+import Swap from '../components/swap';
 
 const AppPage = () => {
   return (

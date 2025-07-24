@@ -1,9 +1,9 @@
-import { FC } from "react";
+import { FC } from 'react';
 
-import { LoadingOutlined } from "@ant-design/icons";
+import { LoadingOutlined } from '@ant-design/icons';
 
 const LoadingSpinner: FC = () => (
-  <LoadingOutlined style={{ fontSize: "128px" }} />
+  <LoadingOutlined style={{ fontSize: '128px' }} />
 );
 
 export default LoadingSpinner;

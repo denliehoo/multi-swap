@@ -1,7 +1,7 @@
-import { FC, useMemo } from "react";
-import { Row, Col } from "antd";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-import classes from "./index.module.css";
+import { FC, useMemo } from 'react';
+import { Row, Col } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import classes from './index.module.css';
 
 interface ErrorBoxProps {
   showAmountError: boolean;
@@ -53,7 +53,7 @@ const ErrorBox: FC<ErrorBoxProps> = ({
           <Col span={4}>
             <Row justify="center">
               <ExclamationCircleOutlined
-                style={{ fontSize: "200%", padding: "10px" }}
+                style={{ fontSize: '200%', padding: '10px' }}
               />
             </Row>
           </Col>
