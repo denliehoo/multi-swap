@@ -1,51 +1,37 @@
-import { Avatar } from 'antd';
-import { QuestionOutlined } from '@ant-design/icons';
 import { FC } from 'react';
 
-import { StaticImageData } from 'next/image';
-import { AvatarSize } from 'antd/es/avatar/AvatarContext';
+import Image, { StaticImageData } from 'next/image';
+
+import { Avatar } from 'antd';
 
 interface IIconComponent {
   imgUrl?: StaticImageData | string;
-  size?: AvatarSize;
+  size?: 'small' | 'large';
 }
 
-const IconComponent: FC<IIconComponent> = ({ size, imgUrl }) => {
-  console.log('imgUrl:', imgUrl);
+const SIZE_MAP = {
+  small: 24,
+  large: 32,
+};
+
+const IconComponent: FC<IIconComponent> = ({ size = 'small', imgUrl }) => {
   const resolvedSrc = typeof imgUrl === 'object' ? imgUrl.src : imgUrl;
+
+  const dimensions = SIZE_MAP[size] || 24;
 
   return (
     <Avatar
+      src={
+        <Image
+          src={resolvedSrc || ''}
+          alt="Icon"
+          width={dimensions}
+          height={dimensions}
+        />
+      }
       size={size}
-      src={resolvedSrc}
-      icon={resolvedSrc === 'No Logo' && <QuestionOutlined />}
     />
   );
 };
+
 export default IconComponent;
-
-// import { Avatar } from 'antd';
-// import { QuestionOutlined } from '@ant-design/icons';
-// import { FC } from 'react';
-
-// import Image, { StaticImageData } from 'next/image';
-// import { AvatarSize } from 'antd/es/avatar/AvatarContext';
-
-// interface IIconComponent {
-//   imgUrl?: StaticImageData | string;
-//   size?: AvatarSize;
-// }
-
-// const IconComponent: FC<IIconComponent> = ({ size, imgUrl }) => {
-//   const resolvedSrc = typeof imgUrl === 'object' ? imgUrl.src : imgUrl;
-
-//   return (
-//     <Image
-//       src={resolvedSrc || ''}
-//       alt="Icon"
-//       width={size === 'large' ? 64 : size === 'small' ? 32 : 48}
-//       height={size === 'large' ? 64 : size === 'small' ? 32 : 48}
-//     />
-//   );
-// };
-// export default IconComponent;
