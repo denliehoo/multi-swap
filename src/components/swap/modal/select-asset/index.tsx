@@ -1,22 +1,22 @@
-import classes from "./index.module.css";
-import { Row, Col } from "antd/lib/grid";
-import { ArrowLeftOutlined, LoadingOutlined } from "@ant-design/icons";
-import { Button, Modal } from "antd";
-import { FC, useCallback, useEffect, useState } from "react";
-import SelectAssetItem from "./asset-item";
-import IconComponent from "../../shared/IconComponent";
-import ManageCustomToken from "./manage-custom-token";
+import classes from './index.module.css';
+import { Row, Col } from 'antd/lib/grid';
+import { ArrowLeftOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Button, Modal } from 'antd';
+import { FC, useCallback, useEffect, useState } from 'react';
+import SelectAssetItem from './asset-item';
+import IconComponent from '../../shared/IconComponent';
+import ManageCustomToken from './manage-custom-token';
 import {
   ethDefaultAssetInfo,
   ftmDefaultAssetInfo,
   goerliDefaultAssetInfo,
-} from "@src/constants/default-asset-info";
-import { getTokenBalances } from "@src/api";
-import SearchInputComponent from "../../shared/SearchInputComponent";
-import { ICustomToken, useCustomTokenState } from "@src/reducers/custom-token";
-import { IDefaultAssetInfo } from "@src/interface";
-import { EBlockchainNetwork, ESWapDirection } from "@src/enum";
-import { useConnectWalletState } from "@src/reducers/connect-wallet";
+} from '@src/constants/default-asset-info';
+import { getTokenBalances } from '@src/api';
+import SearchInputComponent from '../../shared/SearchInputComponent';
+import { ICustomToken, useCustomTokenState } from '@src/reducers/custom-token';
+import { IDefaultAssetInfo } from '@src/interface';
+import { EBlockchainNetwork, ESWapDirection } from '@src/enum';
+import { useConnectWalletState } from '@src/reducers/connect-wallet';
 
 interface ISelectAssetModal {
   isModalOpen: boolean;
@@ -44,7 +44,7 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [toggleChangesInCustomToken, setToggleChangesInCustomToken] =
     useState(false);
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState('');
   const [searchInputResults, setSearchInputResults] = useState<
     IDefaultAssetInfo[]
   >([]);
@@ -60,7 +60,7 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
       }
       return goerliCustomTokens;
     },
-    [ethCustomTokens, ftmCustomTokens, goerliCustomTokens]
+    [ethCustomTokens, ftmCustomTokens, goerliCustomTokens],
   );
 
   const getDefaultAssets = useCallback((chain: EBlockchainNetwork) => {
@@ -92,7 +92,7 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
       const balancesArray = await getTokenBalances(
         chain,
         address,
-        arrayOfAssetAddresses
+        arrayOfAssetAddresses,
       );
 
       for (let i in combinedAssetListTemp) {
@@ -102,7 +102,7 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
       setIsLoading(false);
       return combinedAssetListTemp;
     },
-    [getDefaultAssets, getCustomTokens]
+    [getDefaultAssets, getCustomTokens],
   );
 
   const chooseAssetHandler = (bal: number) => {
@@ -116,7 +116,7 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
     setCombinedAssetList([]);
     setIsLoading(true);
     setToggleChangesInCustomToken(false);
-    setSearchInput("");
+    setSearchInput('');
     setSearchInputResults([]);
 
     props.closeModal();
@@ -158,10 +158,10 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
             <div>Select A Token</div>
           )
         }
-        visible={props.isModalOpen}
+        open={props.isModalOpen}
         onOk={closeModalHandler}
         onCancel={closeModalHandler}
-        destroyOnClose={true}
+        destroyOnHidden={true}
         // allows us to edit the bottom component (i.e. the OK and Cancel)
         footer={null}
       >
@@ -169,7 +169,7 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
           <div>Please connect your wallet to continue</div>
         ) : isLoading ? (
           <Row align="middle" justify="center">
-            <LoadingOutlined style={{ fontSize: "128px" }} />{" "}
+            <LoadingOutlined style={{ fontSize: '128px' }} />{' '}
           </Row>
         ) : isManageCustomToken ? (
           <ManageCustomToken
@@ -207,7 +207,7 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
                       onClickHandler={chooseAssetHandler}
                       key={i.symbol}
                     />
-                  )
+                  ),
                 )}
                 {searchInput && searchInputResults.length === 0 && (
                   <div>Search result in no tokens found</div>

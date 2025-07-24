@@ -6,6 +6,11 @@
   border-radius: 10px;
 }
 
+.inputBox {
+  font-size: 24px;
+  color: #86c232;
+}
+
 .inputBox,
 .inputBox:focus {
   background: transparent;
@@ -37,14 +42,6 @@
 
 .minus:hover {
   cursor: pointer;
-}
-
-/* hides the up down button for input type=number */
-.inputBox input[type="number"]::-webkit-inner-spin-button,
-.inputBox input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
 }
 
 @media only screen and (max-width: 494px) {

@@ -8,6 +8,7 @@
   - Migrate to Next js: Docs: https://nextjs.org/docs/app/guides/migrating/from-create-react-app#migration-steps
     - Upgrade antd [ok]
     - Ensure stylings are not lost
+    - Fix: ensure on refresh, the images are not huge
   - Set up biome
     - Linter turned off for now. To turn in back on
 - Fix Linting errors
