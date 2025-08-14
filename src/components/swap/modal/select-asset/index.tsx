@@ -11,7 +11,6 @@ import {
   ftmDefaultAssetInfo,
   goerliDefaultAssetInfo,
 } from '@src/constants/default-asset-info';
-import { getTokenBalances } from '@src/api';
 import SearchInputComponent from '../../shared/SearchInputComponent';
 import { ICustomToken, useCustomTokenState } from '@src/reducers/custom-token';
 import { IDefaultAssetInfo } from '@src/interface';
@@ -89,11 +88,17 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
       }));
       let combinedAssetListTemp = defaultAssets.concat(formattedCustomTokens);
       const arrayOfAssetAddresses = combinedAssetListTemp.map((i) => i.address);
-      const balancesArray = await getTokenBalances(
-        chain,
-        address,
-        arrayOfAssetAddresses,
-      );
+      const data = await fetch(
+        `/api/token-balances?chain=${chain}&walletAddress=${address}&tokenAddresses=${[
+          ...arrayOfAssetAddresses,
+        ].join(',')}`,
+      )
+        .then((res) => res.json())
+        .catch((err) => {
+          console.error('Error fetching token balances:', err);
+        });
+
+      const balancesArray = data.balances;
 
       for (let i in combinedAssetListTemp) {
         combinedAssetListTemp[i].bal = balancesArray[i];
