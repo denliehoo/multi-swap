@@ -10,6 +10,7 @@
     - Ensure stylings are not lost
   - Set up biome
     - Linter turned off for now. To turn in back on
+    - in biome.json, linter.enabled is currently false for now
 - Fix Linting errors
 
 - -----Start Of Phase 4: Continuous Improvements-----
