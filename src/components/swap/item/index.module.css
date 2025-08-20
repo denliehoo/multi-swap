@@ -1,63 +1,51 @@
 .cryptoSwapItem {
-    background-color: transparent;
-    border: 2px solid #6B6E70;
-    padding: 10px;
-    margin: 10px;
-    border-radius: 10px;
+  background-color: transparent;
+  border: 2px solid #6b6e70;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+.inputBox {
+  font-size: 24px;
+  color: #86c232;
 }
 
 .inputBox,
 .inputBox:focus {
-    background: transparent;
-    border: none;
-    outline-width: 0;
+  background: transparent;
+  border: none;
+  outline-width: 0;
 }
 
-.numberInput{
-    width: 90%;
-
+.numberInput {
+  width: 90%;
 }
 
-
-
-input[type='range'] {
-    overflow: hidden;
-    width: 200px;
-    height: 15px;
-    -webkit-appearance: none;
-    background-color: #6B6E70;
-    border-radius: 10px;
-  }
-
-  input[type='range']::-webkit-slider-thumb {
-    width: 20px;
-    -webkit-appearance: none;
-    height: 15px;
-    /* cursor: ew-resize; */
-    cursor: pointer;
-    background: #61892F;
-    box-shadow: -120px 0px 0px 120px #86C232;
-    /* border-radius: 4px; */
-  }
-
-
-.minus:hover{
-    cursor: pointer
+.inputSlider {
+  overflow: hidden;
+  width: 200px;
+  height: 15px;
+  -webkit-appearance: none;
+  background-color: #6b6e70;
+  border-radius: 10px;
 }
 
-/* hides the up down button for input type=number */
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none; 
+.inputSlider::-webkit-slider-thumb {
+  width: 20px;
+  -webkit-appearance: none;
+  height: 15px;
+  cursor: pointer;
+  background: #61892f;
+  box-shadow: -120px 0px 0px 120px #86c232;
 }
 
-
-
+.minus:hover {
+  cursor: pointer;
+}
 
 @media only screen and (max-width: 494px) {
-    .numberInput{
-        width: 200%;
-    }
+  .numberInput {
+    width: 200%;
   }
+}

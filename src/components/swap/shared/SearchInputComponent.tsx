@@ -1,7 +1,7 @@
-import { SearchOutlined } from "@ant-design/icons";
-import { IDefaultAssetInfo } from "@src/interface";
-import { Input } from "antd";
-import { ChangeEvent, FC, useState } from "react";
+import { SearchOutlined } from '@ant-design/icons';
+import { IDefaultAssetInfo } from '@src/interface';
+import { Input } from 'antd';
+import { ChangeEvent, FC, useState } from 'react';
 
 interface ISearchInputComponent {
   setSearchInput: (input: string) => void;
@@ -26,7 +26,7 @@ const SearchInputComponent: FC<ISearchInputComponent> = ({
         asset.symbol.toLowerCase().includes(userInput) ||
         asset.name.toLowerCase().includes(userInput) ||
         (userInput.length > 20 &&
-          asset.address.toLowerCase().includes(userInput))
+          asset.address.toLowerCase().includes(userInput)),
     );
     setSearchInputResults(filteredResults);
   };
@@ -37,7 +37,7 @@ const SearchInputComponent: FC<ISearchInputComponent> = ({
       size="large"
       prefix={<SearchOutlined />}
       className={`class-name-custom-ant-input ${
-        inputIsFocused && "glowing-border"
+        inputIsFocused && 'glowing-border'
       }`}
       value={searchInput}
       onChange={changeSearchInputHandler}

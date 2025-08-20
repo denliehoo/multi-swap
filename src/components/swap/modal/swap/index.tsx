@@ -1,45 +1,45 @@
-import { Modal, notification } from "antd";
-import { useEffect, useState, useRef, FC, ReactNode } from "react";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { NotificationPlacement } from "antd/lib/notification";
+import { Modal, notification } from 'antd';
+import { useEffect, useState, useRef, FC, ReactNode } from 'react';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { NotificationPlacement } from 'antd/es/notification/interface';
 import {
   ISwapDetails,
   useSwapDispatch,
   useSwapState,
-} from "@src/reducers/swap";
-import { MULTISWAP_ADDRESS, UINT_256_MAX_AMOUNT } from "@src/config";
-import SwapModalLoadingContent from "./modal-content/loading";
-import SwapModalPreviewSwapContent from "./modal-content/preview-swap";
-import SwapModalPendingConfirmationContent from "./modal-content/pending-confirmation";
-import SwapModalSwapSubmittedContent from "./modal-content/swap-submitted";
-import { getAmountsOutDetails } from "./utils/get-amounts-out-details";
-import { initiateSwap } from "./utils/initiate-swap";
-import { useConnectWalletState } from "@src/reducers/connect-wallet";
+} from '@src/reducers/swap';
+import { MULTISWAP_ADDRESS, UINT_256_MAX_AMOUNT } from '@src/config';
+import SwapModalLoadingContent from './modal-content/loading';
+import SwapModalPreviewSwapContent from './modal-content/preview-swap';
+import SwapModalPendingConfirmationContent from './modal-content/pending-confirmation';
+import SwapModalSwapSubmittedContent from './modal-content/swap-submitted';
+import { getAmountsOutDetails } from './utils/get-amounts-out-details';
+import { initiateSwap } from './utils/initiate-swap';
+import { useConnectWalletState } from '@src/reducers/connect-wallet';
 
 export interface ISwapItemDetails
-  extends Omit<ISwapDetails, "index" | "address" | "balance"> {}
+  extends Omit<ISwapDetails, 'index' | 'address' | 'balance'> {}
 
 export enum ESwapType {
-  ETH_TO_MULTI_TOKEN_PERCENT = "swapEthForMultipleTokensByPercent",
-  MULTI_TOKEN_TO_ETH = "swapMultipleTokensForEth",
-  MULTI_TOKEN_TO_MULTI_TOKEN_PERCENT = "swapMultipleTokensForMultipleTokensByPercent",
-  MULTI_TOKEN_TO_MULTI_TOKEN_AND_ETH_PERCENT = "swapMultipleTokensForMultipleTokensAndEthByPercent",
-  MULTI_TOKEN_AND_ETH_TO_MULTI_TOKEN_PERCENT = "swapTokensAndEthForMultipleTokensByPercent",
+  ETH_TO_MULTI_TOKEN_PERCENT = 'swapEthForMultipleTokensByPercent',
+  MULTI_TOKEN_TO_ETH = 'swapMultipleTokensForEth',
+  MULTI_TOKEN_TO_MULTI_TOKEN_PERCENT = 'swapMultipleTokensForMultipleTokensByPercent',
+  MULTI_TOKEN_TO_MULTI_TOKEN_AND_ETH_PERCENT = 'swapMultipleTokensForMultipleTokensAndEthByPercent',
+  MULTI_TOKEN_AND_ETH_TO_MULTI_TOKEN_PERCENT = 'swapTokensAndEthForMultipleTokensByPercent',
 }
 
 export enum ESwapEventEmitVariable {
-  SWAP_FROM = "swapFrom",
-  SWAP_TO = "swapTo",
+  SWAP_FROM = 'swapFrom',
+  SWAP_TO = 'swapTo',
 }
 
 export const SWAP_TYPE_EVENT_MAP: Record<ESwapType, string> = {
-  [ESwapType.ETH_TO_MULTI_TOKEN_PERCENT]: "SwapEthForTokensEvent",
-  [ESwapType.MULTI_TOKEN_TO_ETH]: "SwapTokensForEthEvent",
-  [ESwapType.MULTI_TOKEN_TO_MULTI_TOKEN_PERCENT]: "SwapTokensForTokensEvent",
+  [ESwapType.ETH_TO_MULTI_TOKEN_PERCENT]: 'SwapEthForTokensEvent',
+  [ESwapType.MULTI_TOKEN_TO_ETH]: 'SwapTokensForEthEvent',
+  [ESwapType.MULTI_TOKEN_TO_MULTI_TOKEN_PERCENT]: 'SwapTokensForTokensEvent',
   [ESwapType.MULTI_TOKEN_TO_MULTI_TOKEN_AND_ETH_PERCENT]:
-    "SwapTokensForTokensAndEthEvent",
+    'SwapTokensForTokensAndEthEvent',
   [ESwapType.MULTI_TOKEN_AND_ETH_TO_MULTI_TOKEN_PERCENT]:
-    "SwapEthAndTokensForTokensEvent",
+    'SwapEthAndTokensForTokensEvent',
 };
 
 // TODO: Proper typing for swapObject once redux revamped
@@ -70,7 +70,7 @@ interface IPreviewSwapModal {
     description: ReactNode,
     icon: ReactNode,
     placement: NotificationPlacement,
-    duration?: number
+    duration?: number,
   ) => void;
   setSwapIsLoading: (isLoading: boolean) => void;
   closePreviewAssetModal: () => void;
@@ -82,14 +82,14 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
 
   const { resetSwapAction: resetSwap } = useSwapDispatch();
 
-  const [modalContent, setModalContent] = useState("loading");
+  const [modalContent, setModalContent] = useState('loading');
   const [swapFromDetails, setSwapFromDetails] = useState<ISwapItemDetails[]>(
-    []
+    [],
   );
   const [swapToDetails, setSwapToDetails] = useState<ISwapItemDetails[]>([]);
   const [swapType, setSwapType] = useState<ESwapType | undefined>(undefined);
   const [swapObject, setSwapObject] = useState<ISwapObject | undefined>(
-    undefined
+    undefined,
   );
   const [tokensRequiringApproval, setTokensRequiringApproval] = useState<
     ITokensRequiringApproval[]
@@ -112,7 +112,7 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
   // }
   const openNotification = (
     message: string,
-    placement: NotificationPlacement
+    placement: NotificationPlacement,
   ) => {
     api.info({
       message: message,
@@ -127,7 +127,7 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
     swapToDetails: ISwapItemDetails[],
     swapType: ESwapType,
     swapObject: ISwapObject,
-    tokensRequiringApproval: ITokensRequiringApproval[]
+    tokensRequiringApproval: ITokensRequiringApproval[],
   ) => {
     /* swapfrom and to details is only for display layout; hence it should be formatted to show the amount / 10^num
     of dps swapobject is that actual one sending to smart contract. Hence need take into account decimals */
@@ -135,7 +135,7 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
     setSwapToDetails(swapToDetails);
     setSwapType(swapType);
     setSwapObject(swapObject);
-    setModalContent("previewSwap");
+    setModalContent('previewSwap');
     setTokensRequiringApproval(tokensRequiringApproval);
   };
 
@@ -158,7 +158,7 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
   };
 
   const closeModalHandler = () => {
-    setModalContent("loading");
+    setModalContent('loading');
     setSwapFromDetails([]);
     setSwapToDetails([]);
     setSwapType(undefined);
@@ -182,7 +182,7 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
 
   const approveTokenHandler = async (
     token: ITokensRequiringApproval,
-    index: number
+    index: number,
   ) => {
     try {
       setTokensRequiringApproval((prevState) => {
@@ -206,10 +206,10 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
           return newState;
         });
       } else {
-        console.log("Approved but something went wrong...");
+        console.log('Approved but something went wrong...');
       }
     } catch {
-      openNotification("You have rejected the token approval", "top");
+      openNotification('You have rejected the token approval', 'top');
       setTokensRequiringApproval((prevState) => {
         const newState = [...prevState];
         newState[index].buttonIsLoading = false;
@@ -244,24 +244,24 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
 
   return (
     <Modal
-      title={modalContent === "previewSwap" ? "Preview Swap" : ""}
-      visible={props.visible}
+      title={modalContent === 'previewSwap' ? 'Preview Swap' : ''}
+      open={props.visible}
       onCancel={
-        modalContent === "swapSubmitted"
+        modalContent === 'swapSubmitted'
           ? resetSwapToDefaultHandler
           : closeModalHandler
       }
       footer={null}
-      bodyStyle={{ height: "60vh" }}
+      styles={{ body: { height: '60vh' } }}
       maskClosable={false}
     >
       {contextHolder}
       {/* loading > preview swap > pending confirmation > swap submitted */}
       {/* Loading Spinner */}
-      {modalContent === "loading" && <SwapModalLoadingContent />}
+      {modalContent === 'loading' && <SwapModalLoadingContent />}
 
       {/* Preview Swap */}
-      {modalContent === "previewSwap" && (
+      {modalContent === 'previewSwap' && (
         <SwapModalPreviewSwapContent
           previewSwapModalContentRef={previewSwapModalContentRef}
           tokensRequiringApproval={tokensRequiringApproval}
@@ -276,7 +276,7 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
       )}
 
       {/* Peding Confirmation */}
-      {modalContent === "pendingConfirmation" && (
+      {modalContent === 'pendingConfirmation' && (
         <SwapModalPendingConfirmationContent
           swapFromDetails={swapFromDetails}
           swapToDetails={swapToDetails}
@@ -284,7 +284,7 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
       )}
 
       {/* Swap Submitted */}
-      {modalContent === "swapSubmitted" && (
+      {modalContent === 'swapSubmitted' && (
         <SwapModalSwapSubmittedContent
           resetSwapToDefaultHandler={resetSwapToDefaultHandler}
         />

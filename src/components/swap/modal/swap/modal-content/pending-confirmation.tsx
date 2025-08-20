@@ -1,9 +1,9 @@
-import { Col, Row } from "antd";
-import LoadingSpinner from "../loading-spinner";
-import { FC } from "react";
-import classes from "../index.module.css";
-import { getPendingSwapText } from "../utils/text";
-import { ISwapItemDetails } from "..";
+import { Col, Row } from 'antd';
+import LoadingSpinner from '../loading-spinner';
+import { FC } from 'react';
+import classes from '../index.module.css';
+import { getPendingSwapText } from '../utils/text';
+import { ISwapItemDetails } from '..';
 
 interface ISwapModalPendingConfirmationContent {
   swapFromDetails: ISwapItemDetails[];
@@ -18,7 +18,7 @@ const SwapModalPendingConfirmationContent: FC<
       <Row
         align="middle"
         justify="center"
-        style={{ width: "100%", height: "100%", textAlign: "center" }}
+        style={{ width: '100%', height: '100%', textAlign: 'center' }}
       >
         <Col>
           <Row align="middle" justify="center">

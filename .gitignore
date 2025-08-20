@@ -23,3 +23,6 @@ yarn-error.log*
 
 # deployment to firebase
 .firebase/
+
+.next
+next-env.d.ts

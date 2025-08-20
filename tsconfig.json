@@ -1,26 +1,42 @@
 {
-    "compilerOptions": {
-      // "noImplicitAny": false,
-      "target": "es6",
-      "module": "esnext",
-      "jsx": "react-jsx",
-      "strict": true,
-      "moduleResolution": "node",
-      "resolveJsonModule": true,
-      "isolatedModules": true,
-      "skipLibCheck": true,
-      "esModuleInterop": true,
-      "forceConsistentCasingInFileNames": true,
-      "allowSyntheticDefaultImports": true,
-      "paths": {
-        "@src/*": ["./src/*"],
-        
-    }
+  "compilerOptions": {
+    // "noImplicitAny": false,
+    "target": "es6",
+    "module": "esnext",
+    "jsx": "preserve",
+    "strict": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@src/*": [
+        "./src/*"
+      ]
     },
-    "include": [
-    "src", 
-    "src/types/**/*.d.ts" 
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
-    "exclude": ["node_modules"]
-  }
-  
+    "allowJs": true,
+    "noEmit": true,
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "src",
+    "src/types/**/*.d.ts",
+    "build/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

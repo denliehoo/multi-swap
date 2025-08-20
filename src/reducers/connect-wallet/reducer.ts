@@ -1,23 +1,23 @@
-import Web3 from "web3";
+import Web3 from 'web3';
 // import from truffle_abis if deployed through truffle
 // import Multiswap from '../truffle_abis/Multiswap.json'
 
 // import from utils if deployed through remix
 // import Multiswap from '../utils/deployedContractsABI/goerliABI.json'
 // import Multiswap from '../utils/deployedContractsABI/ftmABI.json'
-import Multiswap_goerli from "../../utils/deployedContractsABI/phase2/goerliABI.json";
-import Multiswap_ftm from "../../utils/deployedContractsABI/phase2/ftmABI.json";
-import { MULTISWAP_ADDRESS } from "../../config";
-import { EBlockchainNetwork } from "../../enum";
-import { IConnectWalletState } from "./interface";
-import { Dispatch } from "redux";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import Multiswap_goerli from '../../utils/deployedContractsABI/phase2/goerliABI.json';
+import Multiswap_ftm from '../../utils/deployedContractsABI/phase2/ftmABI.json';
+import { MULTISWAP_ADDRESS } from '../../config';
+import { EBlockchainNetwork } from '../../enum';
+import { IConnectWalletState } from './interface';
+import { Dispatch } from 'redux';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // config for chain ids
 const chainIds: Record<EBlockchainNetwork, string> = {
-  [EBlockchainNetwork.ETH]: "0x1",
-  [EBlockchainNetwork.FTM]: "0xFA",
-  [EBlockchainNetwork.GOERLI]: "0x5",
+  [EBlockchainNetwork.ETH]: '0x1',
+  [EBlockchainNetwork.FTM]: '0xFA',
+  [EBlockchainNetwork.GOERLI]: '0x5',
 };
 
 const multiswapAbi: any = {
@@ -29,20 +29,20 @@ const chainConfig: any = {
   //eth:
   // goerli:
   [EBlockchainNetwork.FTM]: {
-    chainId: "0xFA",
-    chainName: "Fantom",
-    rpcUrls: ["https://rpc.ankr.com/fantom"],
+    chainId: '0xFA',
+    chainName: 'Fantom',
+    rpcUrls: ['https://rpc.ankr.com/fantom'],
     nativeCurrency: {
-      name: "FTM",
-      symbol: "FTM",
+      name: 'FTM',
+      symbol: 'FTM',
       decimals: 18,
     },
-    blockExplorerUrls: ["https://ftmscan.com"],
+    blockExplorerUrls: ['https://ftmscan.com'],
   },
 };
 
 const initialState: IConnectWalletState = {
-  address: "",
+  address: '',
   walletConnected: false,
   chain: EBlockchainNetwork.FTM,
   // chain: 'goerli',
@@ -58,7 +58,7 @@ export interface IConnectWalletPayload {
 }
 
 const connectWalletSlice = createSlice({
-  name: "connectWalletReducer",
+  name: 'connectWalletReducer',
   initialState,
   reducers: {
     connectWallet(state, action: PayloadAction<IConnectWalletPayload>) {
@@ -71,7 +71,7 @@ const connectWalletSlice = createSlice({
       state.walletConnected = true;
     },
     disconnectWallet(state) {
-      state.address = "";
+      state.address = '';
       state.walletConnected = false;
       state.multiswap = {};
     },
@@ -141,7 +141,7 @@ export const attemptToConnectWallet = (chain: EBlockchainNetwork): any => {
           // '0x743EaA47beaC140B1ff8d7b14C92A757A0dFAbF4', // Goerli
           // '0x4e604887d397BB75e064522223c0D56CDD92E990', // FTM
           // '0x6aD14F3770bb85a35706DCa781E003Fcf1e716e3' // phase 2 goerli
-          MULTISWAP_ADDRESS[chain]
+          MULTISWAP_ADDRESS[chain],
         );
         // ******
 
@@ -150,7 +150,7 @@ export const attemptToConnectWallet = (chain: EBlockchainNetwork): any => {
         return true;
       } else {
         // if no network...
-        console.log("Error: Wrong chain or no network detected");
+        console.log('Error: Wrong chain or no network detected');
         dispatch(disconnectWallet());
         return false;
       }
@@ -168,7 +168,7 @@ const attemptToChangeChain = async (chain: EBlockchainNetwork) => {
   // try to switch, if can't switch (either because user reject or dont have the chain id), then will give error
   try {
     await window.ethereum.request({
-      method: "wallet_switchEthereumChain",
+      method: 'wallet_switchEthereumChain',
       params: [{ chainId: chainIds[chain] }],
     });
     return true;
@@ -176,8 +176,8 @@ const attemptToChangeChain = async (chain: EBlockchainNetwork) => {
     // if user dont have the chain then we add it
     try {
       const results = await window.ethereum.request({
-        jsonrpc: "2.0",
-        method: "wallet_addEthereumChain",
+        jsonrpc: '2.0',
+        method: 'wallet_addEthereumChain',
         params: [chainConfig[chain]],
         id: 0,
       });
@@ -185,7 +185,7 @@ const attemptToChangeChain = async (chain: EBlockchainNetwork) => {
       if (!results) return false;
       return true;
     } catch {
-      console.log("User rejected");
+      console.log('User rejected');
       return false;
       // maybe change address here or something to unsupported? Will this cause any problems?
     }

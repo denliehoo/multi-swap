@@ -1,13 +1,13 @@
-import { ISwapDetails } from "@src/reducers/swap";
+import { ISwapDetails } from '@src/reducers/swap';
 
 export const validatePercentageArray = (
   swapToPercentages: number[],
-  setShowPercentageError: (value: boolean) => void
+  setShowPercentageError: (value: boolean) => void,
 ): boolean => {
   const arrayHasZero = swapToPercentages.includes(0);
   const sumOfArray = swapToPercentages.reduce(
     (partialSum, a) => partialSum + a,
-    0
+    0,
   );
   const valid = arrayHasZero || sumOfArray !== 100 ? false : true;
   if (!valid) {
@@ -19,12 +19,12 @@ export const validatePercentageArray = (
 export const validateTokenSelected = (
   swapTo: ISwapDetails[],
   swapFrom: ISwapDetails[],
-  setShowTokenNotSelectedError: (value: boolean) => void
+  setShowTokenNotSelectedError: (value: boolean) => void,
 ): boolean => {
   const swapToSymbols = swapTo.map((i) => i.symbol);
   const swapFromSymbols = swapFrom.map((i) => i.symbol);
   const valid =
-    swapToSymbols.includes("") || swapFromSymbols.includes("") ? false : true;
+    swapToSymbols.includes('') || swapFromSymbols.includes('') ? false : true;
   if (!valid) {
     setShowTokenNotSelectedError(true);
   }
@@ -33,7 +33,7 @@ export const validateTokenSelected = (
 
 export const validateAmount = (
   swapFrom: ISwapDetails[],
-  setShowAmountError: (value: boolean) => void
+  setShowAmountError: (value: boolean) => void,
 ): boolean => {
   // By default an empty input will give an empty string. Convert it to 0
   const swapFromAmount = swapFrom.map((i) => i.amount || 0);
@@ -58,7 +58,7 @@ export const validateAmount = (
 
 export const validateAmountLesserThanBalance = (
   swapFrom: ISwapDetails[],
-  setShowAmountGreaterThanBalanceError: (value: boolean) => void
+  setShowAmountGreaterThanBalanceError: (value: boolean) => void,
 ): boolean => {
   const swapFromAmount = swapFrom.map((i) => i.amount);
   const swapFromBalance = swapFrom.map((i) => i.balance);

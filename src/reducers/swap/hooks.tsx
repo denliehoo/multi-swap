@@ -1,36 +1,36 @@
-import { RootState } from "@src/store";
-import { useDispatch, useSelector } from "react-redux";
-import { ISwapDetails } from "./interface";
+import { RootState } from '@src/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { ISwapDetails } from './interface';
 import {
   addSwapFrom,
   removeSwapFrom,
   addSwapTo,
   removeSwapTo,
   resetSwap,
-} from "./reducer";
-import { useCallback } from "react";
+} from './reducer';
+import { useCallback } from 'react';
 
 export const useSwapDispatch = () => {
   const dispatch = useDispatch();
 
   const addSwapFromAction = useCallback(
     (swapFrom: ISwapDetails[]) => dispatch(addSwapFrom(swapFrom)),
-    [dispatch]
+    [dispatch],
   );
 
   const removeSwapFromAction = useCallback(
     (swapFrom: ISwapDetails[]) => dispatch(removeSwapFrom(swapFrom)),
-    [dispatch]
+    [dispatch],
   );
 
   const addSwapToAction = useCallback(
     (swapTo: ISwapDetails[]) => dispatch(addSwapTo(swapTo)),
-    [dispatch]
+    [dispatch],
   );
 
   const removeSwapToAction = useCallback(
     (swapTo: ISwapDetails[]) => dispatch(removeSwapTo(swapTo)),
-    [dispatch]
+    [dispatch],
   );
 
   const resetSwapAction = useCallback(() => dispatch(resetSwap()), [dispatch]);

@@ -1,17 +1,18 @@
-import { EBlockchainNetwork } from "@src/enum";
+'use client';
+import { EBlockchainNetwork } from '@src/enum';
 
-import IconComponent from "../../swap/shared/IconComponent";
-import ConnectWalletPopup from "@src/components/shared/ConnectWalletPopup";
+import IconComponent from '../../swap/shared/IconComponent';
+import ConnectWalletPopup from '@src/components/shared/ConnectWalletPopup';
 import {
   BLOCK_NETWORK_NAME_MAPPING,
   BLOCKCHAIN_NETWORK_LOGO_MAPPING,
-} from "@src/constants";
-import { shortenAddress } from "@src/utils/format/string";
+} from '@src/constants';
+import { shortenAddress } from '@src/utils/format/string';
 
 const renderNetworkLabel = (
   chain: EBlockchainNetwork,
   _isHeader: boolean,
-  handleNetworkChange: (chain: EBlockchainNetwork) => void
+  handleNetworkChange: (chain: EBlockchainNetwork) => void,
 ) => {
   const chainLogo = BLOCKCHAIN_NETWORK_LOGO_MAPPING[chain];
   const chainName = BLOCK_NETWORK_NAME_MAPPING[chain];
@@ -20,7 +21,7 @@ const renderNetworkLabel = (
     return {
       label: (
         <span onClick={() => handleNetworkChange(chain)}>
-          <IconComponent imgUrl={chainLogo} size={"small"} /> {chainName}
+          <IconComponent imgUrl={chainLogo} size={'small'} /> {chainName}
         </span>
       ),
       key: chainName,
@@ -28,7 +29,7 @@ const renderNetworkLabel = (
   } else {
     return (
       <span>
-        <IconComponent imgUrl={chainLogo} size={"small"} /> {chainName}
+        <IconComponent imgUrl={chainLogo} size={'small'} /> {chainName}
       </span>
     );
   }
@@ -37,13 +38,13 @@ const renderNetworkLabel = (
 export const getNetworkPortion = (
   chain: EBlockchainNetwork,
   handleNetworkChange: (chain: EBlockchainNetwork) => Promise<void>,
-  remainingChains: EBlockchainNetwork[]
+  remainingChains: EBlockchainNetwork[],
 ) => {
   return {
     label: renderNetworkLabel(chain, true, handleNetworkChange),
-    key: "networkName",
+    key: 'networkName',
     children: remainingChains.map((c) =>
-      renderNetworkLabel(c, false, handleNetworkChange)
+      renderNetworkLabel(c, false, handleNetworkChange),
     ),
   };
 };
@@ -52,7 +53,7 @@ export const getWalletConnectPortion = (
   walletConnected: boolean,
   address: string,
   connectWalletHandler: () => void,
-  disconnectWalletAction: () => void
+  disconnectWalletAction: () => void,
 ) => {
   const shortenedAddress = shortenAddress(address);
 
@@ -60,7 +61,7 @@ export const getWalletConnectPortion = (
     <span>
       {shortenedAddress ? (
         <span>{shortenedAddress}</span>
-      ) : window.ethereum ? (
+      ) : typeof window !== 'undefined' && window.ethereum ? (
         <span onClick={connectWalletHandler}>Connect Wallet</span>
       ) : (
         <ConnectWalletPopup placement="bottom" />
@@ -71,13 +72,13 @@ export const getWalletConnectPortion = (
   return walletConnected && address
     ? {
         label: addressOrConnectButton,
-        key: "connectWallet",
+        key: 'connectWallet',
         children: [
           {
             label: <div onClick={disconnectWalletAction}>Disconnect</div>,
-            key: "disconnectWallet",
+            key: 'disconnectWallet',
           },
         ],
       }
-    : { label: addressOrConnectButton, key: "connectWallet" };
+    : { label: addressOrConnectButton, key: 'connectWallet' };
 };

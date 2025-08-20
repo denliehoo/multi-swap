@@ -1,10 +1,10 @@
 export enum EBlockchainNetwork {
-  ETH = "eth",
-  FTM = "ftm",
-  GOERLI = "goerli",
+  ETH = 'eth',
+  FTM = 'ftm',
+  GOERLI = 'goerli',
 }
 
 export enum ESWapDirection {
-  FROM = "from",
-  TO = "to",
+  FROM = 'from',
+  TO = 'to',
 }

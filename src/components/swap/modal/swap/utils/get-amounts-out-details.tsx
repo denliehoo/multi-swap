@@ -1,17 +1,17 @@
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { NATIVE_ADDRESS, WETH_ADDRESS } from "@src/config";
-import { ISwapDetails } from "@src/reducers/swap";
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { NATIVE_ADDRESS, WETH_ADDRESS } from '@src/config';
+import { ISwapDetails } from '@src/reducers/swap';
 import {
   ESwapType,
   ISwapItemDetails,
   ISwapObject,
   ITokensRequiringApproval,
   SWAP_TYPE_EVENT_MAP,
-} from "..";
-import { EBlockchainNetwork } from "@src/enum";
-import { getContractABI } from "@src/api";
-import { ReactNode } from "react";
-import { NotificationPlacement } from "antd/lib/notification";
+} from '..';
+import { EBlockchainNetwork } from '@src/enum';
+import { ReactNode } from 'react';
+import { NotificationPlacement } from 'antd/es/notification/interface';
+import { getContractABI } from '@src/api';
 
 interface IGetAmountsOutDetails {
   swapFrom: ISwapDetails[];
@@ -22,7 +22,7 @@ interface IGetAmountsOutDetails {
     swapToDetails: ISwapItemDetails[],
     swapType: ESwapType,
     swapObject: ISwapObject,
-    tokensRequiringApproval: ITokensRequiringApproval[]
+    tokensRequiringApproval: ITokensRequiringApproval[],
   ) => void;
   chain: EBlockchainNetwork;
   address: string;
@@ -33,7 +33,7 @@ interface IGetAmountsOutDetails {
     description: ReactNode,
     icon: ReactNode,
     placement: NotificationPlacement,
-    duration?: number
+    duration?: number,
   ) => void;
 }
 
@@ -67,7 +67,7 @@ export const getAmountsOutDetails = async ({
   const poolAddressesOut = swapTo.map((i) => i.address);
   // note: we change to string because thats usually how we call functions in the contract; check migrations file.
   const amountForEachTokensIn = swapFrom.map((i) =>
-    (i.amount * Math.pow(10, i.decimals)).toString()
+    (i.amount * Math.pow(10, i.decimals)).toString(),
   );
   const percentForEachTokenOut = swapTo.map((i) => (i.amount * 100).toString()); // *100 because in basis point i.e. 50% = 5000
 
@@ -79,7 +79,7 @@ export const getAmountsOutDetails = async ({
       swapFrom[0].address === NATIVE_ADDRESS &&
       !poolAddressesOut.includes(NATIVE_ADDRESS)
     ) {
-      console.log("case 1");
+      console.log('case 1');
       const ethAmount = amountForEachTokensIn[0];
 
       // note: best to use USDC and DAI for testing
@@ -87,7 +87,7 @@ export const getAmountsOutDetails = async ({
         .getAmountsOutEthForMultipleTokensByPercent(
           ethAmount,
           poolAddressesOut,
-          percentForEachTokenOut
+          percentForEachTokenOut,
         )
         .call();
       for (let i in swapToDetailsTemp) {
@@ -104,7 +104,7 @@ export const getAmountsOutDetails = async ({
           percentForEachToken: percentForEachTokenOut,
           event: SWAP_TYPE_EVENT_MAP[ESwapType.ETH_TO_MULTI_TOKEN_PERCENT],
         },
-        []
+        [],
       );
     }
     // 2. ERC20(s) -> ETH
@@ -113,11 +113,11 @@ export const getAmountsOutDetails = async ({
       swapTo.length === 1 &&
       swapTo[0].address === NATIVE_ADDRESS
     ) {
-      console.log("case 2!");
+      console.log('case 2!');
       let amountsOut = await multiswap.methods
         .getAmountsOutMultipleTokensForEth(
           poolAddressesIn,
-          amountForEachTokensIn
+          amountForEachTokensIn,
         )
         .call();
 
@@ -131,7 +131,7 @@ export const getAmountsOutDetails = async ({
         multiswap,
         address,
         chain,
-        web3
+        web3,
       );
 
       setSwapDetails(
@@ -143,7 +143,7 @@ export const getAmountsOutDetails = async ({
           amountForEachTokens: amountForEachTokensIn,
           event: SWAP_TYPE_EVENT_MAP[ESwapType.MULTI_TOKEN_TO_ETH],
         },
-        tokensToApprove
+        tokensToApprove,
       );
     }
     // 3. ERC20(s) -> ERC20(s)
@@ -151,13 +151,13 @@ export const getAmountsOutDetails = async ({
       !poolAddressesIn.includes(NATIVE_ADDRESS) &&
       !poolAddressesOut.includes(NATIVE_ADDRESS)
     ) {
-      console.log("case 3!");
+      console.log('case 3!');
       let amountsOut = await multiswap.methods
         .getAmountsOutMultipleTokensForMultipleTokensByPercent(
           poolAddressesIn,
           amountForEachTokensIn,
           poolAddressesOut,
-          percentForEachTokenOut
+          percentForEachTokenOut,
         )
         .call();
 
@@ -173,7 +173,7 @@ export const getAmountsOutDetails = async ({
         multiswap,
         address,
         chain,
-        web3
+        web3,
       );
 
       setSwapDetails(
@@ -188,7 +188,7 @@ export const getAmountsOutDetails = async ({
           event:
             SWAP_TYPE_EVENT_MAP[ESwapType.MULTI_TOKEN_TO_MULTI_TOKEN_PERCENT],
         },
-        tokensToApprove
+        tokensToApprove,
       );
     }
     // 4. ERC20(s) -> ETH + ERC20(s)
@@ -200,7 +200,7 @@ export const getAmountsOutDetails = async ({
         poolAddressesOut.includes(NATIVE_ADDRESS)
       )
     ) {
-      console.log("case 4!");
+      console.log('case 4!');
 
       const {
         addresses: orderedPoolAddressesOut,
@@ -213,13 +213,13 @@ export const getAmountsOutDetails = async ({
           poolAddressesIn,
           amountForEachTokensIn,
           orderedPoolAddressesOut,
-          orderedPercentForEachTokenOut
+          orderedPercentForEachTokenOut,
         )
         .call();
 
       let orderedSwapToDetailsTemp = swapToDetailsTemp.map((i) => i);
       orderedSwapToDetailsTemp.push(
-        ...orderedSwapToDetailsTemp.splice(indexToMove, 1)
+        ...orderedSwapToDetailsTemp.splice(indexToMove, 1),
       );
 
       for (let i in orderedSwapToDetailsTemp) {
@@ -234,7 +234,7 @@ export const getAmountsOutDetails = async ({
         multiswap,
         address,
         chain,
-        web3
+        web3,
       );
 
       setSwapDetails(
@@ -251,7 +251,7 @@ export const getAmountsOutDetails = async ({
               ESwapType.MULTI_TOKEN_TO_MULTI_TOKEN_AND_ETH_PERCENT
             ],
         },
-        tokensToApprove
+        tokensToApprove,
       );
     }
     // 5. ETH + ERC20 -> ERC20(s)
@@ -263,7 +263,7 @@ export const getAmountsOutDetails = async ({
         poolAddressesOut.includes(WETH_ADDRESS[chain as EBlockchainNetwork])
       )
     ) {
-      console.log("case 5!");
+      console.log('case 5!');
 
       const {
         addresses: orderedPoolAddressesIn,
@@ -276,7 +276,7 @@ export const getAmountsOutDetails = async ({
           orderedPoolAddressesIn,
           orderedAmountForEachTokensIn,
           poolAddressesOut,
-          percentForEachTokenOut
+          percentForEachTokenOut,
         )
         .call();
 
@@ -287,7 +287,7 @@ export const getAmountsOutDetails = async ({
 
       let orderedSwapFromDetailsTemp = swapFromDetailsTemp.map((i) => i);
       orderedSwapFromDetailsTemp.push(
-        ...orderedSwapFromDetailsTemp.splice(indexToMove, 1)
+        ...orderedSwapFromDetailsTemp.splice(indexToMove, 1),
       );
 
       const tokensToApprove = await getTokensToApprove(
@@ -297,7 +297,7 @@ export const getAmountsOutDetails = async ({
         multiswap,
         address,
         chain,
-        web3
+        web3,
       );
 
       setSwapDetails(
@@ -314,7 +314,7 @@ export const getAmountsOutDetails = async ({
               ESwapType.MULTI_TOKEN_AND_ETH_TO_MULTI_TOKEN_PERCENT
             ],
         },
-        tokensToApprove
+        tokensToApprove,
       );
     }
     // if user tries swapping ETH with ETH or ETH -> WETH or WETH -> ETH
@@ -327,20 +327,20 @@ export const getAmountsOutDetails = async ({
         poolAddressesOut.includes(WETH_ADDRESS[chain as EBlockchainNetwork]))
     ) {
       showNotificationInSwapJs(
-        "Unable To Swap ETH for ETH or WETH, vice versa",
-        "Try removing ETH or WETH in swap from or swap to",
+        'Unable To Swap ETH for ETH or WETH, vice versa',
+        'Try removing ETH or WETH in swap from or swap to',
         <ExclamationCircleOutlined />,
-        "top"
+        'top',
       );
       closeModalHandler();
     }
     // eventually do the case for if swap two same tokens e.g. swapping usdt and usdt to ETH should reject
     // else if()
     else {
-      console.log("something went wrong...");
+      console.log('something went wrong...');
       genericPreviewSwapErrorAction(
         showNotificationInSwapJs,
-        closeModalHandler
+        closeModalHandler,
       );
     }
   } catch (e) {
@@ -351,13 +351,13 @@ export const getAmountsOutDetails = async ({
 
 const genericPreviewSwapErrorAction = (
   showNotificationInSwapJs: any,
-  closeModalHandler: () => void
+  closeModalHandler: () => void,
 ) => {
   showNotificationInSwapJs(
-    "Unable To Get Swap Details",
-    "There seems to be an error in one of the tokens you are swapping to or from. Please swap to/from a different token",
+    'Unable To Get Swap Details',
+    'There seems to be an error in one of the tokens you are swapping to or from. Please swap to/from a different token',
     <ExclamationCircleOutlined />,
-    "top"
+    'top',
   );
   closeModalHandler();
 };
@@ -369,7 +369,7 @@ const getTokensToApprove = async (
   multiswap: any,
   address: string,
   chain: EBlockchainNetwork,
-  web3: any
+  web3: any,
 ) => {
   let tokensToApprove: ITokensRequiringApproval[] = [];
   for (let i in poolAddressesIn) {
@@ -385,7 +385,7 @@ const getTokensToApprove = async (
       }
       const tokenContract = new web3.eth.Contract(
         tokenContractABI,
-        poolAddressesIn[i]
+        poolAddressesIn[i],
       );
       console.log(tokenContract);
 

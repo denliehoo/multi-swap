@@ -1,11 +1,13 @@
-// import classes from "./AppPage.module.css";
-import Swap from "../components/swap";
+import { Providers } from '@src/app/providers';
+import Swap from '../components/swap';
 
 const AppPage = () => {
   return (
-    <div>
-      <Swap />
-    </div>
+    <Providers>
+      <div>
+        <Swap />
+      </div>
+    </Providers>
   );
 };
 

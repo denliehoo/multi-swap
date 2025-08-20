@@ -1,11 +1,11 @@
-import { localStorageKey } from "@src/config";
-import { ESwapType, ISwapItemDetails, ISwapObject } from "..";
-import { getPendingSwapText, getSuccessfulSwapText } from "./text";
-import { ReactNode } from "react";
-import { CheckCircleOutlined, LoadingOutlined } from "@ant-design/icons";
-import { ISwapDetails } from "@src/reducers/swap";
-import { EBlockchainNetwork } from "@src/enum";
-import { NotificationPlacement } from "antd/lib/notification";
+import { localStorageKey } from '@src/config';
+import { ESwapType, ISwapItemDetails, ISwapObject } from '..';
+import { getPendingSwapText, getSuccessfulSwapText } from './text';
+import { ReactNode } from 'react';
+import { CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { ISwapDetails } from '@src/reducers/swap';
+import { EBlockchainNetwork } from '@src/enum';
+import { NotificationPlacement } from 'antd/es/notification/interface';
 
 interface IInitiateSwap {
   swapType?: ESwapType;
@@ -19,7 +19,7 @@ interface IInitiateSwap {
     description: ReactNode,
     icon: ReactNode,
     placement: NotificationPlacement,
-    duration?: number
+    duration?: number,
   ) => void;
   swapToDetails: ISwapItemDetails[];
   swapFrom: ISwapDetails[];
@@ -49,7 +49,7 @@ export const initiateSwap = async ({
   }
   // console.log(swapFromDetails)
   // console.log(swapToDetails)
-  setModalContent("pendingConfirmation");
+  setModalContent('pendingConfirmation');
   let callSwap;
   try {
     if (swapType === ESwapType.ETH_TO_MULTI_TOKEN_PERCENT) {
@@ -57,20 +57,20 @@ export const initiateSwap = async ({
       callSwap = await multiswap.methods
         .swapEthForMultipleTokensByPercent(
           swapObject.poolAddresses,
-          swapObject.percentForEachToken
+          swapObject.percentForEachToken,
         )
         .send({
           from: address,
           value: swapObject.amount && swapObject.amount[0],
         }) // only when user clicks confirm on metamask will this next step appear
-        .on("transactionHash", (_hash: string) => {
+        .on('transactionHash', (_hash: string) => {
           // console.log(`Transaction hash: ${hash}. user has confirmed`)
           userAcceptedTransaction(
             showNotificationInSwapJs,
             swapFromDetails,
             swapToDetails,
             setSwapIsLoading,
-            setModalContent
+            setModalContent,
           );
         });
     } else if (swapType === ESwapType.MULTI_TOKEN_TO_ETH) {
@@ -78,18 +78,18 @@ export const initiateSwap = async ({
       callSwap = await multiswap.methods
         .swapMultipleTokensForEth(
           swapObject.poolAddresses,
-          swapObject.amountForEachTokens
+          swapObject.amountForEachTokens,
         )
         .send({
           from: address,
         })
-        .on("transactionHash", (_hash: string) => {
+        .on('transactionHash', (_hash: string) => {
           userAcceptedTransaction(
             showNotificationInSwapJs,
             swapFromDetails,
             swapToDetails,
             setSwapIsLoading,
-            setModalContent
+            setModalContent,
           );
         });
     } else if (swapType === ESwapType.MULTI_TOKEN_TO_MULTI_TOKEN_PERCENT) {
@@ -99,18 +99,18 @@ export const initiateSwap = async ({
           swapObject.poolAddressesIn,
           swapObject.amountForEachTokensIn,
           swapObject.poolAddressesOut,
-          swapObject.percentForEachTokenOut
+          swapObject.percentForEachTokenOut,
         )
         .send({
           from: address,
         })
-        .on("transactionHash", (_hash: string) => {
+        .on('transactionHash', (_hash: string) => {
           userAcceptedTransaction(
             showNotificationInSwapJs,
             swapFromDetails,
             swapToDetails,
             setSwapIsLoading,
-            setModalContent
+            setModalContent,
           );
         });
     } else if (
@@ -122,18 +122,18 @@ export const initiateSwap = async ({
           swapObject.poolAddressesIn,
           swapObject.amountForEachTokensIn,
           swapObject.poolAddressesOut,
-          swapObject.percentForEachTokenOut
+          swapObject.percentForEachTokenOut,
         )
         .send({
           from: address,
         })
-        .on("transactionHash", (_hash: string) => {
+        .on('transactionHash', (_hash: string) => {
           userAcceptedTransaction(
             showNotificationInSwapJs,
             swapFromDetails,
             swapToDetails,
             setSwapIsLoading,
-            setModalContent
+            setModalContent,
           );
         });
     } else if (
@@ -151,31 +151,31 @@ export const initiateSwap = async ({
           swapObject.poolAddressesIn,
           swapObject.amountForEachTokensIn,
           swapObject.poolAddressesOut,
-          swapObject.percentForEachTokenOut
+          swapObject.percentForEachTokenOut,
         )
         .send({
           from: address,
           value,
         })
-        .on("transactionHash", (_hash: string) => {
+        .on('transactionHash', (_hash: string) => {
           userAcceptedTransaction(
             showNotificationInSwapJs,
             swapFromDetails,
             swapToDetails,
             setSwapIsLoading,
-            setModalContent
+            setModalContent,
           );
         });
     }
 
     // Promise will resolve once the transaction has been confirmed and mined
     const receipt = await web3.eth.getTransactionReceipt(
-      callSwap.transactionHash
+      callSwap.transactionHash,
     );
     console.log(receipt);
     console.log(callSwap);
     showNotificationInSwapJs(
-      "Transaction Completed",
+      'Transaction Completed',
       getSuccessfulSwapText({
         receipt: callSwap,
         swapType,
@@ -186,8 +186,8 @@ export const initiateSwap = async ({
         chain,
       }),
       <CheckCircleOutlined />,
-      "topRight",
-      60
+      'topRight',
+      60,
     );
     localStorage.removeItem(localStorageKey);
     setSwapIsLoading(false);
@@ -195,8 +195,8 @@ export const initiateSwap = async ({
     //
   } catch (e: any) {
     if (e?.code === 4001) {
-      setModalContent("previewSwap");
-      openNotification("You have rejected the transaction", "top");
+      setModalContent('previewSwap');
+      openNotification('You have rejected the transaction', 'top');
     } else {
       console.log(e);
     }
@@ -209,20 +209,20 @@ const userAcceptedTransaction = (
     description: ReactNode,
     icon: ReactNode,
     placement: NotificationPlacement,
-    duration?: number
+    duration?: number,
   ) => void,
   swapFromDetails: ISwapItemDetails[],
   swapToDetails: ISwapItemDetails[],
   setSwapIsLoading: (isLoading: boolean) => void,
-  setModalContent: (modalType: string) => void
+  setModalContent: (modalType: string) => void,
 ) => {
   showNotificationInSwapJs(
-    "Transaction Pending",
+    'Transaction Pending',
     getPendingSwapText(swapFromDetails, swapToDetails),
     <LoadingOutlined />,
-    "topRight",
-    15
+    'topRight',
+    15,
   );
   setSwapIsLoading(true);
-  setModalContent("swapSubmitted");
+  setModalContent('swapSubmitted');
 };

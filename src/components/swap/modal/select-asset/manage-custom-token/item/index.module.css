@@ -1,13 +1,12 @@
 .manageCustomTokenItemContainer {
-    padding: 10px;
+  padding: 10px;
 }
 
 .manageCustomTokenItemContainer:hover {
-    background-color: #6B6E70;
+  background-color: #6b6e70;
 }
 
 .icon:hover {
-    cursor: pointer;
-    color: #61892F;
-
+  cursor: pointer;
+  color: #61892f;
 }

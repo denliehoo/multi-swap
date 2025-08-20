@@ -1,45 +1,45 @@
-import classes from "./index.module.css";
-import { Row, Col } from "antd/lib/grid";
-import { Button, notification } from "antd";
+import classes from './index.module.css';
+import { Row, Col } from 'antd/lib/grid';
+import { Button, notification } from 'antd';
 import {
   DownCircleOutlined,
   PlusCircleOutlined,
   LoadingOutlined,
-} from "@ant-design/icons";
-import { FC, ReactNode, useEffect, useState } from "react";
-import CryptoSwapItem from "./item";
-import PreviewSwapModal from "./modal/swap";
+} from '@ant-design/icons';
+import { FC, ReactNode, useEffect, useState } from 'react';
+import CryptoSwapItem from './item';
+import PreviewSwapModal from './modal/swap';
 
-import ConnectWalletPopup from "../shared/ConnectWalletPopup";
-import { ESWapDirection } from "@src/enum";
+import ConnectWalletPopup from '../shared/ConnectWalletPopup';
+import { ESWapDirection } from '@src/enum';
 import {
   useConnectWalletDispatch,
   useConnectWalletState,
-} from "@src/reducers/connect-wallet";
+} from '@src/reducers/connect-wallet';
 import {
   ISwapDetails,
   useSwapDispatch,
   useSwapState,
-} from "@src/reducers/swap";
+} from '@src/reducers/swap';
 import {
   validateAmount,
   validateAmountLesserThanBalance,
   validatePercentageArray,
   validateTokenSelected,
-} from "./validator";
-import { NotificationPlacement } from "antd/lib/notification";
-import ErrorBox from "./error-box";
+} from './validator';
+import ErrorBox from './error-box';
+import { NotificationPlacement } from 'antd/es/notification/interface';
 
 // Swap > CryptoSwapItem > SelectAssetModal > SelectAssetItem
 
 const DEFAULT_SWAP_STATE: ISwapDetails = {
   index: 0,
-  symbol: "",
-  address: "",
+  symbol: '',
+  address: '',
   balance: 0,
   amount: 0,
   decimals: 0,
-  imgUrl: "",
+  imgUrl: '',
 };
 
 const Swap: FC = () => {
@@ -91,7 +91,7 @@ const Swap: FC = () => {
   const addSwapState = (
     type: ESWapDirection,
     index: number,
-    newAssetDetails: ISwapDetails
+    newAssetDetails: ISwapDetails,
   ) => {
     if (type === ESWapDirection.FROM) {
       if (!swapFrom[index]) {
@@ -132,17 +132,17 @@ const Swap: FC = () => {
     console.log(swapTo);
     const validPercentages = validatePercentageArray(
       swapToPercentages,
-      setShowPercentageError
+      setShowPercentageError,
     );
     const tokensSelected = validateTokenSelected(
       swapTo,
       swapFrom,
-      setShowTokenNotSelectedError
+      setShowTokenNotSelectedError,
     );
     const validAmount = validateAmount(swapFrom, setShowAmountError);
     const amountLesserThanBalance = validateAmountLesserThanBalance(
       swapFrom,
-      setShowAmountGreaterThanBalanceError
+      setShowAmountGreaterThanBalanceError,
     );
     if (
       validPercentages &&
@@ -161,7 +161,7 @@ const Swap: FC = () => {
     description: ReactNode,
     icon: ReactNode,
     placement: NotificationPlacement,
-    duration?: number
+    duration?: number,
   ) => {
     api.open({
       message: message,
@@ -185,9 +185,9 @@ const Swap: FC = () => {
       <div className={classes.card}>
         <Row
           justify="space-between"
-          style={{ width: "100%", marginBottom: "15px" }}
+          style={{ width: '100%', marginBottom: '15px' }}
         >
-          <Col style={{ fontWeight: "700", fontSize: "large" }}>Swap</Col>
+          <Col style={{ fontWeight: '700', fontSize: 'large' }}>Swap</Col>
         </Row>
 
         <ErrorBox
@@ -213,19 +213,20 @@ const Swap: FC = () => {
           <Row
             justify="center"
             align="middle"
-            className={classes.plusButonContainer}
+            className={classes.plusButtonContainer}
           >
             <Button
               block
               shape="round"
               type="primary"
-              icon={<PlusCircleOutlined />}
               onClick={() => onClickAddSwapState(ESWapDirection.FROM)}
-            />
+            >
+              <PlusCircleOutlined />
+            </Button>
           </Row>
         </div>
-        <div style={{ margin: "5px" }}>
-          <DownCircleOutlined style={{ fontSize: "200%" }} />
+        <div style={{ margin: '5px' }}>
+          <DownCircleOutlined style={{ fontSize: '200%' }} />
         </div>
         {/* Swap to portion */}
         {/* <Row>You Get</Row> */}
@@ -253,13 +254,14 @@ const Swap: FC = () => {
               block
               shape="round"
               type="primary"
-              icon={<PlusCircleOutlined />}
               onClick={() => onClickAddSwapState(ESWapDirection.TO)}
-            />
+            >
+              {<PlusCircleOutlined />}
+            </Button>
           </Row>
         </div>
 
-        <Row style={{ width: "100%", marginTop: "15px" }}>
+        <Row style={{ width: '100%', marginTop: '15px' }}>
           <Button
             size="large"
             block
@@ -274,7 +276,7 @@ const Swap: FC = () => {
               swapIsLoading ? (
                 <LoadingOutlined />
               ) : (
-                "Preview Swap"
+                'Preview Swap'
               )
             ) : (
               <ConnectWalletPopup placement="top" />

@@ -8,7 +8,7 @@
     font-size: large !important;
 }
 */
-.antdMenu{
+.antdMenu {
   border: none !important;
   border-radius: 0 !important;
   font-size: large !important;
@@ -34,16 +34,14 @@
   display: flex;
   justify-content: flex-end;
   flex: 1;
-
 }
 
-.hamburgerMenu{
+.hamburgerMenu {
   cursor: pointer;
 }
 
-
 @media (min-width: 500px) {
-  .antdMenu{
+  .antdMenu {
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -51,5 +49,4 @@
   .rightItems {
     flex: 4;
   }
-  
 }

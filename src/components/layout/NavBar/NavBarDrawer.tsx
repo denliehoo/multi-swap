@@ -1,7 +1,7 @@
-import { FC } from "react";
-import { Drawer, Menu } from "antd";
-import { CloseOutlined, MenuOutlined } from "@ant-design/icons";
-import classes from "./NavBar.module.css";
+import { FC } from 'react';
+import { Drawer, Menu } from 'antd';
+import { CloseOutlined, MenuOutlined } from '@ant-design/icons';
+import classes from './NavBar.module.css';
 
 interface NavBarDrawerProps {
   showDrawer: boolean;
@@ -24,14 +24,14 @@ const NavBarDrawer: FC<NavBarDrawerProps> = ({
     </div>
     <Drawer
       title={null}
-      headerStyle={{ border: 0 }}
+      styles={{ header: { border: 0 } }}
       placement="right"
       onClose={closeDrawer}
-      visible={showDrawer}
+      open={showDrawer}
       width={width}
-      closeIcon={<CloseOutlined style={{ color: "#86C232" }} />}
+      closeIcon={<CloseOutlined style={{ color: '#86C232' }} />}
     >
-      <Menu items={rightItems} mode={"inline"} className={classes.antdMenu} />
+      <Menu items={rightItems} mode={'inline'} className={classes.antdMenu} />
     </Drawer>
   </>
 );

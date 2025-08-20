@@ -1,8 +1,8 @@
 // 0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9
 
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { EBlockchainNetwork } from "../../enum";
-import { ICustomToken, ICustomTokenState } from "./interface";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { EBlockchainNetwork } from '../../enum';
+import { ICustomToken, ICustomTokenState } from './interface';
 
 // initial state
 const initialState: ICustomTokenState = {
@@ -14,7 +14,7 @@ const initialState: ICustomTokenState = {
 };
 
 const customTokenSlice = createSlice({
-  name: "customTokenReducer",
+  name: 'customTokenReducer',
   initialState,
   reducers: {
     addCustomToken(state, action: PayloadAction<ICustomToken[]>) {

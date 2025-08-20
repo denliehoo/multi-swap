@@ -1,5 +1,21 @@
 # To do list / Progress:
+
 ## To do
+- Deploy to vercel instead of firebase
+- Migrate to sepolia (ftm + goerli has been deprecated)
+  - Multiswap set up
+  - Add in sepolia code
+  - Remove ftm & goerli related code
+- Use nextjs pages router properly
+  - Currently just using slug
+  - caching of api calls (e.g. getting token dont need refresh all the time)
+- Turn on biome linter and fix linting errors (in biome.json, linter.enabled is currently false for now)
+  - propery typing, etc
+- Migrate to tailwind
+- Fix first load css
+- Fix styles messing up on save in local development
+
+
 - -----Start Of Phase 4: Continuous Improvements-----
 - C# backend
 - refactor and clean code
@@ -8,47 +24,52 @@
 - work on light mode dark mode css theme
 
 ## Pending Bug Fixes
+
 - In CryptoSwapItem.js[ cant seem to recreate this issue. KIV]
   - if add 3 assets, if edit the 2nd one and then 3rd then 1st, gives errors. maybe check selectassetitem.js to fix
-or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo, but keep it with empty values except for index:
-  - e.g. {index: 0, amount: 0, asset: "", ...} then, in selectassetitem, we change the details accordingly. 
+    or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo, but keep it with empty values except for index:
+  - e.g. {index: 0, amount: 0, asset: "", ...} then, in selectassetitem, we change the details accordingly.
   - This ensures that the list is ordered; but what about when remove assets? maybe we re-order? does the key for the cryptoswapitem change when remove to?
   - Solution is TBC
 
-## Note / KIV: 
+## Note / KIV:
 
+## Low Priority Items:
 
-## Low Priority Items: 
-- error in the return value in event for some swaps (currently for sure case 2 is effected). The token swapfrom value amount is showing the amount of ETH it is swapped for when it should show the amount of the original tokens being swapped instead. Currently, swap from portion is still working since we take the swap from value from frontend itself. Ensure that the swapfrom values for all cases are correct. 
-- Refactor backend APIs to C# 
+- error in the return value in event for some swaps (currently for sure case 2 is effected). The token swapfrom value amount is showing the amount of ETH it is swapped for when it should show the amount of the original tokens being swapped instead. Currently, swap from portion is still working since we take the swap from value from frontend itself. Ensure that the swapfrom values for all cases are correct.
+- Refactor backend APIs to C#
 - add swap history and save it to a database along with the value it was swapped for; history can access from nav bar
 - Proxy set up for smart contract
 - store contract ABIs in a database and fetch it:
+
   - current idea is to call etherscan/ftmscan/etc api to fetch the ABI whenever user wants to approve tokens for ERC20 transfer
   - This doesn't scale well on free etherscan plans (unless going for paid version)
   - Instead, change it to this flow:
-    1. When user needs to approve, call an API to database to check whether it has the token ABI for the given chain. 
+
+    1. When user needs to approve, call an API to database to check whether it has the token ABI for the given chain.
     2. If it exists, fetch that ABI from database to be used for user to approved.
     3. If it doesn't exist, call the etherscan/etc API to get the ABI
     4. Call an API to store it in the database for the given chain and token address in a format similar to this:
-      ``` Javascript
-      {
-        chain: {
-          eth: {
-            tokenAddress1: TOKEN_ADDRESS_1_CONTRACT_ABI,
-            tokenAddress2: TOKEN_ADDRESS_2_CONTRACT_ABI,
-            // and so on
-          },
-          ftm: {
-            // and so on
-          },
-          // other chains here...
-          
-          }
-      }
-      ```
-      
+
+    ```Javascript
+    {
+      chain: {
+        eth: {
+          tokenAddress1: TOKEN_ADDRESS_1_CONTRACT_ABI,
+          tokenAddress2: TOKEN_ADDRESS_2_CONTRACT_ABI,
+          // and so on
+        },
+        ftm: {
+          // and so on
+        },
+        // other chains here...
+
+        }
+    }
+    ```
+
 # Done:
+
 - 9/7/22: Code smart contract for ETH -> Multiple assets
 - 2/9/22: General swap component structure
 - 16/9/22: UI for Drop drop modal for select an asset (hardcode common assets) [pass state properly in the future]
@@ -100,7 +121,7 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - 25/01/23: Add in Goerli network and change it to it for testing
 - 25/01/23: Show notifications when swap is pending (after use clicked confirm on metamask) and when swap is completed
 - 25/01/23: Refactor connect wallet function from navbar to connectWalletReducer
-- 25/01/23: Change the Preview Swap Button to "Connect To Wallet" if not connected. Upon clicking it, it should connect to wallet. 
+- 25/01/23: Change the Preview Swap Button to "Connect To Wallet" if not connected. Upon clicking it, it should connect to wallet.
 - 26/01/23: error handling for when unable to get amounts out (e.g. USDT for FTM)
 - 01/02/23: Basic CSS styling for antd components done in framework.css
 - 01/02/23: Basic styling for some global components in styles.css
@@ -144,15 +165,15 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - 24/02/23: Connect the new swap types for all case to the frontend and ensure it is working
 - 25/02/23: Optimisation and reducing API calls: Add the balances during getTokenBalances api call to local storage.
   - If balances is queried again, check whether it has been more than 60 seconds
-  - If more than 60 seconds, remove from local storage 
+  - If more than 60 seconds, remove from local storage
   - If it has been less than 60 seconds, show the balance from local
   - If a swap has occured / custom token imported, remove from local
 - 28/02/23: Preparing to launch phase 2
 - -----End Of Phase 2: Swap ETH/ERC20 tokens to ETH/ERC20 tokens-----
 - -----Start Of Phase 3: Ability to use different chains-----
 - 17/03/23: optimise CSS for different screen sizes
-- 17/03/23: If asset already exists in select asset modal, then user shouldn't be able to import it 
-- 30/03/23: create similar smart contracts for other chains 
+- 17/03/23: If asset already exists in select asset modal, then user shouldn't be able to import it
+- 30/03/23: create similar smart contracts for other chains
 - 30/03/23: Ensure user can change chain in nav bar
   - changing the chains should cause the tokens/custom tokens displayed to change accordingly
   - changing chain should change the displayed chain in the nav bar accordingly
@@ -160,3 +181,9 @@ or, maybe upon clicking the + button, we create the asset in swapFrom and swapTo
 - 9/04/23: ensure swap functionalities are working
 - 9/04/23: Preparing to launch phase 3
 - -----End Of Phase 3: Ability to use different chains-----
+- Architecture revamp:
+  - Migrate npm to pnpm:
+  - Migrate to Next js: Docs: https://nextjs.org/docs/app/guides/migrating/from-create-react-app#migration-steps
+    - Upgrade antd 
+    - Ensure stylings are not lost 
+  - Set up biome

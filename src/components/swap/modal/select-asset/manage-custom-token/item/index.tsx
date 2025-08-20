@@ -1,15 +1,15 @@
-import classes from "./index.module.css";
-import { Row, Col } from "antd";
-import { DeleteOutlined, ScanOutlined } from "@ant-design/icons";
-import { FC } from "react";
+import classes from './index.module.css';
+import { Row, Col } from 'antd';
+import { DeleteOutlined, ScanOutlined } from '@ant-design/icons';
+import { FC } from 'react';
 
-import { EBlockchainNetwork } from "@src/enum";
-import { useWindowSize } from "@src/hooks/useWindowSize";
+import { EBlockchainNetwork } from '@src/enum';
+import { useWindowSize } from '@src/hooks/useWindowSize';
 import {
   useCustomTokenDispatch,
   useCustomTokenState,
-} from "@src/reducers/custom-token";
-import IconComponent from "@src/components/swap/shared/IconComponent";
+} from '@src/reducers/custom-token';
+import IconComponent from '@src/components/swap/shared/IconComponent';
 
 interface IManageCustomTokenItem {
   chain: EBlockchainNetwork;

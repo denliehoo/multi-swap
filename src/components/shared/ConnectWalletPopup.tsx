@@ -1,6 +1,7 @@
-import { Popconfirm } from "antd";
-import { FC } from "react";
-import { TooltipPlacement } from "antd/lib/tooltip";
+'use client';
+import { Popconfirm } from 'antd';
+import { FC } from 'react';
+import { TooltipPlacement } from 'antd/lib/tooltip';
 
 interface IConnectWalletPopup {
   placement?: TooltipPlacement;
@@ -9,8 +10,8 @@ interface IConnectWalletPopup {
 const ConnectWalletPopup: FC<IConnectWalletPopup> = ({ placement }) => {
   return (
     <Popconfirm
-      placement={placement || "bottom"}
-      title={"Wallet not found. Try Metamask?"}
+      placement={placement || 'bottom'}
+      title={'Wallet not found. Try Metamask?'}
       showCancel={false}
       // description={"Try metamask?"}
       okText={

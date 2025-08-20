@@ -1,7 +1,7 @@
-import { Col, Row } from "antd";
-import classes from "../index.module.css";
-import LoadingSpinner from "../loading-spinner";
-import { FC } from "react";
+import { Col, Row } from 'antd';
+import classes from '../index.module.css';
+import LoadingSpinner from '../loading-spinner';
+import { FC } from 'react';
 
 const SwapModalLoadingContent: FC = () => {
   return (
@@ -9,7 +9,7 @@ const SwapModalLoadingContent: FC = () => {
       <Row
         align="middle"
         justify="center"
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: '100%', height: '100%' }}
       >
         <Col>
           <LoadingSpinner />
