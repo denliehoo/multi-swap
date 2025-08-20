@@ -4,7 +4,6 @@ import { useState, useEffect, FC } from 'react';
 import { Input, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import ManageCustomTokenItem from './item';
-import { getDetailsForCustomToken } from '@src/api';
 import { localStorageKey } from '@src/config';
 import { EBlockchainNetwork } from '@src/enum';
 import { useWindowSize } from '@src/hooks/useWindowSize';
@@ -72,11 +71,17 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
     // For FTM:
     // AAVE: 0x6a07A792ab2965C72a5B8088d3a069A7aC3a993B
     // CRV: 0x1E4F97b9f9F913c46F1632781732927B9019C68b
-    const res = await getDetailsForCustomToken(chain, tokenAddress);
-    const name = await res.data[0].name;
-    const symbol = await res.data[0].symbol;
-    const decimals = await parseFloat(res.data[0].decimals);
-    let logo = await res.data[0].logo;
+    const params = new URLSearchParams({
+      chain,
+      tokenAddress,
+    });
+    const res = await fetch(
+      `/api/custom-token-details?${params.toString()}`,
+    ).then((res) => res.json());
+    const name = await res[0].name;
+    const symbol = await res[0].symbol;
+    const decimals = await parseFloat(res[0].decimals);
+    let logo = await res[0].logo;
     if (!logo) {
       logo = 'No Logo';
     }

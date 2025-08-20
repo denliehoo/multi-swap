@@ -9,7 +9,6 @@ import {
   SWAP_TYPE_EVENT_MAP,
 } from '..';
 import { EBlockchainNetwork } from '@src/enum';
-import { getContractABI } from '@src/api';
 import { ReactNode } from 'react';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 
@@ -378,7 +377,15 @@ const getTokensToApprove = async (
       .call({ from: address });
 
     if (parseFloat(amountForEachTokensIn[i]) > parseFloat(allowance)) {
-      const tokenContractABI = await getContractABI(chain, poolAddressesIn[i]);
+      const params = new URLSearchParams({
+        chain,
+        address: poolAddressesIn[i],
+      });
+      const tokenContractABI = await fetch(
+        `/api/contract-abi?${params.toString()}`,
+      ).then((res) => res.json());
+
+      console.log('tokenContractABI', tokenContractABI);
       if (!tokenContractABI) {
         // TODO: Throw error
         return [];

@@ -7,7 +7,7 @@
     - Fix issue of using CSR in SSR [in progress]
   - Migrate to Next js: Docs: https://nextjs.org/docs/app/guides/migrating/from-create-react-app#migration-steps
     - Upgrade antd [ok]
-    - Ensure stylings are not lost
+    - Ensure stylings are not lost [ok]
   - Set up biome
     - Linter turned off for now. To turn in back on
     - in biome.json, linter.enabled is currently false for now
