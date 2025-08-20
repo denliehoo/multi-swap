@@ -6,11 +6,14 @@
   - Multiswap set up
   - Add in sepolia code
   - Remove ftm & goerli related code
-- Turn on biome linter and fix linting errors (in biome.json, linter.enabled is currently false for now)
 - Use nextjs pages router properly
+  - Currently just using slug
+  - caching of api calls (e.g. getting token dont need refresh all the time)
+- Turn on biome linter and fix linting errors (in biome.json, linter.enabled is currently false for now)
+  - propery typing, etc
+- Migrate to tailwind
 - Fix first load css
 - Fix styles messing up on save in local development
-- Migrate to tailwind
 
 
 - -----Start Of Phase 4: Continuous Improvements-----

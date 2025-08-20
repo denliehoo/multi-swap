@@ -20,7 +20,8 @@ const PreviewSwapItem: FC<IPreviewSwapItem> = ({
     <div className="mt-10 pr-15 pt-5">
       <Row justify="space-between">
         <Row align="middle">
-          <IconComponent size={40} imgUrl={imgUrl} />
+          {/* Note: changed from 40 */}
+          <IconComponent size="large" imgUrl={imgUrl} />
           <span className="ml-10">{symbol}</span>
         </Row>
         <Row align="middle">
