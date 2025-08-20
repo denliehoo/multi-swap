@@ -15,6 +15,7 @@ import {
 import { IDefaultAssetInfo } from '@src/interface';
 import IconComponent from '@src/components/swap/shared/IconComponent';
 import { useConnectWalletState } from '@src/reducers/connect-wallet';
+import { getDetailsForCustomToken } from '@src/api';
 
 interface IManageCustomTokenProps {
   defaultAssets: IDefaultAssetInfo[];
@@ -71,13 +72,8 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
     // For FTM:
     // AAVE: 0x6a07A792ab2965C72a5B8088d3a069A7aC3a993B
     // CRV: 0x1E4F97b9f9F913c46F1632781732927B9019C68b
-    const params = new URLSearchParams({
-      chain,
-      tokenAddress,
-    });
-    const res = await fetch(
-      `/api/custom-token-details?${params.toString()}`,
-    ).then((res) => res.json());
+
+    const res = await getDetailsForCustomToken(chain, tokenAddress);
     const name = await res[0].name;
     const symbol = await res[0].symbol;
     const decimals = await parseFloat(res[0].decimals);

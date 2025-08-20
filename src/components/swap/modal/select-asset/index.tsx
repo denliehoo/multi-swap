@@ -16,6 +16,7 @@ import { ICustomToken, useCustomTokenState } from '@src/reducers/custom-token';
 import { IDefaultAssetInfo } from '@src/interface';
 import { EBlockchainNetwork, ESWapDirection } from '@src/enum';
 import { useConnectWalletState } from '@src/reducers/connect-wallet';
+import { getTokenBalances } from '@src/api';
 
 interface ISelectAssetModal {
   isModalOpen: boolean;
@@ -88,15 +89,11 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
       }));
       let combinedAssetListTemp = defaultAssets.concat(formattedCustomTokens);
       const arrayOfAssetAddresses = combinedAssetListTemp.map((i) => i.address);
-      const data = await fetch(
-        `/api/token-balances?chain=${chain}&walletAddress=${address}&tokenAddresses=${[
-          ...arrayOfAssetAddresses,
-        ].join(',')}`,
-      )
-        .then((res) => res.json())
-        .catch((err) => {
-          console.error('Error fetching token balances:', err);
-        });
+      const data = await getTokenBalances(
+        chain,
+        address,
+        arrayOfAssetAddresses,
+      );
 
       const balancesArray = data.balances;
 

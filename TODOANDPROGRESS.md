@@ -1,17 +1,17 @@
 # To do list / Progress:
 
 ## To do
+- Deploy to vercel instead of firebase
+- Migrate to sepolia (ftm + goerli has been deprecated)
+  - Multiswap set up
+  - Add in sepolia code
+  - Remove ftm & goerli related code
+- Turn on biome linter and fix linting errors (in biome.json, linter.enabled is currently false for now)
+- Use nextjs pages router properly
+- Fix first load css
+- Fix styles messing up on save in local development
+- Migrate to tailwind
 
-- Architecture revamp:
-  - Migrate npm to pnpm:
-    - Fix issue of using CSR in SSR [in progress]
-  - Migrate to Next js: Docs: https://nextjs.org/docs/app/guides/migrating/from-create-react-app#migration-steps
-    - Upgrade antd [ok]
-    - Ensure stylings are not lost [ok]
-  - Set up biome
-    - Linter turned off for now. To turn in back on
-    - in biome.json, linter.enabled is currently false for now
-- Fix Linting errors
 
 - -----Start Of Phase 4: Continuous Improvements-----
 - C# backend
@@ -178,3 +178,9 @@
 - 9/04/23: ensure swap functionalities are working
 - 9/04/23: Preparing to launch phase 3
 - -----End Of Phase 3: Ability to use different chains-----
+- Architecture revamp:
+  - Migrate npm to pnpm:
+  - Migrate to Next js: Docs: https://nextjs.org/docs/app/guides/migrating/from-create-react-app#migration-steps
+    - Upgrade antd 
+    - Ensure stylings are not lost 
+  - Set up biome

@@ -9,6 +9,7 @@ import { useSwapState, useSwapDispatch } from '@src/reducers/swap';
 import { formatNumber } from '@src/utils/format/number';
 import { EBlockchainNetwork, ESWapDirection } from '@src/enum';
 import { useConnectWalletState } from '@src/reducers/connect-wallet';
+import { getAssetPrice } from '@src/api';
 
 interface ICryptoSwapItem {
   percent?: number;
@@ -104,16 +105,7 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
   const getPrice = useCallback(
     async (chain: EBlockchainNetwork) => {
       if (props.asset) {
-        const params = new URLSearchParams({
-          chain,
-          asset: props.asset,
-          address: props.address,
-        });
-
-        const price = await fetch(`/api/asset-price?${params.toString()}`)
-          .then((res) => res.text())
-          .then((text) => parseFloat(text));
-
+        const price = await getAssetPrice(chain, props.asset, props.address);
         setPrice(price);
         setPriceIsLoading(false);
 

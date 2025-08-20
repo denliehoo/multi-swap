@@ -11,6 +11,7 @@ import {
 import { EBlockchainNetwork } from '@src/enum';
 import { ReactNode } from 'react';
 import { NotificationPlacement } from 'antd/es/notification/interface';
+import { getContractABI } from '@src/api';
 
 interface IGetAmountsOutDetails {
   swapFrom: ISwapDetails[];
@@ -377,15 +378,7 @@ const getTokensToApprove = async (
       .call({ from: address });
 
     if (parseFloat(amountForEachTokensIn[i]) > parseFloat(allowance)) {
-      const params = new URLSearchParams({
-        chain,
-        address: poolAddressesIn[i],
-      });
-      const tokenContractABI = await fetch(
-        `/api/contract-abi?${params.toString()}`,
-      ).then((res) => res.json());
-
-      console.log('tokenContractABI', tokenContractABI);
+      const tokenContractABI = await getContractABI(chain, poolAddressesIn[i]);
       if (!tokenContractABI) {
         // TODO: Throw error
         return [];
