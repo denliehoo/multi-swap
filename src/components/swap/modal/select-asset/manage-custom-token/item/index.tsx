@@ -25,7 +25,7 @@ const ManageCustomTokenItem: FC<IManageCustomTokenItem> = (props) => {
   const {
     eth: ethCustomTokens,
     ftm: ftmCustomTokens,
-    goerli: goerliCustomTokens,
+    sepolia: sepoliaCustomTokens,
   } = useCustomTokenState();
 
   const { removeCustomTokenAction: removeCustomToken } =
@@ -37,10 +37,10 @@ const ManageCustomTokenItem: FC<IManageCustomTokenItem> = (props) => {
       return ethCustomTokens;
     } else if (chain === EBlockchainNetwork.FTM) {
       return ftmCustomTokens;
-    } else if (chain === EBlockchainNetwork.GOERLI) {
-      return goerliCustomTokens;
+    } else if (chain === EBlockchainNetwork.SEPOLIA) {
+      return sepoliaCustomTokens;
     }
-    return goerliCustomTokens;
+    return sepoliaCustomTokens;
   };
   const deleteHandler = () => {
     const customTokens = getCustomTokens(props.chain);
@@ -73,10 +73,10 @@ const ManageCustomTokenItem: FC<IManageCustomTokenItem> = (props) => {
           <ScanOutlined className={classes.icon} />
         </a>
       );
-    } else if (props.chain === EBlockchainNetwork.GOERLI) {
+    } else if (props.chain === EBlockchainNetwork.SEPOLIA) {
       return (
         <a
-          href={`https://goerli.etherscan.io/address/${props.address}`}
+          href={`https://sepolia.etherscan.io/address/${props.address}`}
           target="_blank"
           rel="noreferrer"
         >

@@ -9,7 +9,7 @@ import ManageCustomToken from './manage-custom-token';
 import {
   ethDefaultAssetInfo,
   ftmDefaultAssetInfo,
-  goerliDefaultAssetInfo,
+  sepoliaDefaultAssetInfo,
 } from '@src/constants/default-asset-info';
 import SearchInputComponent from '../../shared/SearchInputComponent';
 import { ICustomToken, useCustomTokenState } from '@src/reducers/custom-token';
@@ -33,7 +33,7 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
   const {
     eth: ethCustomTokens,
     ftm: ftmCustomTokens,
-    goerli: goerliCustomTokens,
+    sepolia: sepoliaCustomTokens,
   } = useCustomTokenState();
   const { chain, address } = useConnectWalletState();
 
@@ -55,12 +55,12 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
         return ethCustomTokens;
       } else if (chain === EBlockchainNetwork.FTM) {
         return ftmCustomTokens;
-      } else if (chain === EBlockchainNetwork.GOERLI) {
-        return goerliCustomTokens;
+      } else if (chain === EBlockchainNetwork.SEPOLIA) {
+        return sepoliaCustomTokens;
       }
-      return goerliCustomTokens;
+      return sepoliaCustomTokens;
     },
-    [ethCustomTokens, ftmCustomTokens, goerliCustomTokens],
+    [ethCustomTokens, ftmCustomTokens, sepoliaCustomTokens],
   );
 
   const getDefaultAssets = useCallback((chain: EBlockchainNetwork) => {
@@ -68,8 +68,8 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
       return ethDefaultAssetInfo;
     } else if (chain === EBlockchainNetwork.FTM) {
       return ftmDefaultAssetInfo;
-    } else if (chain === EBlockchainNetwork.GOERLI) {
-      return goerliDefaultAssetInfo;
+    } else if (chain === EBlockchainNetwork.SEPOLIA) {
+      return sepoliaDefaultAssetInfo;
     }
     return [];
   }, []);
@@ -77,8 +77,8 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
   const getCombinedListOfAssets = useCallback(
     async (chain: EBlockchainNetwork, address: string) => {
       const defaultAssets = getDefaultAssets(chain);
-      const customTokens = getCustomTokens(chain);
-      const formattedCustomTokens = customTokens.map((i: ICustomToken) => ({
+      const customTokens = getCustomTokens(chain) as ICustomToken[];
+      const formattedCustomTokens = customTokens.map((i) => ({
         symbol: i.symbol,
         name: i.name,
         imgUrl: i.logo,

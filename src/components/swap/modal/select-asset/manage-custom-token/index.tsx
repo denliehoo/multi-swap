@@ -26,7 +26,7 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
   const {
     eth: ethCustomTokens,
     ftm: ftmCustomTokens,
-    goerli: goerliCustomTokens,
+    sepolia: sepoliaCustomTokens,
   } = useCustomTokenState();
   const { chain } = useConnectWalletState();
 
@@ -112,10 +112,10 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
       return ethCustomTokens;
     } else if (chain === EBlockchainNetwork.FTM) {
       return ftmCustomTokens;
-    } else if (chain === EBlockchainNetwork.GOERLI) {
-      return goerliCustomTokens;
+    } else if (chain === EBlockchainNetwork.SEPOLIA) {
+      return sepoliaCustomTokens;
     } else {
-      return goerliCustomTokens;
+      return sepoliaCustomTokens;
     }
   };
 
@@ -127,8 +127,8 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
       addCustomToken([...ethCustomTokens, customTokenData]);
     } else if (chain === EBlockchainNetwork.FTM) {
       addCustomToken([...ftmCustomTokens, customTokenData]);
-    } else if (chain === EBlockchainNetwork.GOERLI) {
-      addCustomToken([...goerliCustomTokens, customTokenData]);
+    } else if (chain === EBlockchainNetwork.SEPOLIA) {
+      addCustomToken([...sepoliaCustomTokens, customTokenData]);
     }
     localStorage.removeItem(localStorageKey); // remove current balances from cache because of new token
     setShowImportToken(false);

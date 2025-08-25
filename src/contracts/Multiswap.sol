@@ -2,13 +2,16 @@
 pragma solidity ^0.8.0;
 import "./IERC20.sol";
 import "./Irouter.sol";
+import "./IWETH.sol";
 
 contract Multiswap {
-    Irouter router;
     IERC20 erc20;
     address public contractOwner;
-    address public constant WETH = 0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83; // wFTM
-    // address public constant WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2; // wETH
+    address public constant WETH = 0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14; // wETH on Sepolia
+    IWETH wethContract = IWETH(WETH);
+    Irouter router = Irouter(0xeE567Fe1712Faf6149d80dA1E6934E354124CfE3); // Sepolia uniswapv2 router
+
+
 
     address NATIVE_ADDRESS_SIMULATION =
         0x0000000000000000000000000000000000000000;
@@ -35,10 +38,9 @@ contract Multiswap {
         SwapObject[] swapTo
     );
 
-    constructor(address _router) {
+    constructor() {
         // for now, we put the default router; in the future, we will inidicate in code which to use
         contractOwner = msg.sender;
-        router = Irouter(_router);
     }
 
     // checks whether the user has given allowance to the contract
@@ -68,7 +70,7 @@ contract Multiswap {
                 ethAmount = msg.value;
             } else {
                 ethAmount = inputtedEthAmountFromContract;
-                require(address(this).balance >= inputtedEthAmountFromContract);
+                require(address(this).balance >= inputtedEthAmountFromContract, "Error: Contract ETH balance lesser than inputted amount");
             }
         }
         require(ethAmount > 0, "Error: input amount must be more than 0 ETH");
@@ -81,13 +83,23 @@ contract Multiswap {
             address[] memory path = new address[](2);
             path[0] = WETH;
             path[1] = poolAddresses[i];
-            // router.swapExactETHForTokens(amountOutMin, path, to, deadline);
-            uint256 tokenAmount = router.swapExactETHForTokens{
-                value: (ethAmount * percentForEachToken[i]) / 10000
-            }(1, path, to, block.timestamp)[1];
+            uint256 ethSwapAmount = (ethAmount * percentForEachToken[i]) / 10000;
+            uint256 tokenAmount;
+
+            if(path[0] == path[1]){
+                wethContract.deposit{
+                    value: ethSwapAmount
+                }();
+                tokenAmount = ethSwapAmount;
+            } else {
+                tokenAmount = router.swapExactETHForTokens{
+                    value: ethSwapAmount
+                }(1, path, to, block.timestamp)[1];
+            }
             SwapObject memory swapObject = SwapObject(path[1], tokenAmount);
             swapTo[i] = swapObject;
         }
+        return (ethAmount, swapTo);
     }
 
     // ERC20s -> ETH general function
@@ -103,7 +115,7 @@ contract Multiswap {
     {
         swapFrom = new SwapObject[](poolAddresses.length);
         address to;
-
+        
         if (toAddress == ToAddress.Sender) {
             to = msg.sender;
         }
@@ -123,24 +135,32 @@ contract Multiswap {
                 amountForEachTokens[i]
             );
 
-            // get the smart contract to approve sending the erc20 token to the router
-            IERC20(poolAddresses[i]).approve(
-                address(router),
-                amountForEachTokens[i]
-            );
+            uint256 ethFromSwap;
 
-            // swap the ERC20 token for ETH
-            uint256 ethFromSwap = router.swapExactTokensForETH(
-                amountForEachTokens[i],
-                1,
-                path,
-                to,
-                block.timestamp
-            )[1];
+            if(path[0] == path[1]){
+                wethContract.withdraw(amountForEachTokens[i]);
+                ethFromSwap = amountForEachTokens[i];
+            } else {
+                // get the smart contract to approve sending the erc20 token to the router
+                IERC20(poolAddresses[i]).approve(
+                    address(router),
+                    amountForEachTokens[i]
+                );
+                // swap the ERC20 token for ETH
+                ethFromSwap = router.swapExactTokensForETH(
+                    amountForEachTokens[i],
+                    1,
+                    path,
+                    to,
+                    block.timestamp
+                )[1];
+            }
             ethAmount += ethFromSwap;
             SwapObject memory swapObject = SwapObject(path[0], ethFromSwap);
             swapFrom[i] = swapObject;
         }
+
+        return (swapFrom, ethAmount);
     }
 
     // 1. get amounts out ETH -> ERC20 [tested and works]
@@ -160,10 +180,14 @@ contract Multiswap {
             address[] memory path = new address[](2);
             path[0] = WETH;
             path[1] = poolAddresses[i];
-            uint256 tokenAmount = router.getAmountsOut(
-                (ethAmount * percentForEachToken[i]) / 10000,
-                path
-            )[1];
+
+            uint256 inputAmount = (ethAmount * percentForEachToken[i]) / 10000;
+            uint256 tokenAmount;
+            if (path[0] == path[1]) {
+                tokenAmount = inputAmount;
+            } else {
+                tokenAmount = router.getAmountsOut(inputAmount, path)[1];
+            }
             returnArray[i] = (tokenAmount);
         }
         return returnArray;
@@ -184,7 +208,14 @@ contract Multiswap {
             address[] memory path = new address[](2);
             path[0] = poolAddresses[i];
             path[1] = WETH;
-            ethAmount += router.getAmountsOut(amountForEachTokens[i], path)[1];
+            uint256 amountToAdd;
+            
+            if(path[0] == path[1]) {
+                amountToAdd = amountForEachTokens[i];
+            } else {
+                amountToAdd = router.getAmountsOut(amountForEachTokens[i], path)[1];
+            }
+            ethAmount += amountToAdd;
         }
         return ethAmount;
     }
@@ -341,7 +372,7 @@ contract Multiswap {
         emit SwapTokensForEthEvent(swapFrom, ethAmount);
     }
 
-    // 3. ERC20(s) -> ERC20(s) [tested and works]
+    // 3. ERC20(s) -> ERC20(s) [tested and works] 
     function swapMultipleTokensForMultipleTokensByPercent(
         address[] memory poolAddressesIn,
         uint256[] memory amountForEachTokensIn,

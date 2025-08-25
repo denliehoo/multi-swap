@@ -77,7 +77,8 @@ export const getAmountsOutDetails = async ({
     if (
       swapFrom.length === 1 &&
       swapFrom[0].address === NATIVE_ADDRESS &&
-      !poolAddressesOut.includes(NATIVE_ADDRESS)
+      !poolAddressesOut.includes(NATIVE_ADDRESS) &&
+      !poolAddressesOut.includes(WETH_ADDRESS[chain])
     ) {
       console.log('case 1');
       const ethAmount = amountForEachTokensIn[0];

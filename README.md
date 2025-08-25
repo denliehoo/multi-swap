@@ -57,6 +57,10 @@ REACT_APP_FTMSCAN_API_KEY=XXXX
   - Customisation of slippage
 
 # Deployed contracts:
+- Sepolia: https://sepolia.etherscan.io/address/0x49E36698Ac0A75d8093aD33a58096508D699eA58#code
+
+```bash
+Deprecated
 - Uniswap Router V2: https://goerli.etherscan.io/address/0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D#readContract
 - Phase 1:
   - Goerli: 0x743EaA47beaC140B1ff8d7b14C92A757A0dFAbF4
@@ -68,6 +72,7 @@ REACT_APP_FTMSCAN_API_KEY=XXXX
     - Multiswap: https://goerli.etherscan.io/address/0x6ad14f3770bb85a35706dca781e003fcf1e716e3#code
   - Fantom: 0x439de68f77b135AA56beB2825Be77aA20fbb4384
     - Multiswap: https://ftmscan.com/address/0x439de68f77b135aa56beb2825be77aa20fbb4384
+```
 
 
 ---

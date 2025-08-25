@@ -1,7 +1,7 @@
 export enum EBlockchainNetwork {
   ETH = 'eth',
   FTM = 'ftm',
-  GOERLI = 'goerli',
+  SEPOLIA = 'sepolia',
 }
 
 export enum ESWapDirection {

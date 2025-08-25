@@ -1,6 +1,6 @@
 import { IDefaultAssetInfo } from '@src/interface';
 
-export const goerliDefaultAssetInfo: IDefaultAssetInfo[] = [
+export const sepoliaDefaultAssetInfo: IDefaultAssetInfo[] = [
   {
     symbol: 'ETH',
     name: 'Ethereum',
@@ -28,7 +28,7 @@ export const goerliDefaultAssetInfo: IDefaultAssetInfo[] = [
       'https://assets.coingecko.com/coins/images/2518/large/weth.png?1628852295',
     bal: 0.01,
     decimals: 18,
-    address: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+    address: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14',
     isDefaultAsset: true,
   },
 ];

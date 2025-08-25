@@ -12,5 +12,5 @@ export interface ICustomTokenState {
   chain: EBlockchainNetwork;
   eth: ICustomToken[];
   ftm: ICustomToken[];
-  goerli: ICustomToken[];
+  sepolia: ICustomToken[];
 }

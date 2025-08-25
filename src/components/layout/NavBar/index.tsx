@@ -29,7 +29,7 @@ const NavBar: FC = () => {
 
   const [showDrawer, setShowDrawer] = useState(false);
   const [remainingChains, setRemainingChains] = useState<EBlockchainNetwork[]>([
-    EBlockchainNetwork.GOERLI,
+    EBlockchainNetwork.FTM,
   ]);
   const { width } = useWindowSize();
 
