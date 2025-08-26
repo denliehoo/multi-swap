@@ -10,7 +10,7 @@ export const WETH_ADDRESS: Record<EBlockchainNetwork, string> = {
 export const UINT_256_MAX_AMOUNT =
   '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
 export const MULTISWAP_ADDRESS: Record<EBlockchainNetwork, string> = {
-  [EBlockchainNetwork.SEPOLIA]: '0x49E36698Ac0A75d8093aD33a58096508D699eA58',
+  [EBlockchainNetwork.SEPOLIA]: '0xCD34486AABE14B61388f06b8297BaDC5FF7C6a64',
   [EBlockchainNetwork.FTM]: '0x439de68f77b135AA56beB2825Be77aA20fbb4384',
   [EBlockchainNetwork.ETH]: '',
 };

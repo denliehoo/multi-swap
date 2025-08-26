@@ -63,8 +63,9 @@ contract Multiswap {
     {
         swapTo = new SwapObject[](poolAddresses.length);
         address to;
+        bool isSendToSender = toAddress == ToAddress.Sender;
 
-        if (toAddress == ToAddress.Sender) {
+        if (isSendToSender) {
             to = msg.sender;
             if (inputtedEthAmountFromContract == 0) {
                 ethAmount = msg.value;
@@ -91,7 +92,12 @@ contract Multiswap {
                     value: ethSwapAmount
                 }();
                 tokenAmount = ethSwapAmount;
+                if(isSendToSender){
+                    // Transfer WETH to the sender
+                    wethContract.transfer(to, tokenAmount);
+                }
             } else {
+                // Swap ETH for tokens and transfers it to "to"
                 tokenAmount = router.swapExactETHForTokens{
                     value: ethSwapAmount
                 }(1, path, to, block.timestamp)[1];
@@ -140,13 +146,18 @@ contract Multiswap {
             if(path[0] == path[1]){
                 wethContract.withdraw(amountForEachTokens[i]);
                 ethFromSwap = amountForEachTokens[i];
+                if(toAddress == ToAddress.Sender){
+                    // Transfer ETH to the sender
+                    (bool transferSuccess, ) = payable(to).call{value: ethFromSwap}("");
+                    require(transferSuccess, "ETH transfer failed");
+                }
             } else {
                 // get the smart contract to approve sending the erc20 token to the router
                 IERC20(poolAddresses[i]).approve(
                     address(router),
                     amountForEachTokens[i]
                 );
-                // swap the ERC20 token for ETH
+                // swap ERC20 tokens for ETH and sends it to "to"
                 ethFromSwap = router.swapExactTokensForETH(
                     amountForEachTokens[i],
                     1,
@@ -439,6 +450,10 @@ contract Multiswap {
         uint256 returnEthAmount = (ethReceivedFromSwap *
             _percentForEachTokenOut[_percentForEachTokenOut.length - 1]) /
             10000;
+
+        // Transfer eth back to sender
+        (bool transferSuccess, ) = payable(msg.sender).call{value: returnEthAmount}("");
+        require(transferSuccess, "ETH transfer failed");
 
         SwapObject[] memory swapToTemp;
 
