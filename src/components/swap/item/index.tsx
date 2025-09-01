@@ -245,7 +245,7 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
             {props.asset ? props.asset : <span>Select A Token</span>}
             <DownOutlined />
           </Button>
-          {
+          {isModalOpen && (
             <SelectAssetModal
               isModalOpen={isModalOpen}
               index={props.index}
@@ -260,7 +260,7 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
                 setIsModalOpen(false);
               }}
             />
-          }
+          )}
         </Col>
       </Row>
 
