@@ -43,11 +43,10 @@ const ManageCustomTokenItem: FC<IManageCustomTokenItem> = (props) => {
     return sepoliaCustomTokens;
   };
   const deleteHandler = () => {
-    const customTokens = getCustomTokens(props.chain);
-    const customTokenSymbols = customTokens.map((i) => i.symbol);
-    const indexOfAsset = customTokenSymbols.indexOf(props.symbol);
-    customTokens.splice(indexOfAsset, 1); // remove the entire {asset} from the customTokens array
-    removeCustomToken(customTokens);
+    const newCustomTokens = getCustomTokens(props.chain).filter(
+      (token) => token.symbol !== props.symbol,
+    );
+    removeCustomToken(newCustomTokens);
     props.onClickDelete();
     props.setToggleChangesInCustomToken();
   };

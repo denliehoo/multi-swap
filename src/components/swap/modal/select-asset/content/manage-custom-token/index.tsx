@@ -4,7 +4,6 @@ import { useState, useEffect, FC } from 'react';
 import { Input, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import ManageCustomTokenItem from './item';
-import { localStorageKey } from '@src/config';
 import { EBlockchainNetwork } from '@src/enum';
 import { useWindowSize } from '@src/hooks/useWindowSize';
 import {
@@ -130,7 +129,6 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
     } else if (chain === EBlockchainNetwork.SEPOLIA) {
       addCustomToken([...sepoliaCustomTokens, customTokenData]);
     }
-    localStorage.removeItem(localStorageKey); // remove current balances from cache because of new token
     setShowImportToken(false);
     props.setToggleChangesInCustomToken();
     setCustomTokenErrorMessage('');

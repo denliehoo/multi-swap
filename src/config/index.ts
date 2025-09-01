@@ -1,6 +1,5 @@
 import { EBlockchainNetwork } from '../enum';
 
-export const localStorageKey = 'Y2FjaGVkQmFsYW5jZXM=';
 export const NATIVE_ADDRESS = '0x0000000000000000000000000000000000000000';
 export const WETH_ADDRESS: Record<EBlockchainNetwork, string> = {
   [EBlockchainNetwork.SEPOLIA]: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14',

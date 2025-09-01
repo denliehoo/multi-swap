@@ -1,11 +1,6 @@
 # To do list / Progress:
 
 ## To do
-- Deploy to vercel instead of firebase
-- Migrate to sepolia (ftm + goerli has been deprecated)
-  - Multiswap set up
-  - Add in sepolia code
-  - Remove ftm & goerli related code
 - Use nextjs pages router properly
   - Currently just using slug
   - caching of api calls (e.g. getting token dont need refresh all the time)
@@ -187,3 +182,9 @@
     - Upgrade antd 
     - Ensure stylings are not lost 
   - Set up biome
+- Deploy to vercel instead of firebase
+- Migrate to sepolia (ftm + goerli has been deprecated)
+  - Multiswap set up
+  - Add in sepolia code
+  - Remove goerli related code
+  - Leave ftm, but sepolia is default

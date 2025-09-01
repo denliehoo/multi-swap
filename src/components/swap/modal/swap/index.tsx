@@ -15,6 +15,7 @@ import SwapModalSwapSubmittedContent from './modal-content/swap-submitted';
 import { getAmountsOutDetails } from './utils/get-amounts-out-details';
 import { initiateSwap } from './utils/initiate-swap';
 import { useConnectWalletState } from '@src/reducers/connect-wallet';
+import { useClearTokenBalancesCache } from '@src/hooks/query/use-token-balances';
 
 export interface ISwapItemDetails
   extends Omit<ISwapDetails, 'index' | 'address' | 'balance'> {}
@@ -79,6 +80,7 @@ interface IPreviewSwapModal {
 const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
   const { swapFrom, swapTo } = useSwapState();
   const { multiswap, address, web3, chain } = useConnectWalletState();
+  const { remove: removeTokenBalances } = useClearTokenBalancesCache();
 
   const { resetSwapAction: resetSwap } = useSwapDispatch();
 
@@ -139,8 +141,8 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
     setTokensRequiringApproval(tokensRequiringApproval);
   };
 
-  const initiateSwapHandler = () => {
-    initiateSwap({
+  const initiateSwapHandler = async () => {
+    await initiateSwap({
       swapType,
       setModalContent,
       swapObject,
@@ -155,6 +157,8 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
       setSwapIsLoading: props.setSwapIsLoading,
       openNotification,
     });
+    // Clear toke balance cache upon swap confirmed
+    removeTokenBalances();
   };
 
   const closeModalHandler = () => {

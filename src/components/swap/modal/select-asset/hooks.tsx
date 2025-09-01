@@ -1,10 +1,10 @@
-import { getTokenBalances } from '@src/api';
 import {
   ethDefaultAssetInfo,
   ftmDefaultAssetInfo,
   sepoliaDefaultAssetInfo,
 } from '@src/constants';
 import { EBlockchainNetwork } from '@src/enum';
+import { useTokenBalances } from '@src/hooks/query/use-token-balances';
 import { IDefaultAssetInfo } from '@src/interface';
 import { useConnectWalletState } from '@src/reducers/connect-wallet';
 import { useCustomTokenState, ICustomToken } from '@src/reducers/custom-token';
@@ -34,7 +34,6 @@ export const useSelectAssetModal = ({
   const [combinedAssetList, setCombinedAssetList] = useState<
     IDefaultAssetInfo[]
   >([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [toggleChangesInCustomToken, setToggleChangesInCustomToken] =
     useState(false);
   const [searchInput, setSearchInput] = useState('');
@@ -67,38 +66,24 @@ export const useSelectAssetModal = ({
     return [];
   }, []);
 
-  const getCombinedListOfAssets = useCallback(
-    async (chain: EBlockchainNetwork, address: string) => {
-      const defaultAssets = getDefaultAssets(chain);
-      const customTokens = getCustomTokens(chain) as ICustomToken[];
-      const formattedCustomTokens = customTokens.map((i) => ({
-        symbol: i.symbol,
-        name: i.name,
-        imgUrl: i.logo,
-        address: i.address,
-        isDefaultAsset: false,
-        bal: 0,
-        decimals: i.decimals,
-      }));
-      let combinedAssetListTemp = defaultAssets.concat(formattedCustomTokens);
-      const arrayOfAssetAddresses = combinedAssetListTemp.map((i) => i.address);
-      // Refactor to use the tanstack hook instead. Furthermore, should only use the hook when needed (e.g. when we open the modal), definitely need to refactor this entire component as it is getting too big
-      const data = await getTokenBalances(
-        chain,
-        address,
-        arrayOfAssetAddresses,
-      );
+  const defaultAssets = getDefaultAssets(chain);
+  const customTokens = getCustomTokens(chain) as ICustomToken[];
+  const formattedCustomTokens = customTokens.map((i) => ({
+    symbol: i.symbol,
+    name: i.name,
+    imgUrl: i.logo,
+    address: i.address,
+    isDefaultAsset: false,
+    bal: 0,
+    decimals: i.decimals,
+  }));
+  const combinedAssets = defaultAssets.concat(formattedCustomTokens);
+  const arrayOfAssetAddresses = combinedAssets.map((i) => i.address);
 
-      const balancesArray = data.balances;
-
-      for (let i in combinedAssetListTemp) {
-        combinedAssetListTemp[i].bal = balancesArray[i];
-      }
-      setCombinedAssetList(combinedAssetListTemp);
-      setIsLoading(false);
-      return combinedAssetListTemp;
-    },
-    [getDefaultAssets, getCustomTokens],
+  const { data, isLoading } = useTokenBalances(
+    chain,
+    address,
+    arrayOfAssetAddresses,
   );
 
   const chooseAssetHandler = (bal: number) => {
@@ -110,7 +95,6 @@ export const useSelectAssetModal = ({
   const closeModalHandler = () => {
     setIsManageCustomToken(false);
     setCombinedAssetList([]);
-    setIsLoading(true);
     setToggleChangesInCustomToken(false);
     setSearchInput('');
     setSearchInputResults([]);
@@ -119,16 +103,15 @@ export const useSelectAssetModal = ({
   };
 
   useEffect(() => {
-    if (isModalOpen && address) {
-      getCombinedListOfAssets(chain, address);
+    if (isModalOpen && address && data && data.balances) {
+      const balancesArray = data.balances;
+      const updatedAssets = combinedAssets.map((asset, idx) => ({
+        ...asset,
+        bal: balancesArray[idx],
+      }));
+      setCombinedAssetList(updatedAssets);
     }
-  }, [
-    address,
-    chain,
-    getCombinedListOfAssets,
-    isModalOpen,
-    toggleChangesInCustomToken,
-  ]);
+  }, [isModalOpen, address, data, chain, toggleChangesInCustomToken]);
 
   return {
     setIsManageCustomToken,

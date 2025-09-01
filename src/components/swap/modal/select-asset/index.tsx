@@ -2,18 +2,9 @@ import classes from './index.module.css';
 import { Row, Col } from 'antd/lib/grid';
 import { ArrowLeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC } from 'react';
 import ManageCustomToken from './content/manage-custom-token';
-import {
-  ethDefaultAssetInfo,
-  ftmDefaultAssetInfo,
-  sepoliaDefaultAssetInfo,
-} from '@src/constants/default-asset-info';
-import { ICustomToken, useCustomTokenState } from '@src/reducers/custom-token';
-import { IDefaultAssetInfo } from '@src/interface';
-import { EBlockchainNetwork, ESWapDirection } from '@src/enum';
-import { useConnectWalletState } from '@src/reducers/connect-wallet';
-import { getTokenBalances } from '@src/api';
+import { ESWapDirection } from '@src/enum';
 import SelectAssetModalContentAsset from './content/asset';
 import { useSelectAssetModal } from './hooks';
 
@@ -88,6 +79,7 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
         {!address ? (
           <div>Please connect your wallet to continue</div>
         ) : isLoading ? (
+          // TODO: Instead of swapping content, should do a loading overlay so that the content size doesn't change
           <Row align="middle" justify="center">
             <LoadingOutlined style={{ fontSize: '128px' }} />{' '}
           </Row>

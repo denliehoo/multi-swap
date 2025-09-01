@@ -11,8 +11,8 @@ Multiswap is a web3 nextjs application which allows users to swap multiple crypt
   - Antd
   - Web3.js: Used to interact with the smart contracts (TODO: Migrate away from web3.js)
   - CSS
+  - Tanstack
   - Tailwind (TODO)
-  - Tanstack (TODO)
 
 - Blockchain:
   - Solidity
