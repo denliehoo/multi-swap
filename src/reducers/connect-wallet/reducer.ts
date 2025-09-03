@@ -141,12 +141,11 @@ export const attemptToConnectWallet = (chain: EBlockchainNetwork): any => {
         console.log(multiswap.methods);
         dispatch(connectSmartContract(multiswap));
         return true;
-      } else {
-        // if no network...
-        console.log('Error: Wrong chain or no network detected');
-        dispatch(disconnectWallet());
-        return false;
       }
+      // if no network...
+      console.log('Error: Wrong chain or no network detected');
+      dispatch(disconnectWallet());
+      return false;
     } catch (error) {
       console.log(error);
       dispatch(disconnectWallet());

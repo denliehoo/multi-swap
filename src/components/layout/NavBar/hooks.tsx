@@ -6,12 +6,12 @@ const useNetworkHandler = (
   setRemainingChains: (chains: EBlockchainNetwork[]) => void,
   changeChainCustomTokenReducer: (chain: EBlockchainNetwork) => void,
   changeChainConnectWalletReducer: (chain: EBlockchainNetwork) => void,
-  attemptToConnectWallet: (chain: EBlockchainNetwork) => Promise<Boolean>,
+  attemptToConnectWallet: (chain: EBlockchainNetwork) => Promise<boolean>,
 ) => {
   const handleNetworkChange = async (_chain: EBlockchainNetwork) => {
-    let networkChanged = await attemptToConnectWallet(_chain);
+    const networkChanged = await attemptToConnectWallet(_chain);
     if (networkChanged) {
-      let newRemainingChain = remainingChains.filter((c) => c !== _chain);
+      const newRemainingChain = remainingChains.filter((c) => c !== _chain);
       newRemainingChain.push(chain);
       setRemainingChains(newRemainingChain);
       changeChainCustomTokenReducer(_chain);

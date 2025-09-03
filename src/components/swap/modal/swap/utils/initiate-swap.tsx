@@ -60,7 +60,7 @@ export const initiateSwap = async ({
         )
         .send({
           from: address,
-          value: swapObject.amount && swapObject.amount[0],
+          value: swapObject.amount?.[0],
         }) // only when user clicks confirm on metamask will this next step appear
         .on('transactionHash', (_hash: string) => {
           // console.log(`Transaction hash: ${hash}. user has confirmed`)

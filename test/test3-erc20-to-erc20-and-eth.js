@@ -47,7 +47,8 @@ const getEventReturnValuesFromReceipt = (receipt, eventName) => {
 contract(
   'Multiswap: Test case for 1. Swap ETH to ERC20 and 4. ERC20 to ERC20 + ETH',
   (accounts) => {
-    let instance, amountForEachTokensIn;
+    let instance;
+    let amountForEachTokensIn;
     const userWalletAddress = accounts[0];
 
     // any code in the before function will run first before anything (can be placed anywhere)
@@ -66,8 +67,8 @@ contract(
           );
         console.log(`USDC from getAmountsOut: ${getAmountsOut[0]}`);
         console.log(`DAI from getAmountsOut: ${getAmountsOut[1]}`);
-        assert.isAbove(parseInt(getAmountsOut[0]), 0);
-        assert.isAbove(parseInt(getAmountsOut[1]), 0);
+        assert.isAbove(Number.parseInt(getAmountsOut[0]), 0);
+        assert.isAbove(Number.parseInt(getAmountsOut[1]), 0);
       });
       it('Swap should work', async () => {
         const receipt = await instance.swapEthForMultipleTokensByPercent(
@@ -85,8 +86,8 @@ contract(
           returnValues.swapTo[0][1],
           returnValues.swapTo[1][1],
         ];
-        assert.isAbove(parseInt(returnValues.swapTo[0][1]), 0);
-        assert.isAbove(parseInt(returnValues.swapTo[1][1]), 0);
+        assert.isAbove(Number.parseInt(returnValues.swapTo[0][1]), 0);
+        assert.isAbove(Number.parseInt(returnValues.swapTo[1][1]), 0);
       });
 
       it('Tokens should approve', async () => {
@@ -96,7 +97,7 @@ contract(
         await daiContract.methods
           .approve(instance.address, uint256MaxAmount)
           .send({ from: userWalletAddress });
-        for (let i in poolAddressesIn) {
+        for (const i in poolAddressesIn) {
           const allowance = await instance.allowanceERC20(poolAddressesIn[i]);
           assert.equal(allowance.toString(), uint256MaxAmount);
         }
@@ -116,9 +117,9 @@ contract(
         console.log(`BOO from getAmountsOut: ${getAmountsOut[0]}`);
         console.log(`WBTC from getAmountsOut: ${getAmountsOut[1]}`);
         console.log(`Native from getAmountsOut: ${getAmountsOut[2]}`);
-        assert.isAbove(parseInt(getAmountsOut[0]), 0);
-        assert.isAbove(parseInt(getAmountsOut[1]), 0);
-        assert.isAbove(parseInt(getAmountsOut[2]), 0);
+        assert.isAbove(Number.parseInt(getAmountsOut[0]), 0);
+        assert.isAbove(Number.parseInt(getAmountsOut[1]), 0);
+        assert.isAbove(Number.parseInt(getAmountsOut[2]), 0);
       });
       it('Swap Should Work', async () => {
         const receipt2 =
@@ -136,9 +137,9 @@ contract(
         console.log(`BOO from swap: ${returnValues.swapTo[0][1]}`);
         console.log(`WBTC from swap: ${returnValues.swapTo[1][1]}`);
         console.log(`Native from swap: ${returnValues.swapTo[2][1]}`);
-        assert.isAbove(parseInt(returnValues.swapTo[0][1]), 0);
-        assert.isAbove(parseInt(returnValues.swapTo[1][1]), 0);
-        assert.isAbove(parseInt(returnValues.swapTo[2][1]), 0);
+        assert.isAbove(Number.parseInt(returnValues.swapTo[0][1]), 0);
+        assert.isAbove(Number.parseInt(returnValues.swapTo[1][1]), 0);
+        assert.isAbove(Number.parseInt(returnValues.swapTo[2][1]), 0);
       });
     });
   },

@@ -34,12 +34,12 @@ const SelectAssetItem: FC<ISelectAssetItem> = (props) => {
     if (type === ESWapDirection.FROM) {
       // if they are the same index, we change the details
       if (props.index === swapFrom[props.index].index) {
-        let newSwapFrom = [...swapFrom];
+        const newSwapFrom = [...swapFrom];
         newSwapFrom[props.index] = newAssetDetails;
         addSwapFrom(newSwapFrom);
       }
     } else if (type === ESWapDirection.TO) {
-      let newSwapTo = [...swapTo];
+      const newSwapTo = [...swapTo];
       if (props.index === swapTo[props.index].index) {
         newSwapTo[props.index] = newAssetDetails;
         addSwapTo(newSwapTo);

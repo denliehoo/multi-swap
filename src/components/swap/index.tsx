@@ -65,7 +65,7 @@ const Swap: FC = () => {
   const [api, contextHolder] = notification.useNotification();
 
   const changeSwapToPercentHandler = (i: number, percent: number) => {
-    let newSwapToPercentages = [...swapToPercentages];
+    const newSwapToPercentages = [...swapToPercentages];
     newSwapToPercentages[i] = percent;
     setSwapToPercentages(newSwapToPercentages);
     if (showPercentageError) {
@@ -83,7 +83,7 @@ const Swap: FC = () => {
   };
 
   const changePercentageFromMinus = (index: number) => {
-    let newSwapToPercentage = [...swapToPercentages];
+    const newSwapToPercentage = [...swapToPercentages];
     newSwapToPercentage.splice(index, 1);
     setSwapToPercentages(newSwapToPercentage);
   };
@@ -95,13 +95,13 @@ const Swap: FC = () => {
   ) => {
     if (type === ESWapDirection.FROM) {
       if (!swapFrom[index]) {
-        let newSwapFrom = [...swapFrom];
+        const newSwapFrom = [...swapFrom];
         newSwapFrom.push(newAssetDetails);
         addSwapFrom(newSwapFrom);
       }
     } else if (type === ESWapDirection.TO) {
       if (!swapTo[index]) {
-        let newSwapTo = [...swapTo];
+        const newSwapTo = [...swapTo];
         newSwapTo.push(newAssetDetails);
         addSwapTo(newSwapTo);
       }
@@ -120,7 +120,7 @@ const Swap: FC = () => {
         index: swapTo.length,
         amount: 100,
       });
-      let newSwapToPercentages = [...swapToPercentages];
+      const newSwapToPercentages = [...swapToPercentages];
       newSwapToPercentages.push(100);
       setSwapToPercentages(newSwapToPercentages);
     }
@@ -201,7 +201,10 @@ const Swap: FC = () => {
           {swapFrom.map((i, index) => (
             <CryptoSwapItem
               amount={i.amount}
-              key={`fromAsset${index}`}
+              key={`fromAsset${
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                index
+              }`}
               index={index}
               type={ESWapDirection.FROM}
               assetHasBeenSelected={toggleAssetSelectedState}
@@ -234,7 +237,10 @@ const Swap: FC = () => {
           {swapTo.map((i, index) => (
             <CryptoSwapItem
               percent={i.amount}
-              key={`toAssets${index}`}
+              key={`toAssets${
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                index
+              }`}
               index={index}
               type={ESWapDirection.TO}
               changeSwapToPercent={changeSwapToPercentHandler}
@@ -267,7 +273,7 @@ const Swap: FC = () => {
             block
             type="primary"
             shape="round"
-            disabled={swapIsLoading ? true : false}
+            disabled={!!swapIsLoading}
             onClick={() => {
               address ? swapButtonHandler() : attemptToConnectWallet(chain);
             }}

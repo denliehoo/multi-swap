@@ -6,11 +6,11 @@ export const formatNumber = (
     return 0;
   }
 
-  if (isNaN(num as number) || num === 'NaN') {
+  if (Number.isNaN(num as number) || num === 'NaN') {
     return 'Unable to fetch price';
   }
 
-  const number = typeof num === 'string' ? parseFloat(num) : num;
+  const number = typeof num === 'string' ? Number.parseFloat(num) : num;
 
   if (type === 'fiat') {
     return `$ ${number
@@ -25,7 +25,7 @@ export const formatNumber = (
     const integerPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     const decimalPart = parts[1].replace(/0+$/, '');
     if (decimalPart.length > 0) {
-      formattedNumber = integerPart + '.' + decimalPart;
+      formattedNumber = `${integerPart}.${decimalPart}`;
     } else {
       formattedNumber = integerPart;
     }

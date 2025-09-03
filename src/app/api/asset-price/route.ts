@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error('Failed to fetch asset price:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch Prices:' + JSON.stringify(error) },
+      { error: `Failed to fetch Prices:${JSON.stringify(error)}` },
       { status: 500 },
     );
   }

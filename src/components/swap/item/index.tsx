@@ -48,12 +48,12 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
   };
 
   const changeAmountInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const amount = parseFloat(e.target.value);
+    const amount = Number.parseFloat(e.target.value);
     if (props.type === ESWapDirection.FROM) {
       setAmount(amount);
-      props.amountHasChanged && props.amountHasChanged();
+      props.amountHasChanged?.();
 
-      let newSwapFrom = [...swapFrom];
+      const newSwapFrom = [...swapFrom];
       newSwapFrom[props.index] = {
         ...newSwapFrom[props.index],
         amount: amount,
@@ -63,11 +63,10 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
     } else if (props.type === ESWapDirection.TO) {
       const re = /^\d*$/;
       if (e.target.value === '' || (re.test(e.target.value) && amount <= 100)) {
-        const inputValue = parseFloat(e.target.value);
+        const inputValue = Number.parseFloat(e.target.value);
         setPercentInput(inputValue);
-        props.changeSwapToPercent &&
-          props.changeSwapToPercent(props.index, inputValue);
-        let newSwapTo = [...swapTo];
+        props.changeSwapToPercent?.(props.index, inputValue);
+        const newSwapTo = [...swapTo];
         newSwapTo[props.index] = {
           ...newSwapTo[props.index],
           amount: inputValue,
@@ -80,7 +79,7 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
   const minusHandler = () => {
     let newSwap =
       props.type === ESWapDirection.FROM ? [...swapFrom] : [...swapTo];
-    let index = props.index;
+    const index = props.index;
     newSwap.splice(index, 1);
 
     // Update the index
@@ -95,8 +94,7 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
     } else if (props.type === ESWapDirection.TO) {
       removeSwapTo(newSwap);
       setPercentInput(newSwap[index]?.amount);
-      props.changePercentageFromMinus &&
-        props.changePercentageFromMinus(props.index);
+      props.changePercentageFromMinus?.(props.index);
     }
     props.assetHasBeenSelected();
   };
@@ -109,7 +107,7 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
         setPrice(price);
         setPriceIsLoading(false);
 
-        let newSwap =
+        const newSwap =
           props.type === ESWapDirection.FROM ? [...swapFrom] : [...swapTo];
         newSwap[props.index] = {
           ...newSwap[props.index],
@@ -136,7 +134,7 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
   const onInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     e.target.addEventListener(
       'wheel',
-      function (e: WheelEvent) {
+      (e: WheelEvent) => {
         e.preventDefault();
       },
       { passive: false },

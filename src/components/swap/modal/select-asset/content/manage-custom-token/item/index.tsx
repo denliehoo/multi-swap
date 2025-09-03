@@ -35,9 +35,11 @@ const ManageCustomTokenItem: FC<IManageCustomTokenItem> = (props) => {
   const getCustomTokens = (chain: EBlockchainNetwork) => {
     if (chain === EBlockchainNetwork.ETH) {
       return ethCustomTokens;
-    } else if (chain === EBlockchainNetwork.FTM) {
+    }
+    if (chain === EBlockchainNetwork.FTM) {
       return ftmCustomTokens;
-    } else if (chain === EBlockchainNetwork.SEPOLIA) {
+    }
+    if (chain === EBlockchainNetwork.SEPOLIA) {
       return sepoliaCustomTokens;
     }
     return sepoliaCustomTokens;
@@ -62,7 +64,8 @@ const ManageCustomTokenItem: FC<IManageCustomTokenItem> = (props) => {
           <ScanOutlined className={classes.icon} />
         </a>
       );
-    } else if (props.chain === EBlockchainNetwork.FTM) {
+    }
+    if (props.chain === EBlockchainNetwork.FTM) {
       return (
         <a
           href={`https://ftmscan.com/address/${props.address}`}
@@ -72,7 +75,8 @@ const ManageCustomTokenItem: FC<IManageCustomTokenItem> = (props) => {
           <ScanOutlined className={classes.icon} />
         </a>
       );
-    } else if (props.chain === EBlockchainNetwork.SEPOLIA) {
+    }
+    if (props.chain === EBlockchainNetwork.SEPOLIA) {
       return (
         <a
           href={`https://sepolia.etherscan.io/address/${props.address}`}
