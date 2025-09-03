@@ -57,6 +57,8 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
     Hence, causing the parent component to render again, making it aware of the
     ethCustomTokens(store) state change. 
     */
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {}, [renderComponent]);
 
   const checkIfValidAddress = async (

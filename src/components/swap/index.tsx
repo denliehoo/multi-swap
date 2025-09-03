@@ -172,6 +172,7 @@ const Swap: FC = () => {
     });
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <We want the effect to run when toggleAssetSelected changes too>
   useEffect(() => {
     if (showTokenNotSelectedError) {
       setShowTokenNotSelectedError(false);

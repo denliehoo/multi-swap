@@ -60,7 +60,9 @@ const NavBar: FC = () => {
   }, [attemptToConnectWallet, changeChainCustomTokenReducer, chain]);
 
   useEffect(() => {
-    width && width > 500 && closeDrawer();
+    if (width && width > 500) {
+      setShowDrawer(false);
+    }
   }, [width]);
 
   useEffect(() => {

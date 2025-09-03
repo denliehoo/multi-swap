@@ -25,11 +25,16 @@
       },
       "recommended": true,
       "correctness": {
-        "noUnusedImports": "warn",
-        "noUnusedVariables": "warn"
+        "noUnusedImports": "error",
+        "noUnusedVariables": "warn",
+        "useExhaustiveDependencies": "warn"
       },
       "suspicious": {
-        "noExplicitAny": "error"
+        "noExplicitAny": "warn",
+        "noImplicitAnyLet": "warn"
+      },
+      "a11y": {
+        "useKeyWithClickEvents":"off"
       }
     }
   },

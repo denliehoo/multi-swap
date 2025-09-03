@@ -229,6 +229,7 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
     resetSwap();
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <Call only once when modal is visible, TODO: Find a better solution than this>
   useEffect(() => {
     props.visible &&
       getAmountsOutDetails({
@@ -242,9 +243,6 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
         closeModalHandler,
         showNotificationInSwapJs: props.showNotificationInSwapJs,
       });
-    // Call only once when modal is visible
-    // TODO: Find a better solution to this
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.visible]);
 
   return (

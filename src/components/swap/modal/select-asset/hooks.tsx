@@ -115,7 +115,7 @@ export const useSelectAssetModal = ({
       }));
       setCombinedAssetList(updatedAssets);
     }
-  }, [isModalOpen, address, data, chain, toggleChangesInCustomToken]);
+  }, [isModalOpen, address, data, combinedAssets]);
 
   return {
     setIsManageCustomToken,
