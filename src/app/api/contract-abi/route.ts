@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 
-// TODO: Change the APIs for this after Migrating away from ftm + goerli => sepolia
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const chain = searchParams.get('chain');
@@ -15,9 +14,9 @@ export async function GET(req: NextRequest) {
   }
 
   let res;
-  if (chain === 'goerli') {
+  if (chain === 'sepolia') {
     res = await axios.get(
-      `https://api-goerli.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY}`,
+      `https://api.etherscan.io/v2/api?chainid=11155111&module=contract&action=getabi&address=${address}&apikey=${process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY}`,
     );
   } else if (chain === 'ftm') {
     res = await axios.get(

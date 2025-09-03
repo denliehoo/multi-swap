@@ -70,10 +70,10 @@ const getLinkToBlockExplorer = (hash: string, chain: EBlockchainNetwork) => {
         <ScanOutlined />
       </a>
     );
-  } else if (chain === EBlockchainNetwork.GOERLI) {
+  } else if (chain === EBlockchainNetwork.SEPOLIA) {
     return (
       <a
-        href={`https://goerli.etherscan.io/tx/${hash}`}
+        href={`https://sepolia.etherscan.io/tx/${hash}`}
         target="_blank"
         rel="noreferrer"
       >

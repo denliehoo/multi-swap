@@ -1,3 +1,3 @@
 export * from './ethDefaultAssetInfo';
-export * from './goerliDefaultAssetInfo';
+export * from './sepoliaDefaultAssetInfo';
 export * from './ftmDefaultAssetInfo';

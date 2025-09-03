@@ -1,4 +1,3 @@
-import { localStorageKey } from '@src/config';
 import { ESwapType, ISwapItemDetails, ISwapObject } from '..';
 import { getPendingSwapText, getSuccessfulSwapText } from './text';
 import { ReactNode } from 'react';
@@ -189,7 +188,7 @@ export const initiateSwap = async ({
       'topRight',
       60,
     );
-    localStorage.removeItem(localStorageKey);
+
     setSwapIsLoading(false);
     // in the future, show also push to history
     //

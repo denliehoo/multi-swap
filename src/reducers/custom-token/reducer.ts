@@ -6,11 +6,10 @@ import { ICustomToken, ICustomTokenState } from './interface';
 
 // initial state
 const initialState: ICustomTokenState = {
-  chain: EBlockchainNetwork.FTM, //might need change this default?
-  // chain: 'goerli',
+  chain: EBlockchainNetwork.SEPOLIA, //might need change this default?
   eth: [],
   ftm: [],
-  goerli: [],
+  sepolia: [],
 };
 
 const customTokenSlice = createSlice({
