@@ -1,7 +1,7 @@
 const Multiswap = artifacts.require('Multiswap');
 
-module.exports = async function (deployer, network, accounts) {
-  const userWalletAddress = accounts[0];
+module.exports = async (deployer, _network, accounts) => {
+  const _userWalletAddress = accounts[0];
   // ftm spooky swap router
   const routerAddress = '0xF491e7B69E4244ad4002BC14e878a34207E38c29';
 
@@ -10,7 +10,7 @@ module.exports = async function (deployer, network, accounts) {
 
   await deployer.deploy(Multiswap, routerAddress);
 
-  const instance = await Multiswap.deployed();
+  const _instance = await Multiswap.deployed();
 };
 
 // const {daiABI} = require('../src/utils/testTokenABIs/ftm/daiABI')

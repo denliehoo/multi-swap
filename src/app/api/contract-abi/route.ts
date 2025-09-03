@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
   let res;
   if (chain === 'sepolia') {
     res = await axios.get(
@@ -26,7 +27,7 @@ export async function GET(req: NextRequest) {
 
   // if status !== 200, likely means contract not verified
 
-  let response = res?.status === 200 ? JSON.parse(res.data.result) : null;
+  const response = res?.status === 200 ? JSON.parse(res.data.result) : null;
 
   return NextResponse.json(response, {
     status: response ? 200 : 404,

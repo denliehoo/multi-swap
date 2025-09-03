@@ -12,6 +12,7 @@ import { EBlockchainNetwork } from '../../enum';
 import { IConnectWalletState } from './interface';
 import { Dispatch } from 'redux';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IWeb3 } from '@src/interface';
 
 // config for chain ids
 const chainIds: Record<EBlockchainNetwork, string> = {
@@ -20,12 +21,26 @@ const chainIds: Record<EBlockchainNetwork, string> = {
   [EBlockchainNetwork.SEPOLIA]: '0xaa36a7',
 };
 
-const multiswapAbi: any = {
-  sepolia: Multiswap_sepolia,
-  ftm: Multiswap_ftm,
+// biome-ignore lint/suspicious/noExplicitAny: <Unable to import AbiItem type>
+const multiswapAbi: Record<EBlockchainNetwork, any> = {
+  [EBlockchainNetwork.SEPOLIA]: Multiswap_sepolia,
+  [EBlockchainNetwork.FTM]: Multiswap_ftm,
+  [EBlockchainNetwork.ETH]: undefined,
 };
 
-const chainConfig: any = {
+interface IChainConfig {
+  chainId: string;
+  chainName: string;
+  rpcUrls: string[];
+  nativeCurrency: {
+    name: string;
+    symbol: string;
+    decimals: number;
+  };
+  blockExplorerUrls: string[];
+}
+
+const chainConfig: Record<EBlockchainNetwork, IChainConfig | undefined> = {
   [EBlockchainNetwork.FTM]: {
     chainId: '0xFA',
     chainName: 'Fantom',
@@ -37,6 +52,8 @@ const chainConfig: any = {
     },
     blockExplorerUrls: ['https://ftmscan.com'],
   },
+  [EBlockchainNetwork.ETH]: undefined,
+  [EBlockchainNetwork.SEPOLIA]: undefined,
 };
 
 const initialState: IConnectWalletState = {
@@ -50,7 +67,7 @@ const initialState: IConnectWalletState = {
 // TODO: Proper typing for web3 and multiswap
 export interface IConnectWalletPayload {
   address: string;
-  web3: any;
+  web3: IWeb3;
 }
 
 const connectWalletSlice = createSlice({
@@ -71,7 +88,7 @@ const connectWalletSlice = createSlice({
       state.walletConnected = false;
       state.multiswap = {};
     },
-    connectSmartContract(state, action: PayloadAction<any>) {
+    connectSmartContract(state, action: PayloadAction<object>) {
       state.multiswap = action.payload;
     },
     changeChain(state, action: PayloadAction<EBlockchainNetwork>) {
@@ -90,7 +107,7 @@ export const {
 export default connectWalletSlice.reducer;
 
 // TODO: Refactor this somewhere else
-export const attemptToConnectWallet = (chain: EBlockchainNetwork): any => {
+export const attemptToConnectWallet = (chain: EBlockchainNetwork) => {
   return async (dispatch: Dispatch) => {
     ///
     try {
@@ -141,12 +158,11 @@ export const attemptToConnectWallet = (chain: EBlockchainNetwork): any => {
         console.log(multiswap.methods);
         dispatch(connectSmartContract(multiswap));
         return true;
-      } else {
-        // if no network...
-        console.log('Error: Wrong chain or no network detected');
-        dispatch(disconnectWallet());
-        return false;
       }
+      // if no network...
+      console.log('Error: Wrong chain or no network detected');
+      dispatch(disconnectWallet());
+      return false;
     } catch (error) {
       console.log(error);
       dispatch(disconnectWallet());

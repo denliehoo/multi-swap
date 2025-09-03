@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["node_modules"]
+    "ignore": ["node_modules", "build", ".next", "deployedContractsABI", "testTokenABIs", "truffle_abis"]
   },
   "formatter": {
     "enabled": true,
@@ -18,18 +18,23 @@
     "enabled": true
   },
   "linter": {
-    "enabled": false,
+    "enabled": true,
     "rules": {
       "style": {
         "useImportType": "off"
       },
       "recommended": true,
       "correctness": {
-        "noUnusedImports": "warn",
-        "noUnusedVariables": "warn"
+        "noUnusedImports": "error",
+        "noUnusedVariables": "warn",
+        "useExhaustiveDependencies": "warn"
       },
       "suspicious": {
-        "noExplicitAny": "error"
+        "noExplicitAny": "warn",
+        "noImplicitAnyLet": "warn"
+      },
+      "a11y": {
+        "useKeyWithClickEvents":"off"
       }
     }
   },

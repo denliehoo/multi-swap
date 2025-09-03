@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
     );
 
     tokenBalances.push(
-      parseFloat(nativeBalanceRes.data.balance) / Math.pow(10, 18),
+      Number.parseFloat(nativeBalanceRes.data.balance) / 10 ** 18,
     );
 
     tokenAddresses.splice(0, 1); // Remove first element which is address native
@@ -57,13 +57,13 @@ export async function GET(req: NextRequest) {
 
     for (const tokenAddress of tokenAddresses) {
       const found = rawBalances.find(
-        (r: any) =>
+        (r: { token_address: string }) =>
           r.token_address.toLowerCase() === tokenAddress.toLowerCase(),
       );
 
       if (found) {
         tokenBalances.push(
-          parseFloat(found.balance) / Math.pow(10, found.decimals),
+          Number.parseFloat(found.balance) / 10 ** found.decimals,
         );
       } else {
         tokenBalances.push(0);
@@ -74,7 +74,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error('Failed to fetch token balances:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch balances:' + JSON.stringify(error) },
+      { error: `Failed to fetch balances:${JSON.stringify(error)}` },
       { status: 500 },
     );
   }

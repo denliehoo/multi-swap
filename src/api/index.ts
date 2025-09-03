@@ -7,7 +7,7 @@ const getAssetPrice = async (chain: string, asset: string, address: string) => {
 
   return await fetch(`/api/asset-price?${params.toString()}`)
     .then((res) => res.text())
-    .then((text) => parseFloat(text));
+    .then((text) => Number.parseFloat(text));
 };
 
 const getDetailsForCustomToken = async (

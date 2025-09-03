@@ -16,6 +16,7 @@ import { getAmountsOutDetails } from './utils/get-amounts-out-details';
 import { initiateSwap } from './utils/initiate-swap';
 import { useConnectWalletState } from '@src/reducers/connect-wallet';
 import { useClearTokenBalancesCache } from '@src/hooks/query/use-token-balances';
+import { IContract } from '@src/interface';
 
 export interface ISwapItemDetails
   extends Omit<ISwapDetails, 'index' | 'address' | 'balance'> {}
@@ -60,7 +61,7 @@ export interface ITokensRequiringApproval {
   address: string;
   symbol: string;
   buttonIsLoading: boolean;
-  contract: any;
+  contract: IContract;
 }
 
 interface IPreviewSwapModal {
@@ -228,6 +229,7 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
     resetSwap();
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <Call only once when modal is visible, TODO: Find a better solution than this>
   useEffect(() => {
     props.visible &&
       getAmountsOutDetails({
@@ -241,9 +243,6 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
         closeModalHandler,
         showNotificationInSwapJs: props.showNotificationInSwapJs,
       });
-    // Call only once when modal is visible
-    // TODO: Find a better solution to this
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.visible]);
 
   return (

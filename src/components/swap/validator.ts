@@ -9,7 +9,7 @@ export const validatePercentageArray = (
     (partialSum, a) => partialSum + a,
     0,
   );
-  const valid = arrayHasZero || sumOfArray !== 100 ? false : true;
+  const valid = !(arrayHasZero || sumOfArray !== 100);
   if (!valid) {
     setShowPercentageError(true);
   }
@@ -23,8 +23,7 @@ export const validateTokenSelected = (
 ): boolean => {
   const swapToSymbols = swapTo.map((i) => i.symbol);
   const swapFromSymbols = swapFrom.map((i) => i.symbol);
-  const valid =
-    swapToSymbols.includes('') || swapFromSymbols.includes('') ? false : true;
+  const valid = !(swapToSymbols.includes('') || swapFromSymbols.includes(''));
   if (!valid) {
     setShowTokenNotSelectedError(true);
   }
@@ -39,17 +38,16 @@ export const validateAmount = (
   const swapFromAmount = swapFrom.map((i) => i.amount || 0);
   const arrayContainsNaN = (arr: number[]) => {
     let results = false;
-    for (let i in arr) {
+    for (const i in arr) {
       if (!arr[i]) {
         results = true;
       }
     }
     return results;
   };
-  const valid =
+  const valid = !(
     swapFromAmount.includes(0) || arrayContainsNaN(swapFromAmount)
-      ? false
-      : true;
+  );
   if (!valid) {
     setShowAmountError(true);
   }
@@ -64,7 +62,7 @@ export const validateAmountLesserThanBalance = (
   const swapFromBalance = swapFrom.map((i) => i.balance);
 
   let valid = true;
-  for (let i in swapFrom) {
+  for (const i in swapFrom) {
     if (swapFromAmount[i] > swapFromBalance[i]) {
       valid = false;
       setShowAmountGreaterThanBalanceError(true);

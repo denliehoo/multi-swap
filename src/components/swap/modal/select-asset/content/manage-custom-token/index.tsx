@@ -57,6 +57,8 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
     Hence, causing the parent component to render again, making it aware of the
     ethCustomTokens(store) state change. 
     */
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {}, [renderComponent]);
 
   const checkIfValidAddress = async (
@@ -75,7 +77,7 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
     const res = await getDetailsForCustomToken(chain, tokenAddress);
     const name = await res[0].name;
     const symbol = await res[0].symbol;
-    const decimals = await parseFloat(res[0].decimals);
+    const decimals = await Number.parseFloat(res[0].decimals);
     let logo = await res[0].logo;
     if (!logo) {
       logo = 'No Logo';
@@ -109,13 +111,14 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
   const getCustomTokens = (chain: EBlockchainNetwork) => {
     if (chain === EBlockchainNetwork.ETH) {
       return ethCustomTokens;
-    } else if (chain === EBlockchainNetwork.FTM) {
+    }
+    if (chain === EBlockchainNetwork.FTM) {
       return ftmCustomTokens;
-    } else if (chain === EBlockchainNetwork.SEPOLIA) {
-      return sepoliaCustomTokens;
-    } else {
+    }
+    if (chain === EBlockchainNetwork.SEPOLIA) {
       return sepoliaCustomTokens;
     }
+    return sepoliaCustomTokens;
   };
 
   const importTokenHandler = (chain: EBlockchainNetwork) => {
@@ -165,7 +168,7 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
       {customTokenErrorMessage ? (
         <div className="color-light-grey">{customTokenErrorMessage}</div>
       ) : (
-        <div></div>
+        <div />
       )}
       {showImportToken ? (
         <div className={classes.importTokenContainer}>
@@ -196,7 +199,7 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
           </Row>
         </div>
       ) : (
-        <div></div>
+        <div />
       )}
 
       {/* <hr /> */}
@@ -212,12 +215,13 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
             </Col>
           </Row>
         ) : (
-          <span></span>
+          <span />
         )}
 
         {getCustomTokens(chain)?.length ? (
           getCustomTokens(chain)?.map(({ name, symbol, logo, address }) => (
             <ManageCustomTokenItem
+              key={address}
               name={name}
               symbol={symbol}
               icon={logo}

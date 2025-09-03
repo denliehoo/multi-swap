@@ -45,9 +45,11 @@ export const useSelectAssetModal = ({
     (chain: EBlockchainNetwork) => {
       if (chain === EBlockchainNetwork.ETH) {
         return ethCustomTokens;
-      } else if (chain === EBlockchainNetwork.FTM) {
+      }
+      if (chain === EBlockchainNetwork.FTM) {
         return ftmCustomTokens;
-      } else if (chain === EBlockchainNetwork.SEPOLIA) {
+      }
+      if (chain === EBlockchainNetwork.SEPOLIA) {
         return sepoliaCustomTokens;
       }
       return sepoliaCustomTokens;
@@ -58,9 +60,11 @@ export const useSelectAssetModal = ({
   const getDefaultAssets = useCallback((chain: EBlockchainNetwork) => {
     if (chain === EBlockchainNetwork.ETH) {
       return ethDefaultAssetInfo;
-    } else if (chain === EBlockchainNetwork.FTM) {
+    }
+    if (chain === EBlockchainNetwork.FTM) {
       return ftmDefaultAssetInfo;
-    } else if (chain === EBlockchainNetwork.SEPOLIA) {
+    }
+    if (chain === EBlockchainNetwork.SEPOLIA) {
       return sepoliaDefaultAssetInfo;
     }
     return [];
@@ -111,7 +115,7 @@ export const useSelectAssetModal = ({
       }));
       setCombinedAssetList(updatedAssets);
     }
-  }, [isModalOpen, address, data, chain, toggleChangesInCustomToken]);
+  }, [isModalOpen, address, data, combinedAssets]);
 
   return {
     setIsManageCustomToken,

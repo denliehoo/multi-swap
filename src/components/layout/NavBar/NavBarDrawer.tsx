@@ -2,12 +2,13 @@ import { FC } from 'react';
 import { Drawer, Menu } from 'antd';
 import { CloseOutlined, MenuOutlined } from '@ant-design/icons';
 import classes from './NavBar.module.css';
+import { ItemType, MenuItemType } from 'antd/es/menu/interface';
 
 interface NavBarDrawerProps {
   showDrawer: boolean;
   closeDrawer: () => void;
   openDrawer: () => void;
-  rightItems: any;
+  rightItems: ItemType<MenuItemType>[];
   width: number | undefined;
 }
 

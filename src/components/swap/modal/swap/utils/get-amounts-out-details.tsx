@@ -12,11 +12,20 @@ import { EBlockchainNetwork } from '@src/enum';
 import { ReactNode } from 'react';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import { getContractABI } from '@src/api';
+import { IMultiswap, IWeb3 } from '@src/interface';
+
+type TShowNotificationInSwapJs = (
+  message: string,
+  description: ReactNode,
+  icon: ReactNode,
+  placement: NotificationPlacement,
+  duration?: number,
+) => void;
 
 interface IGetAmountsOutDetails {
   swapFrom: ISwapDetails[];
   swapTo: ISwapDetails[];
-  multiswap: any;
+  multiswap: IMultiswap;
   setSwapDetails: (
     swapFromDetails: ISwapItemDetails[],
     swapToDetails: ISwapItemDetails[],
@@ -26,15 +35,9 @@ interface IGetAmountsOutDetails {
   ) => void;
   chain: EBlockchainNetwork;
   address: string;
-  web3: any;
+  web3: IWeb3;
   closeModalHandler: () => void;
-  showNotificationInSwapJs: (
-    message: string,
-    description: ReactNode,
-    icon: ReactNode,
-    placement: NotificationPlacement,
-    duration?: number,
-  ) => void;
+  showNotificationInSwapJs: TShowNotificationInSwapJs;
 }
 
 export const getAmountsOutDetails = async ({
@@ -48,14 +51,14 @@ export const getAmountsOutDetails = async ({
   closeModalHandler,
   showNotificationInSwapJs,
 }: IGetAmountsOutDetails) => {
-  let swapFromDetailsTemp = swapFrom.map((i) => ({
+  const swapFromDetailsTemp = swapFrom.map((i) => ({
     amount: i.amount,
     symbol: i.symbol,
     price: i.price,
     decimals: i.decimals,
     imgUrl: i.imgUrl,
   }));
-  let swapToDetailsTemp = swapTo.map((i) => ({
+  const swapToDetailsTemp = swapTo.map((i) => ({
     amount: i.amount,
     symbol: i.symbol,
     price: i.price,
@@ -67,7 +70,7 @@ export const getAmountsOutDetails = async ({
   const poolAddressesOut = swapTo.map((i) => i.address);
   // note: we change to string because thats usually how we call functions in the contract; check migrations file.
   const amountForEachTokensIn = swapFrom.map((i) =>
-    (i.amount * Math.pow(10, i.decimals)).toString(),
+    (i.amount * 10 ** i.decimals).toString(),
   );
   const percentForEachTokenOut = swapTo.map((i) => (i.amount * 100).toString()); // *100 because in basis point i.e. 50% = 5000
 
@@ -84,16 +87,16 @@ export const getAmountsOutDetails = async ({
       const ethAmount = amountForEachTokensIn[0];
 
       // note: best to use USDC and DAI for testing
-      let amountsOut = await multiswap.methods
+      const amountsOut = await multiswap.methods
         .getAmountsOutEthForMultipleTokensByPercent(
           ethAmount,
           poolAddressesOut,
           percentForEachTokenOut,
         )
         .call();
-      for (let i in swapToDetailsTemp) {
+      for (const i in swapToDetailsTemp) {
         swapToDetailsTemp[i].amount =
-          amountsOut[i] / Math.pow(10, swapToDetailsTemp[i].decimals);
+          amountsOut[i] / 10 ** swapToDetailsTemp[i].decimals;
       }
       setSwapDetails(
         swapFromDetailsTemp,
@@ -115,7 +118,7 @@ export const getAmountsOutDetails = async ({
       swapTo[0].address === NATIVE_ADDRESS
     ) {
       console.log('case 2!');
-      let amountsOut = await multiswap.methods
+      const amountsOut = await multiswap.methods
         .getAmountsOutMultipleTokensForEth(
           poolAddressesIn,
           amountForEachTokensIn,
@@ -123,7 +126,7 @@ export const getAmountsOutDetails = async ({
         .call();
 
       swapToDetailsTemp[0].amount =
-        amountsOut / Math.pow(10, swapToDetailsTemp[0].decimals);
+        amountsOut / 10 ** swapToDetailsTemp[0].decimals;
 
       const tokensToApprove = await getTokensToApprove(
         poolAddressesIn,
@@ -153,7 +156,7 @@ export const getAmountsOutDetails = async ({
       !poolAddressesOut.includes(NATIVE_ADDRESS)
     ) {
       console.log('case 3!');
-      let amountsOut = await multiswap.methods
+      const amountsOut = await multiswap.methods
         .getAmountsOutMultipleTokensForMultipleTokensByPercent(
           poolAddressesIn,
           amountForEachTokensIn,
@@ -162,9 +165,9 @@ export const getAmountsOutDetails = async ({
         )
         .call();
 
-      for (let i in swapToDetailsTemp) {
+      for (const i in swapToDetailsTemp) {
         swapToDetailsTemp[i].amount =
-          amountsOut[i] / Math.pow(10, swapToDetailsTemp[i].decimals);
+          amountsOut[i] / 10 ** swapToDetailsTemp[i].decimals;
       }
 
       const tokensToApprove = await getTokensToApprove(
@@ -209,7 +212,7 @@ export const getAmountsOutDetails = async ({
         indexToMove,
       } = reorderNativeToLast(poolAddressesOut, percentForEachTokenOut);
 
-      let amountsOut = await multiswap.methods
+      const amountsOut = await multiswap.methods
         .getAmountsOutMultipleTokensForMultipleTokensAndEthByPercent(
           poolAddressesIn,
           amountForEachTokensIn,
@@ -218,14 +221,14 @@ export const getAmountsOutDetails = async ({
         )
         .call();
 
-      let orderedSwapToDetailsTemp = swapToDetailsTemp.map((i) => i);
+      const orderedSwapToDetailsTemp = swapToDetailsTemp.map((i) => i);
       orderedSwapToDetailsTemp.push(
         ...orderedSwapToDetailsTemp.splice(indexToMove, 1),
       );
 
-      for (let i in orderedSwapToDetailsTemp) {
+      for (const i in orderedSwapToDetailsTemp) {
         orderedSwapToDetailsTemp[i].amount =
-          amountsOut[i] / Math.pow(10, orderedSwapToDetailsTemp[i].decimals);
+          amountsOut[i] / 10 ** orderedSwapToDetailsTemp[i].decimals;
       }
 
       const tokensToApprove = await getTokensToApprove(
@@ -272,7 +275,7 @@ export const getAmountsOutDetails = async ({
         indexToMove,
       } = reorderNativeToLast(poolAddressesIn, amountForEachTokensIn);
 
-      let amountsOut = await multiswap.methods
+      const amountsOut = await multiswap.methods
         .getAmountsOutTokensAndEthForMultipleTokensByPercent(
           orderedPoolAddressesIn,
           orderedAmountForEachTokensIn,
@@ -281,12 +284,12 @@ export const getAmountsOutDetails = async ({
         )
         .call();
 
-      for (let i in swapToDetailsTemp) {
+      for (const i in swapToDetailsTemp) {
         swapToDetailsTemp[i].amount =
-          amountsOut[i] / Math.pow(10, swapToDetailsTemp[i].decimals);
+          amountsOut[i] / 10 ** swapToDetailsTemp[i].decimals;
       }
 
-      let orderedSwapFromDetailsTemp = swapFromDetailsTemp.map((i) => i);
+      const orderedSwapFromDetailsTemp = swapFromDetailsTemp.map((i) => i);
       orderedSwapFromDetailsTemp.push(
         ...orderedSwapFromDetailsTemp.splice(indexToMove, 1),
       );
@@ -351,7 +354,7 @@ export const getAmountsOutDetails = async ({
 };
 
 const genericPreviewSwapErrorAction = (
-  showNotificationInSwapJs: any,
+  showNotificationInSwapJs: TShowNotificationInSwapJs,
   closeModalHandler: () => void,
 ) => {
   showNotificationInSwapJs(
@@ -367,18 +370,20 @@ const getTokensToApprove = async (
   poolAddressesIn: string[],
   amountForEachTokensIn: string[],
   swapFromDetailsTemp: ISwapItemDetails[],
-  multiswap: any,
+  multiswap: IMultiswap,
   address: string,
   chain: EBlockchainNetwork,
-  web3: any,
+  web3: IWeb3,
 ) => {
-  let tokensToApprove: ITokensRequiringApproval[] = [];
-  for (let i in poolAddressesIn) {
+  const tokensToApprove: ITokensRequiringApproval[] = [];
+  for (const i in poolAddressesIn) {
     const allowance = await multiswap.methods
       .allowanceERC20(poolAddressesIn[i])
       .call({ from: address });
 
-    if (parseFloat(amountForEachTokensIn[i]) > parseFloat(allowance)) {
+    if (
+      Number.parseFloat(amountForEachTokensIn[i]) > Number.parseFloat(allowance)
+    ) {
       const tokenContractABI = await getContractABI(chain, poolAddressesIn[i]);
       if (!tokenContractABI) {
         // TODO: Throw error

@@ -134,6 +134,7 @@
   width: 100%;
   border-radius: 10px !important;
   background-color: transparent !important;
+  /* biome-ignore lint/suspicious/noShorthandPropertyOverrides: <explanation> */
   background: transparent !important;
   border-color: #86c232 !important;
 }

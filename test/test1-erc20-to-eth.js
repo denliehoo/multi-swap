@@ -40,7 +40,8 @@ const getEventReturnValuesFromReceipt = (receipt, eventName) => {
 contract(
   'Multiswap: Test case for 1. Swap ETH to ERC20 and 2. ERC20 to ETH',
   (accounts) => {
-    let instance, amountForEachTokens;
+    let instance;
+    let amountForEachTokens;
     const userWalletAddress = accounts[0];
 
     // any code in the before function will run first before anything (can be placed anywhere)
@@ -69,8 +70,8 @@ contract(
           );
         console.log(`USDC from getAmountsOut: ${getAmountsOut[0]}`);
         console.log(`DAI from getAmountsOut: ${getAmountsOut[1]}`);
-        assert.isAbove(parseInt(getAmountsOut[0]), 0);
-        assert.isAbove(parseInt(getAmountsOut[1]), 0);
+        assert.isAbove(Number.parseInt(getAmountsOut[0]), 0);
+        assert.isAbove(Number.parseInt(getAmountsOut[1]), 0);
       });
       it('Swap should work', async () => {
         const receipt = await instance.swapEthForMultipleTokensByPercent(
@@ -88,8 +89,8 @@ contract(
           returnValues.swapTo[0][1],
           returnValues.swapTo[1][1],
         ];
-        assert.isAbove(parseInt(returnValues.swapTo[0][1]), 0);
-        assert.isAbove(parseInt(returnValues.swapTo[1][1]), 0);
+        assert.isAbove(Number.parseInt(returnValues.swapTo[0][1]), 0);
+        assert.isAbove(Number.parseInt(returnValues.swapTo[1][1]), 0);
       });
 
       it('Tokens should approve', async () => {
@@ -99,7 +100,7 @@ contract(
         await daiContract.methods
           .approve(instance.address, uint256MaxAmount)
           .send({ from: userWalletAddress });
-        for (let i in poolAddresses) {
+        for (const i in poolAddresses) {
           const allowance = await instance.allowanceERC20(poolAddresses[i]);
           assert.equal(allowance.toString(), uint256MaxAmount);
         }
@@ -113,7 +114,7 @@ contract(
           amountForEachTokens,
         );
         console.log(`ETH from getAmountsOut: ${getAmountsOut.toString()}`);
-        assert.isAbove(parseInt(getAmountsOut), 0);
+        assert.isAbove(Number.parseInt(getAmountsOut), 0);
       });
       it('Swap Should Work', async () => {
         const receipt2 = await instance.swapMultipleTokensForEth(
@@ -128,7 +129,7 @@ contract(
         console.log(
           `ethAmount from swap: ${returnValues.swapToAmount.toString()}`,
         );
-        assert.isAbove(parseInt(returnValues.swapToAmount), 0);
+        assert.isAbove(Number.parseInt(returnValues.swapToAmount), 0);
       });
     });
   },

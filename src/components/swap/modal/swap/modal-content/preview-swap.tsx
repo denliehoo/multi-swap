@@ -53,11 +53,17 @@ const SwapModalPreviewSwapContent: FC<ISwapModalPreviewSwapContent> = ({
             >
               {tokensRequiringApproval.map((i, index) =>
                 tokensApproved.includes(i.address) ? (
-                  <div className={classes.tokenApproved}>
+                  <div
+                    className={classes.tokenApproved}
+                    key={`${i.address}-approved`}
+                  >
                     {<CheckCircleOutlined />} Approved {i.symbol}
                   </div>
                 ) : (
-                  <div style={{ display: 'inline-block' }}>
+                  <div
+                    style={{ display: 'inline-block' }}
+                    key={`${i.address}-approve`}
+                  >
                     <Button
                       type="primary"
                       onClick={() => approveTokenHandler(i, index)}
@@ -79,7 +85,10 @@ const SwapModalPreviewSwapContent: FC<ISwapModalPreviewSwapContent> = ({
             symbol={i.symbol}
             price={i.price}
             imgUrl={i.imgUrl}
-            key={`${index}previewSwapFrom`}
+            key={`${
+              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+              index
+            }previewSwapFrom`}
           />
         ))}
 
@@ -90,7 +99,10 @@ const SwapModalPreviewSwapContent: FC<ISwapModalPreviewSwapContent> = ({
             symbol={i.symbol}
             price={i.price}
             imgUrl={i.imgUrl}
-            key={`${index}previewSwapTo`}
+            key={`${
+              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+              index
+            }previewSwapTo`}
           />
         ))}
       </div>

@@ -15,6 +15,7 @@ import {
   useConnectWalletState,
 } from '@src/reducers/connect-wallet';
 import { useCustomTokenDispatch } from '@src/reducers/custom-token';
+import { ItemType, MenuItemType } from 'antd/es/menu/interface';
 
 const NavBar: FC = () => {
   const { address, chain, walletConnected } = useConnectWalletState();
@@ -59,7 +60,9 @@ const NavBar: FC = () => {
   }, [attemptToConnectWallet, changeChainCustomTokenReducer, chain]);
 
   useEffect(() => {
-    width && width > 500 && closeDrawer();
+    if (width && width > 500) {
+      setShowDrawer(false);
+    }
   }, [width]);
 
   useEffect(() => {
@@ -88,16 +91,17 @@ const NavBar: FC = () => {
     }
   }, [walletConnected, attemptToConnectWallet, chain]);
 
-  const menuItems: any = useMemo(
-    () => [
-      getNetworkPortion(chain, handleNetworkChange, remainingChains),
-      getWalletConnectPortion(
-        walletConnected,
-        address,
-        connectWalletHandler,
-        disconnectWalletAction,
-      ),
-    ],
+  const menuItems = useMemo(
+    () =>
+      [
+        getNetworkPortion(chain, handleNetworkChange, remainingChains),
+        getWalletConnectPortion(
+          walletConnected,
+          address,
+          connectWalletHandler,
+          disconnectWalletAction,
+        ),
+      ] as ItemType<MenuItemType>[],
     [
       chain,
       handleNetworkChange,

@@ -50,8 +50,9 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     console.error('Failed to fetch asset price:', error);
+    // TODO: Handle if moralis fails to fetch the price
     return NextResponse.json(
-      { error: 'Failed to fetch Prices:' + JSON.stringify(error) },
+      { error: 'Failed to fetch Prices' },
       { status: 500 },
     );
   }

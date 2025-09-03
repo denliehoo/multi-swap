@@ -26,13 +26,12 @@ const renderNetworkLabel = (
       ),
       key: chainName,
     };
-  } else {
-    return (
-      <span>
-        <IconComponent imgUrl={chainLogo} size={'small'} /> {chainName}
-      </span>
-    );
   }
+  return (
+    <span>
+      <IconComponent imgUrl={chainLogo} size={'small'} /> {chainName}
+    </span>
+  );
 };
 
 export const getNetworkPortion = (
