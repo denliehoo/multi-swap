@@ -11,6 +11,7 @@ import {
 } from './reducer';
 import { EBlockchainNetwork } from '@src/enum';
 import { useCallback } from 'react';
+import { PayloadAction } from '@reduxjs/toolkit';
 
 export const useConnectWalletDispatch = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -30,8 +31,10 @@ export const useConnectWalletDispatch = () => {
     [dispatch],
   );
 
+  // Replace 'unknown' with a more specific type if available, e.g., ContractType
   const connectSmartContractAction = useCallback(
-    (contract: any) => dispatch(connectSmartContract(contract)),
+    (contract: PayloadAction<object>) =>
+      dispatch(connectSmartContract(contract)),
     [dispatch],
   );
 

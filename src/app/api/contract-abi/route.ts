@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
   let res;
   if (chain === 'sepolia') {
     res = await axios.get(

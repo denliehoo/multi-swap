@@ -32,8 +32,9 @@ export const getIndividualSwapText = (arr: ISwapItemDetails[]) => {
 };
 
 const formatAmountsInArrayForSuccessfulSwap = (
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   receipt: any,
-  arrToFormat: any,
+  arrToFormat: unknown[],
   swapType: ESwapEventEmitVariable,
   swapObject: ISwapObject | undefined,
 ) => {
@@ -87,6 +88,7 @@ const getLinkToBlockExplorer = (hash: string, chain: EBlockchainNetwork) => {
 };
 
 interface IGetSuccessfulSwapText {
+  // biome-ignore lint/suspicious/noExplicitAny: <TODO: Implement>
   receipt: any;
   swapType: ESwapType;
   swapToDetails: ISwapItemDetails[];
@@ -130,7 +132,7 @@ export const getSuccessfulSwapText = ({
         {`You have successfully swapped ${getIndividualSwapText(
           swapFromDetails,
         )} for ${formatNumber(
-          receipt.events[swapObject?.event as any].returnValues.swapToAmount /
+          receipt.events[swapObject?.event].returnValues.swapToAmount /
             10 ** swapToDetails[0].decimals,
           'crypto',
         )} ${swapToDetails[0].symbol}`}

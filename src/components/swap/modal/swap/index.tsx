@@ -16,6 +16,7 @@ import { getAmountsOutDetails } from './utils/get-amounts-out-details';
 import { initiateSwap } from './utils/initiate-swap';
 import { useConnectWalletState } from '@src/reducers/connect-wallet';
 import { useClearTokenBalancesCache } from '@src/hooks/query/use-token-balances';
+import { IContract } from '@src/interface';
 
 export interface ISwapItemDetails
   extends Omit<ISwapDetails, 'index' | 'address' | 'balance'> {}
@@ -60,7 +61,7 @@ export interface ITokensRequiringApproval {
   address: string;
   symbol: string;
   buttonIsLoading: boolean;
-  contract: any;
+  contract: IContract;
 }
 
 interface IPreviewSwapModal {

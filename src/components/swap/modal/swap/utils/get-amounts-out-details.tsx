@@ -12,11 +12,20 @@ import { EBlockchainNetwork } from '@src/enum';
 import { ReactNode } from 'react';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import { getContractABI } from '@src/api';
+import { IMultiswap, IWeb3 } from '@src/interface';
+
+type TShowNotificationInSwapJs = (
+  message: string,
+  description: ReactNode,
+  icon: ReactNode,
+  placement: NotificationPlacement,
+  duration?: number,
+) => void;
 
 interface IGetAmountsOutDetails {
   swapFrom: ISwapDetails[];
   swapTo: ISwapDetails[];
-  multiswap: any;
+  multiswap: IMultiswap;
   setSwapDetails: (
     swapFromDetails: ISwapItemDetails[],
     swapToDetails: ISwapItemDetails[],
@@ -26,15 +35,9 @@ interface IGetAmountsOutDetails {
   ) => void;
   chain: EBlockchainNetwork;
   address: string;
-  web3: any;
+  web3: IWeb3;
   closeModalHandler: () => void;
-  showNotificationInSwapJs: (
-    message: string,
-    description: ReactNode,
-    icon: ReactNode,
-    placement: NotificationPlacement,
-    duration?: number,
-  ) => void;
+  showNotificationInSwapJs: TShowNotificationInSwapJs;
 }
 
 export const getAmountsOutDetails = async ({
@@ -351,7 +354,7 @@ export const getAmountsOutDetails = async ({
 };
 
 const genericPreviewSwapErrorAction = (
-  showNotificationInSwapJs: any,
+  showNotificationInSwapJs: TShowNotificationInSwapJs,
   closeModalHandler: () => void,
 ) => {
   showNotificationInSwapJs(
@@ -367,10 +370,10 @@ const getTokensToApprove = async (
   poolAddressesIn: string[],
   amountForEachTokensIn: string[],
   swapFromDetailsTemp: ISwapItemDetails[],
-  multiswap: any,
+  multiswap: IMultiswap,
   address: string,
   chain: EBlockchainNetwork,
-  web3: any,
+  web3: IWeb3,
 ) => {
   const tokensToApprove: ITokensRequiringApproval[] = [];
   for (const i in poolAddressesIn) {

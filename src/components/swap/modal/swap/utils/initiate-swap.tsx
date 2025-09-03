@@ -5,14 +5,15 @@ import { CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import { ISwapDetails } from '@src/reducers/swap';
 import { EBlockchainNetwork } from '@src/enum';
 import { NotificationPlacement } from 'antd/es/notification/interface';
+import { IMultiswap, IWeb3 } from '@src/interface';
 
 interface IInitiateSwap {
   swapType?: ESwapType;
   setModalContent: (modalType: string) => void;
   swapObject?: ISwapObject;
-  multiswap: any;
+  multiswap: IMultiswap;
   address: string;
-  web3: any;
+  web3: IWeb3;
   showNotificationInSwapJs: (
     message: string,
     description: ReactNode,
@@ -49,6 +50,7 @@ export const initiateSwap = async ({
   // console.log(swapFromDetails)
   // console.log(swapToDetails)
   setModalContent('pendingConfirmation');
+  // biome-ignore lint/suspicious/noImplicitAnyLet: <TODO: Implement>
   let callSwap;
   try {
     if (swapType === ESwapType.ETH_TO_MULTI_TOKEN_PERCENT) {
@@ -192,6 +194,7 @@ export const initiateSwap = async ({
     setSwapIsLoading(false);
     // in the future, show also push to history
     //
+    // biome-ignore lint/suspicious/noExplicitAny: <TODO: Implement, 4001 refers to metamask user rejection>
   } catch (e: any) {
     if (e?.code === 4001) {
       setModalContent('previewSwap');

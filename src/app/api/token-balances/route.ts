@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
 
     for (const tokenAddress of tokenAddresses) {
       const found = rawBalances.find(
-        (r: any) =>
+        (r: { token_address: string }) =>
           r.token_address.toLowerCase() === tokenAddress.toLowerCase(),
       );
 
