@@ -188,7 +188,12 @@ const Swap: FC = () => {
           justify="space-between"
           style={{ width: '100%', marginBottom: '15px' }}
         >
-          <Col style={{ fontWeight: '700', fontSize: 'large' }}>Swap</Col>
+          <Col
+            style={{ fontWeight: '700', fontSize: 'large' }}
+            className="font-bold text-lg italic"
+          >
+            Swap
+          </Col>
         </Row>
 
         <ErrorBox
