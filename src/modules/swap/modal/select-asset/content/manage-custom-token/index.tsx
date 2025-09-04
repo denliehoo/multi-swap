@@ -12,9 +12,9 @@ import {
   useCustomTokenState,
 } from '@src/reducers/custom-token';
 import { IDefaultAssetInfo } from '@src/interface';
-import IconComponent from '@src/components/swap/shared/IconComponent';
 import { useConnectWalletState } from '@src/reducers/connect-wallet';
 import { getDetailsForCustomToken } from '@src/api';
+import IconComponent from '@src/components/shared/IconComponent';
 
 interface IManageCustomTokenProps {
   defaultAssets: IDefaultAssetInfo[];

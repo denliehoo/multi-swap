@@ -1,15 +1,16 @@
 'use client';
 
 import NavBar from '@src/components/layout/NavBar';
-import dynamic from 'next/dynamic';
+import Swap from '@src/modules/swap';
+// import dynamic from 'next/dynamic';
 
-const App = dynamic(() => import('../pages/AppPage'), { ssr: false });
+// const App = dynamic(() => import('../pages'), { ssr: false });
 
 export function ClientOnly() {
   return (
     <>
       <NavBar />
-      <App />
+      <Swap />
     </>
   );
 }

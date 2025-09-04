@@ -2,7 +2,6 @@ import classes from './NavBar.module.css';
 import { Menu } from 'antd';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
-import IconComponent from '../../swap/shared/IconComponent';
 import multiswapLogo from '@src/assets/images/multiswapLogo.png';
 import { useWindowSize } from '@src/hooks/useWindowSize';
 import { EBlockchainNetwork } from '@src/enum';
@@ -16,6 +15,7 @@ import {
 } from '@src/reducers/connect-wallet';
 import { useCustomTokenDispatch } from '@src/reducers/custom-token';
 import { ItemType, MenuItemType } from 'antd/es/menu/interface';
+import IconComponent from '@src/components/shared/IconComponent';
 
 const NavBar: FC = () => {
   const { address, chain, walletConnected } = useConnectWalletState();

@@ -9,7 +9,7 @@ import {
   useCustomTokenDispatch,
   useCustomTokenState,
 } from '@src/reducers/custom-token';
-import IconComponent from '@src/components/swap/shared/IconComponent';
+import IconComponent from '@src/components/shared/IconComponent';
 
 interface IManageCustomTokenItem {
   chain: EBlockchainNetwork;

@@ -1,12 +1,12 @@
-import IconComponent from '@src/components/swap/shared/IconComponent';
 import SelectAssetItem from './asset-item';
 import classes from './index.module.css';
 
-import SearchInputComponent from '@src/components/swap/shared/SearchInputComponent';
 import { Button } from 'antd';
 import { FC } from 'react';
 import { IDefaultAssetInfo } from '@src/interface';
 import { ESWapDirection } from '@src/enum';
+import IconComponent from '@src/components/shared/IconComponent';
+import TokenSearchInput from '@src/modules/swap/token-search-input';
 
 interface ISelectAssetModalContentAsset {
   combinedAssetList: IDefaultAssetInfo[];
@@ -35,7 +35,7 @@ const SelectAssetModalContentAsset: FC<ISelectAssetModalContentAsset> = ({
 }) => {
   return (
     <div>
-      <SearchInputComponent
+      <TokenSearchInput
         itemToFilter={combinedAssetList}
         searchInput={searchInput}
         setSearchInput={setSearchInput}

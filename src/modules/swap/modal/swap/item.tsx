@@ -1,5 +1,5 @@
+import IconComponent from '@src/components/shared/IconComponent';
 import { formatNumber } from '@src/utils/format/number';
-import IconComponent from '../../shared/IconComponent';
 import { Row, Col } from 'antd';
 import { FC } from 'react';
 

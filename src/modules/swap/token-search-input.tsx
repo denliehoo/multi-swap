@@ -3,14 +3,14 @@ import { IDefaultAssetInfo } from '@src/interface';
 import { Input } from 'antd';
 import { ChangeEvent, FC, useState } from 'react';
 
-interface ISearchInputComponent {
+interface ITokenSearchInput {
   setSearchInput: (input: string) => void;
   searchInput: string;
   setSearchInputResults: (results: IDefaultAssetInfo[]) => void;
   itemToFilter: IDefaultAssetInfo[];
 }
 
-const SearchInputComponent: FC<ISearchInputComponent> = ({
+const TokenSearchInput: FC<ITokenSearchInput> = ({
   setSearchInput,
   searchInput,
   setSearchInputResults,
@@ -47,4 +47,4 @@ const SearchInputComponent: FC<ISearchInputComponent> = ({
   );
 };
 
-export default SearchInputComponent;
+export default TokenSearchInput;

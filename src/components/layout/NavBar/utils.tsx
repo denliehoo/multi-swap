@@ -1,13 +1,13 @@
 'use client';
 import { EBlockchainNetwork } from '@src/enum';
 
-import IconComponent from '../../swap/shared/IconComponent';
 import ConnectWalletPopup from '@src/components/shared/ConnectWalletPopup';
 import {
   BLOCK_NETWORK_NAME_MAPPING,
   BLOCKCHAIN_NETWORK_LOGO_MAPPING,
 } from '@src/constants';
 import { shortenAddress } from '@src/utils/format/string';
+import IconComponent from '@src/components/shared/IconComponent';
 
 const renderNetworkLabel = (
   chain: EBlockchainNetwork,

@@ -10,7 +10,6 @@ import { FC, ReactNode, useEffect, useState } from 'react';
 import CryptoSwapItem from './item';
 import PreviewSwapModal from './modal/swap';
 
-import ConnectWalletPopup from '../shared/ConnectWalletPopup';
 import { ESWapDirection } from '@src/enum';
 import {
   useConnectWalletDispatch,
@@ -29,6 +28,7 @@ import {
 } from './validator';
 import ErrorBox from './error-box';
 import { NotificationPlacement } from 'antd/es/notification/interface';
+import ConnectWalletPopup from '@src/components/shared/ConnectWalletPopup';
 
 // Swap > CryptoSwapItem > SelectAssetModal > SelectAssetItem
 
