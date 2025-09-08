@@ -1,10 +1,7 @@
 # To do list / Progress:
 
 ## To do
-- Use nextjs pages router properly
-  - Currently just using slug
-  - caching of api calls (e.g. getting token dont need refresh all the time)
-- Migrate to tailwind
+- Migrate to tailwind + shadcn
 - Fix first load css
 - Fix styles messing up on save in local development
 
@@ -187,3 +184,6 @@
   - Remove goerli related code
   - Leave ftm, but sepolia is default
 - Solve linting errors
+- Use nextjs pages router properly
+  - Currently just using slug
+  - caching of api calls (e.g. getting token dont need refresh all the time)

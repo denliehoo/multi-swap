@@ -26,3 +26,98 @@ input[type="number"]::-webkit-outer-spin-button {
   -moz-appearance: none;
   appearance: none;
 }
+
+/* Default */
+/* --- Primary Color Palette (Dark Theme) --- */
+:root {
+  --color-primary-default: #86c232;
+  --color-primary-hover: #76ad2d;
+  --color-primary-active: #659727;
+  /* Subtle background for active/selected items in dark mode: a dark, desaturated version of the primary color. */
+  --color-primary-subtle: #2a3a1f;
+  --color-text-on-primary: #1a202c; /* Dark text still provides better contrast on this green */
+
+  /* --- Neutral Palette: Backgrounds (Dark Theme) --- */
+  --color-bg-default: #1a202c; /* Deep slate gray for main background */
+  --color-bg-subtle: #2d3748; /* Slightly lighter gray for cards, modals, and elevated surfaces */
+  --color-bg-muted: #4a5568; /* Used for hover states on list items or interactive elements */
+
+  /* --- Neutral Palette: Text (Dark Theme) --- */
+  --color-text-primary: #f7fafc; /* Near-white for primary content */
+  --color-text-secondary: #a0aec0; /* Lighter gray for secondary information */
+  --color-text-disabled: #718096; /* Lower contrast gray for disabled states/placeholders */
+
+  /* --- Neutral Palette: Borders (Dark Theme) --- */
+  /* Borders must be lighter than the backgrounds they contain. */
+  --color-border-default: #4a5568; /* Subtle border to separate elements */
+  --color-border-hover: #718096; /* Brighter border for focus states on inputs */
+
+  /* --- Semantic Status Palette (Dark Theme) --- */
+  /* Status colors are often lightened to improve readability against dark backgrounds. */
+  --color-status-success: #48bb78; /* Lighter green for good contrast */
+  --color-status-warning: #f6e05e; /* Bright yellow for visibility */
+  --color-status-danger: #f56565; /* Lighter red for error messages */
+}
+
+/* Light theme */
+.light {
+  /* --- Primary Color Palette --- */
+  --color-primary-default: #86c232;
+  --color-primary-hover: #76ad2d;
+  --color-primary-active: #659727;
+  --color-primary-subtle: #f0f7e9;
+  --color-text-on-primary: #1a202c;
+
+  /* --- Neutral Palette: Backgrounds --- */
+  --color-bg-default: #ffffff;
+  --color-bg-subtle: #f8f9fa;
+  --color-bg-muted: #f1f3f5;
+
+  /* --- Neutral Palette: Text --- */
+  --color-text-primary: #1a202c;
+  --color-text-secondary: #4a5568;
+  --color-text-disabled: #a0aec0;
+
+  /* --- Neutral Palette: Borders --- */
+  --color-border-default: #e2e8f0;
+  --color-border-hover: #cbd5e0;
+
+  /* --- Semantic Status Palette --- */
+  --color-status-success: #28a745;
+  --color-status-warning: #ffc107;
+  --color-status-danger: #dc3545;
+}
+
+/* ---------------------------------- */
+/* Tailwind Theme Registration        */
+/* ---------------------------------- */
+/* Register every token so Tailwind creates utility classes for them, e.g., */
+/* text-primary-default, bg-bg-default, border-border-default, etc. */
+
+@theme {
+  /* Primary Palette */
+  --color-primary-default: var(--color-primary-default);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-active: var(--color-primary-active);
+  --color-primary-subtle: var(--color-primary-subtle);
+  --color-text-on-primary: var(--color-text-on-primary);
+
+  /* Background Palette */
+  --color-bg-default: var(--color-bg-default);
+  --color-bg-subtle: var(--color-bg-subtle);
+  --color-bg-muted: var(--color-bg-muted);
+
+  /* Text Palette */
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-disabled: var(--color-text-disabled);
+
+  /* Border Palette */
+  --color-border-default: var(--color-border-default);
+  --color-border-hover: var(--color-border-hover);
+
+  /* Status Palette */
+  --color-status-success: var(--color-status-success);
+  --color-status-warning: var(--color-status-warning);
+  --color-status-danger: var(--color-status-danger);
+}

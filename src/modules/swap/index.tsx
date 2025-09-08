@@ -190,7 +190,7 @@ const Swap: FC = () => {
         >
           <Col
             style={{ fontWeight: '700', fontSize: 'large' }}
-            className="font-bold text-lg italic"
+            className="font-bold text-lg italic text-primar-default"
           >
             Swap
           </Col>
