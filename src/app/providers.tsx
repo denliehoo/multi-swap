@@ -3,13 +3,16 @@
 import { Provider } from 'react-redux';
 import { store } from '../store';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AntdRegistry } from '@ant-design/nextjs-registry';
 
 const queryClient = new QueryClient();
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <AntdRegistry>{children}</AntdRegistry>
+      </QueryClientProvider>
     </Provider>
   );
 }
