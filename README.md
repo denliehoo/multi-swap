@@ -66,6 +66,21 @@ className={classes["form-control"]}
   - #474B4F dark grey : emphasis for misc e.g. on hover
   - transparent: background color for most components
 
+## Note on tailwind:
+const MY_CUSTOM_STYLES = ""
+^ Usually for this we dont get any intellisense completion.
+
+But, if we add this line to our settings.json in vscode
+
+"tailwindCSS.experimental.classRegex": [
+    "const\\s+\\w+\\s*:\\s*ClassValue\\s*=\\s*[\"'`]([^\"'`]*)[\"'`]",
+    "\\w+\\s*:\\s*[\"'`]([^\"'`]*)[\"'`]"
+  ]
+
+  we can do this
+  const MY_CUSTOM_STYLES: ClassValue = "" 
+  and it will have intellisense detection
+
 
 ## Deprecated Contracts
 ```bash
