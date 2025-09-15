@@ -15,5 +15,13 @@
   },
   "[json]": {
     "editor.defaultFormatter": "biomejs.biome"
-  }
+  },
+   "editor.quickSuggestions": {
+      "strings": "on"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    "const\\s+\\w+\\s*:\\s*ClassValue\\s*=\\s*[\"'`]([^\"'`]*)[\"'`]",
+    "\\w+\\s*:\\s*[\"'`]([^\"'`]*)[\"'`]"
+  ]
+  
 }

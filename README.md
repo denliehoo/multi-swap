@@ -12,14 +12,15 @@ Multiswap is a web3 nextjs application which allows users to swap multiple crypt
   - Web3.js: Used to interact with the smart contracts (TODO: Migrate away from web3.js)
   - CSS
   - Tanstack
-  - Tailwind (TODO)
+  - Tailwind
+  - Headless UI
 
 - Blockchain:
   - Solidity
 
 - Devops & Tooling:
   - Vercel: for deployment
-  - Biome: for linting and formatting (TODO)
+  - Biome: for linting and formatting
   - pnpm
 
 
@@ -47,7 +48,7 @@ NEXT_PUBLIC_FTMSCAN_API_KEY=GET_FROM_FTMSCAN
   - Sepolia: https://sepolia.etherscan.io/address/0xCD34486AABE14B61388f06b8297BaDC5FF7C6a64#code
 
 
-## Styling / CSS
+<!-- ## Styling / CSS
 - Antd is used to create multiple components
 - Note: to see what is the classname that we should change, we can right click and inspect the element and see the classname. Then in the framework.css, we use that classname and overwrite it
 - css modules are used
@@ -64,8 +65,74 @@ className={classes["form-control"]}
   - #222629 blackish : background
   - #6B6E70 light grey :  misc
   - #474B4F dark grey : emphasis for misc e.g. on hover
-  - transparent: background color for most components
+  - transparent: background color for most components -->
 
+
+## UI Component Library
+This project uses reusable UI components built with React, Tailwind CSS v4, and [Headless UI](https://headlessui.com/).
+
+Components can be found in `src/components`
+
+It also includes utilities to help streamline development with Tailwind and ensure consistent styling across the project.
+
+### Component usage example
+UIButton: A customisation button with filled and outline variants, etc.
+
+```typescript
+<UIButton variant="filled" block onClick={handleClick}>
+  Click Me
+</UIButton>
+```
+
+You can override styles by passing your own classes:
+```typescript
+<UIButton variant="filled" className="bg-amber-500">
+  Warning
+</UIButton>
+```
+
+### Utility function
+cx (Class Combiner)
+
+- We use a custom cx utility that wraps clsx and tailwind-merge:
+
+- clsx → handles conditional class joining
+
+- tailwind-merge → intelligently resolves Tailwind conflicts (e.g., p-2 vs p-4, bg-red-500 vs bg-blue-500)
+
+- example: 
+```typescript
+<div className={cx("p-2", condition && "p-4", "bg-red-500", "bg-blue-500")} />
+```
+Output: "p-4 bg-blue-500" (instead of conflicting duplicates).
+
+- This ensures user-supplied classes always override defaults in components.
+- For example, className="bg-amber-500" on UIButton will always override the variant’s default background color.
+
+### Tailwind IntelliSense
+By default, Tailwind IntelliSense does not provide completions inside custom string constants like:
+```typescript
+const MY_CUSTOM_STYLES = "";
+
+```
+
+To enable IntelliSense in these cases, add the following to your VSCode settings.json:
+```json
+"tailwindCSS.experimental.classRegex": [
+  "const\\s+\\w+\\s*:\\s*ClassValue\\s*=\\s*[\"'`]([^\"'`]*)[\"'`]",
+  "\\w+\\s*:\\s*[\"'`]([^\"'`]*)[\"'`]"
+]
+
+```
+Then define your styles with an explicit `ClassValue` type:
+
+```typescript
+import { ClassValue } from "clsx";
+
+const MY_CUSTOM_STYLES: ClassValue = "bg-primary-default hover:bg-primary-hover";
+
+```
+Now IntelliSense will correctly suggest Tailwind classes.
 
 ## Deprecated Contracts
 ```bash

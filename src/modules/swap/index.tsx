@@ -1,6 +1,6 @@
 import classes from './index.module.css';
 import { Row, Col } from 'antd/lib/grid';
-import { Button, notification } from 'antd';
+import { notification } from 'antd';
 import {
   DownCircleOutlined,
   PlusCircleOutlined,
@@ -29,6 +29,7 @@ import {
 import ErrorBox from './error-box';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import ConnectWalletPopup from '@src/components/shared/ConnectWalletPopup';
+import UIButton from '@src/components/button';
 
 // Swap > CryptoSwapItem > SelectAssetModal > SelectAssetItem
 
@@ -224,15 +225,14 @@ const Swap: FC = () => {
             align="middle"
             className={classes.plusButtonContainer}
           >
-            <Button
-              block
-              shape="round"
-              type="primary"
+            <UIButton
               onClick={() => onClickAddSwapState(ESWapDirection.FROM)}
+              variant="outline"
+              block
             >
               <PlusCircleOutlined />
-            </Button>
-          </Row>
+            </UIButton>
+          </Row>{' '}
         </div>
         <div style={{ margin: '5px' }}>
           <DownCircleOutlined style={{ fontSize: '200%' }} />
@@ -262,23 +262,20 @@ const Swap: FC = () => {
             align="middle"
             className={classes.plusButonContainer}
           >
-            <Button
-              block
-              shape="round"
-              type="primary"
+            <UIButton
               onClick={() => onClickAddSwapState(ESWapDirection.TO)}
+              variant="outline"
+              block
             >
               {<PlusCircleOutlined />}
-            </Button>
+            </UIButton>
           </Row>
         </div>
 
         <Row style={{ width: '100%', marginTop: '15px' }}>
-          <Button
-            size="large"
+          <UIButton
+            variant="filled"
             block
-            type="primary"
-            shape="round"
             disabled={!!swapIsLoading}
             onClick={() => {
               address ? swapButtonHandler() : attemptToConnectWallet(chain);
@@ -293,7 +290,7 @@ const Swap: FC = () => {
             ) : (
               <ConnectWalletPopup placement="top" />
             )}
-          </Button>
+          </UIButton>
         </Row>
       </div>
       {
