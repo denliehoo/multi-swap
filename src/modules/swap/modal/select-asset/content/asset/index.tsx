@@ -1,12 +1,12 @@
 import SelectAssetItem from './asset-item';
 import classes from './index.module.css';
 
-import { Button } from 'antd';
 import { FC } from 'react';
 import { IDefaultAssetInfo } from '@src/interface';
 import { ESWapDirection } from '@src/enum';
 import IconComponent from '@src/components/shared/IconComponent';
 import TokenSearchInput from '@src/modules/swap/token-search-input';
+import UIButton from '@src/components/button';
 
 interface ISelectAssetModalContentAsset {
   combinedAssetList: IDefaultAssetInfo[];
@@ -68,16 +68,15 @@ const SelectAssetModalContentAsset: FC<ISelectAssetModalContentAsset> = ({
       </div>
       {/* <hr /> */}
       <div>
-        <Button
+        <UIButton
           block
-          shape="round"
-          type="primary"
+          variant="filled"
           onClick={() => {
             setIsManageCustomToken(true);
           }}
         >
           Manage Custom Token Addresses
-        </Button>
+        </UIButton>
       </div>
     </div>
   );

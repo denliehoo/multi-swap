@@ -1,12 +1,12 @@
 import classes from './index.module.css';
 import { Row, Col } from 'antd/lib/grid';
 import { ArrowLeftOutlined, LoadingOutlined } from '@ant-design/icons';
-import { Modal } from 'antd';
 import { FC } from 'react';
 import ManageCustomToken from './content/manage-custom-token';
 import { ESWapDirection } from '@src/enum';
 import SelectAssetModalContentAsset from './content/asset';
 import { useSelectAssetModal } from './hooks';
+import UIModal from '@src/components/modal';
 
 interface ISelectAssetModal {
   isModalOpen: boolean;
@@ -61,7 +61,7 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
 
   return (
     <>
-      <Modal
+      <UIModal
         title={
           isManageCustomToken ? (
             <div>{manageCustomeTokenTitle}</div>
@@ -69,12 +69,8 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
             <div>Select A Token</div>
           )
         }
-        open={props.isModalOpen}
-        onOk={closeModalHandler}
-        onCancel={closeModalHandler}
-        destroyOnHidden={true}
-        // allows us to edit the bottom component (i.e. the OK and Cancel)
-        footer={null}
+        isOpen={props.isModalOpen}
+        onClose={closeModalHandler}
       >
         {!address ? (
           <div>Please connect your wallet to continue</div>
@@ -104,7 +100,7 @@ const SelectAssetModal: FC<ISelectAssetModal> = (props) => {
             chooseAssetHandler={chooseAssetHandler}
           />
         )}
-      </Modal>
+      </UIModal>
     </>
   );
 };

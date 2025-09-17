@@ -1,4 +1,4 @@
-import { Modal, notification } from 'antd';
+import { notification } from 'antd';
 import { useEffect, useState, useRef, FC, ReactNode } from 'react';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { NotificationPlacement } from 'antd/es/notification/interface';
@@ -17,6 +17,7 @@ import { initiateSwap } from './utils/initiate-swap';
 import { useConnectWalletState } from '@src/reducers/connect-wallet';
 import { useClearTokenBalancesCache } from '@src/hooks/query/use-token-balances';
 import { IContract } from '@src/interface';
+import UIModal from '@src/components/modal';
 
 export interface ISwapItemDetails
   extends Omit<ISwapDetails, 'index' | 'address' | 'balance'> {}
@@ -246,17 +247,14 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
   }, [props.visible]);
 
   return (
-    <Modal
+    <UIModal
       title={modalContent === 'previewSwap' ? 'Preview Swap' : ''}
-      open={props.visible}
-      onCancel={
+      isOpen={props.visible}
+      onClose={
         modalContent === 'swapSubmitted'
           ? resetSwapToDefaultHandler
           : closeModalHandler
       }
-      footer={null}
-      styles={{ body: { height: '60vh' } }}
-      maskClosable={false}
     >
       {contextHolder}
       {/* loading > preview swap > pending confirmation > swap submitted */}
@@ -292,7 +290,7 @@ const PreviewSwapModal: FC<IPreviewSwapModal> = (props) => {
           resetSwapToDefaultHandler={resetSwapToDefaultHandler}
         />
       )}
-    </Modal>
+    </UIModal>
   );
 };
 

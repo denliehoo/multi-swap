@@ -11,8 +11,9 @@ export const useTokenBalances = (
     queryKey: ['tokenBalances', chain, walletAddress, tokenAddresses],
     queryFn: () => getTokenBalances(chain, walletAddress, tokenAddresses),
     enabled: !!chain && !!walletAddress && tokenAddresses.length > 0,
-    staleTime: 60 * 1000, // 1 minute
-    gcTime: 1 * 60 * 1000,
+    // TODO: Change back to 60 *1000 when done testing
+    staleTime: 60 * 10000, // 1 minute
+    gcTime: 1 * 60 * 10000,
     retry: 1,
   });
 };
