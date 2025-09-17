@@ -2,12 +2,14 @@ import { Button } from '@headlessui/react';
 import { cx } from '@src/utils/theme/cx';
 import { ClassValue } from 'clsx';
 import { ButtonHTMLAttributes, FC } from 'react';
+import ButtonSpinner from './spinner';
 
 type TUIButtonVariant = 'filled' | 'outline';
 
 interface IUIButton extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: TUIButtonVariant;
   block?: boolean;
+  loading?: boolean;
 }
 
 const VARIANT_STYLES: Record<TUIButtonVariant, ClassValue> = {
@@ -18,17 +20,33 @@ const VARIANT_STYLES: Record<TUIButtonVariant, ClassValue> = {
 };
 
 const UIButton: FC<IUIButton> = (props) => {
-  const { className, block, variant = 'outline', ...restProps } = props;
+  const {
+    className,
+    block,
+    variant = 'outline',
+    loading,
+    children,
+    disabled,
+    ...restProps
+  } = props;
+
+  const isDisabled = disabled || loading;
+
   return (
     <Button
+      disabled={isDisabled}
       {...restProps}
       className={cx(
         block && 'w-full',
-        'px-4 py-2 rounded-xl cursor-pointer',
+        'px-4 py-2 rounded-xl cursor-pointer flex items-center gap-2 justify-center',
         VARIANT_STYLES[variant],
+        isDisabled && 'opacity-60 cursor-not-allowed',
         className,
       )}
-    />
+    >
+      {loading && <ButtonSpinner />}
+      {children}
+    </Button>
   );
 };
 export default UIButton;

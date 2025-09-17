@@ -1,6 +1,5 @@
 import classes from './index.module.css';
 import { Row, Col } from 'antd/lib/grid';
-import { Button } from 'antd';
 import React, { useState, useEffect, FC, useCallback } from 'react';
 import { MinusCircleOutlined, DownOutlined } from '@ant-design/icons';
 import SelectAssetModal from '../modal/select-asset';
@@ -10,6 +9,7 @@ import { formatNumber } from '@src/utils/format/number';
 import { EBlockchainNetwork, ESWapDirection } from '@src/enum';
 import { useConnectWalletState } from '@src/reducers/connect-wallet';
 import { getAssetPrice } from '@src/api';
+import UIButton from '@src/components/button';
 
 interface ICryptoSwapItem {
   percent?: number;
@@ -232,16 +232,15 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
         </Col>
 
         <Col>
-          <Button
-            type="primary"
-            style={{ borderRadius: '10px' }}
+          <UIButton
+            variant="filled"
             onClick={() => {
               setIsModalOpen(true);
             }}
           >
-            {props.asset ? props.asset : <span>Select A Token</span>}
+            {props.asset ? props.asset : <span>Select A Token</span>}{' '}
             <DownOutlined />
-          </Button>
+          </UIButton>
           {isModalOpen && (
             <SelectAssetModal
               isModalOpen={isModalOpen}

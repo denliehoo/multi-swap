@@ -1,9 +1,10 @@
 import { FC, Ref } from 'react';
 import classes from '../index.module.css';
-import { Button, Row } from 'antd';
+import { Row } from 'antd';
 import PreviewSwapItem from '../item';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { ISwapItemDetails, ITokensRequiringApproval } from '..';
+import UIButton from '@src/components/button';
 
 interface ISwapModalPreviewSwapContent {
   previewSwapModalContentRef: Ref<HTMLDivElement>;
@@ -64,14 +65,13 @@ const SwapModalPreviewSwapContent: FC<ISwapModalPreviewSwapContent> = ({
                     style={{ display: 'inline-block' }}
                     key={`${i.address}-approve`}
                   >
-                    <Button
-                      type="primary"
+                    <UIButton
+                      variant="filled"
                       onClick={() => approveTokenHandler(i, index)}
-                      shape="round"
                       loading={i.buttonIsLoading}
                     >
                       Approve {i.symbol}
-                    </Button>
+                    </UIButton>
                   </div>
                 ),
               )}
@@ -107,20 +107,19 @@ const SwapModalPreviewSwapContent: FC<ISwapModalPreviewSwapContent> = ({
         ))}
       </div>
       {
-        <Button
+        <UIButton
           onClick={() => {
             tokensRequiringApproval.length !== tokensApproved.length
               ? approveAllTokensButtonHandler()
               : initiateSwap();
           }}
-          type="primary"
-          shape="round"
+          variant="filled"
           block
         >
           {tokensRequiringApproval.length !== tokensApproved.length
             ? 'Approve All Tokens To Proceed'
             : 'Confirm'}
-        </Button>
+        </UIButton>
       }
     </div>
   );

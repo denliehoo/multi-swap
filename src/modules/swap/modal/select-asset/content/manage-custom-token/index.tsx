@@ -1,7 +1,7 @@
 import classes from './index.module.css';
 import { Row, Col } from 'antd/lib/grid';
 import { useState, useEffect, FC } from 'react';
-import { Input, Button } from 'antd';
+import { Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import ManageCustomTokenItem from './item';
 import { EBlockchainNetwork } from '@src/enum';
@@ -15,6 +15,7 @@ import { IDefaultAssetInfo } from '@src/interface';
 import { useConnectWalletState } from '@src/reducers/connect-wallet';
 import { getDetailsForCustomToken } from '@src/api';
 import IconComponent from '@src/components/shared/IconComponent';
+import UIButton from '@src/components/button';
 
 interface IManageCustomTokenProps {
   defaultAssets: IDefaultAssetInfo[];
@@ -185,15 +186,14 @@ const ManageCustomToken: FC<IManageCustomTokenProps> = (props) => {
             </Col>
             <Col span={width && width > 360 ? 12 : 10}>
               <Row justify="end" align="middle">
-                <Button
-                  shape="round"
-                  type="primary"
+                <UIButton
+                  variant="filled"
                   onClick={() => {
                     importTokenHandler(chain);
                   }}
                 >
                   Import
-                </Button>
+                </UIButton>
               </Row>
             </Col>
           </Row>

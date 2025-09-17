@@ -1,7 +1,8 @@
-import { Button, Col, Row } from 'antd';
+import { Col, Row } from 'antd';
 import { FC } from 'react';
 import classes from '../index.module.css';
 import { RightCircleOutlined } from '@ant-design/icons';
+import UIButton from '@src/components/button';
 
 interface ISwapModalSwapSubmittedContent {
   resetSwapToDefaultHandler: () => void;
@@ -29,14 +30,13 @@ const SwapModalSwapSubmittedContent: FC<ISwapModalSwapSubmittedContent> = ({
           </Row>
           <Row align="middle" justify="center">
             <div className="fw-700 mb-15">Your swap has been submitted!</div>
-            <Button
+            <UIButton
               onClick={resetSwapToDefaultHandler}
-              type="primary"
-              shape="round"
+              variant="filled"
               block
             >
               Close
-            </Button>
+            </UIButton>
           </Row>
         </Col>
       </Row>
