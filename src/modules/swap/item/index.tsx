@@ -1,15 +1,13 @@
-import classes from './index.module.css';
-import { Row, Col } from 'antd/lib/grid';
 import React, { useState, useEffect, FC, useCallback } from 'react';
-import { MinusCircleOutlined, DownOutlined } from '@ant-design/icons';
-import SelectAssetModal from '../modal/select-asset';
+import SwapItemInputAndSelect from './input-and-select';
 
 import { useSwapState, useSwapDispatch } from '@src/reducers/swap';
-import { formatNumber } from '@src/utils/format/number';
 import { EBlockchainNetwork, ESWapDirection } from '@src/enum';
 import { useConnectWalletState } from '@src/reducers/connect-wallet';
 import { getAssetPrice } from '@src/api';
-import UIButton from '@src/components/button';
+import { cx } from '@src/utils/theme/cx';
+import SwapSliderOrAssetDetails from './slider-or-asset-details';
+import SwapItemHeader from './header';
 
 interface ICryptoSwapItem {
   percent?: number;
@@ -163,130 +161,48 @@ const CryptoSwapItem: FC<ICryptoSwapItem> = (props) => {
 
   return (
     <div
-      className={
-        inputIsFocused
-          ? `${classes.cryptoSwapItem} glowing-border`
-          : classes.cryptoSwapItem
-      }
+      className={cx(
+        'border-2 border-border-default p-4 mb-4 rounded-2xl',
+        inputIsFocused && 'glowing-border',
+      )}
     >
       {/* Text and minus icon */}
-      {props.type === ESWapDirection.FROM ? (
-        <Row justify="space-between">
-          <Col>Amount To Swap</Col>
-          <Col>
-            {swapFrom.length > 1 && (
-              <MinusCircleOutlined
-                className={classes.minus}
-                onClick={minusHandler}
-              />
-            )}
-          </Col>
-        </Row>
-      ) : (
-        <Row justify="space-between">
-          <Col>Percentage To Receive</Col>
-          <Col>
-            {swapTo.length > 1 && (
-              <MinusCircleOutlined
-                className={classes.minus}
-                onClick={minusHandler}
-              />
-            )}
-          </Col>
-        </Row>
-      )}
+      <SwapItemHeader
+        type={props.type}
+        swapFromLength={swapFrom.length}
+        swapToLength={swapTo.length}
+        minusHandler={minusHandler}
+      />
 
       {/* Input and select button */}
-      <Row justify="space-between" align="middle">
-        <Col style={{ fontSize: '2em' }} span={12}>
-          {props.type === ESWapDirection.FROM ? (
-            <input
-              className={[classes.inputBox, classes.numberInput].join(' ')}
-              onChange={changeAmountInputHandler}
-              value={amount}
-              placeholder={'0.0'}
-              type={'number'}
-              onFocus={onInputFocus}
-              onBlur={onInputBlur}
-            />
-          ) : (
-            <Row style={{ width: '200%' }}>
-              <Col>
-                <input
-                  className={classes.inputBox}
-                  onChange={changeAmountInputHandler}
-                  placeholder={'0'}
-                  value={percentInput}
-                  type={'number'}
-                  min={'0'}
-                  max={'100'}
-                  onFocus={onInputFocus}
-                  onBlur={onInputBlur}
-                />
-              </Col>
-              <Col>
-                <span>%</span>
-              </Col>
-            </Row>
-          )}
-        </Col>
-
-        <Col>
-          <UIButton
-            variant="filled"
-            onClick={() => {
-              setIsModalOpen(true);
-            }}
-          >
-            {props.asset ? props.asset : <span>Select A Token</span>}{' '}
-            <DownOutlined />
-          </UIButton>
-          {isModalOpen && (
-            <SelectAssetModal
-              isModalOpen={isModalOpen}
-              index={props.index}
-              type={props.type}
-              amount={props.type === 'from' ? amount || 0 : percentInput || 0}
-              passBalanceToParent={
-                props.type === 'from' ? getBalanceFromChild : () => {}
-              }
-              assetHasBeenSelected={props.assetHasBeenSelected}
-              asset={props.asset}
-              closeModal={() => {
-                setIsModalOpen(false);
-              }}
-            />
-          )}
-        </Col>
-      </Row>
+      <SwapItemInputAndSelect
+        type={props.type}
+        amount={amount}
+        percentInput={percentInput}
+        changeAmountInputHandler={changeAmountInputHandler}
+        onInputFocus={onInputFocus}
+        onInputBlur={onInputBlur}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        asset={props.asset}
+        index={props.index}
+        assetHasBeenSelected={props.assetHasBeenSelected}
+        getBalanceFromChild={getBalanceFromChild}
+      />
 
       {/* Price and balance */}
-      {props.type === ESWapDirection.FROM ? (
-        <Row justify="space-between">
-          <Col>
-            {priceIsLoading
-              ? '...'
-              : formatNumber(price * (props?.amount || 0), 'fiat')}
-          </Col>
-          <Col>Balance: {props.asset && formatNumber(balance, 'crypto')}</Col>
-        </Row>
-      ) : (
-        <Row style={{ marginTop: '5px' }}>
-          <input
-            type="range"
-            id="points"
-            name="points"
-            min="0"
-            max="100"
-            step="5"
-            value={percentInput}
-            onChange={changeAmountInputHandler}
-            className={classes.inputSlider}
-            onFocus={onInputFocus}
-            onBlur={onInputBlur}
-          />
-        </Row>
-      )}
+      <SwapSliderOrAssetDetails
+        type={props.type}
+        price={price}
+        priceIsLoading={priceIsLoading}
+        amount={amount}
+        asset={props.asset}
+        balance={balance}
+        percentInput={percentInput}
+        changeAmountInputHandler={changeAmountInputHandler}
+        onInputFocus={onInputFocus}
+        onInputBlur={onInputBlur}
+      />
     </div>
   );
 };

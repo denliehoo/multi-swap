@@ -49,7 +49,7 @@ const UIModal: FC<IUIModal> = (props) => {
       <div className="fixed inset-0 flex w-screen items-center justify-center">
         <DialogBackdrop className="fixed inset-0 bg-bg-default/80" />
 
-        <DialogPanel className="min-w-[320px] sm:min-w-[500px] space-y-4 border-[3px] border-[var(--color-primary-default)] bg-bg-subtle p-4 shadow-[0_0_16px_4px_var(--color-primary-active)] rounded-2xl z-30">
+        <DialogPanel className="min-w-[320px] sm:min-w-[500px] space-y-4 glowing-primary-border rounded-2xl bg-bg-subtle p-4 z-30">
           <div className="flex items-center justify-between">
             <div className="font-bold text-text-primary">{title}</div>
             <div

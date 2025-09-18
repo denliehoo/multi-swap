@@ -1,5 +1,3 @@
-import classes from './index.module.css';
-import { Row, Col } from 'antd/lib/grid';
 import { notification } from 'antd';
 import {
   DownCircleOutlined,
@@ -26,6 +24,7 @@ import {
   validatePercentageArray,
   validateTokenSelected,
 } from './validator';
+
 import ErrorBox from './error-box';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import ConnectWalletPopup from '@src/components/shared/ConnectWalletPopup';
@@ -181,21 +180,14 @@ const Swap: FC = () => {
   }, [showTokenNotSelectedError, toggleAssetSelected]);
 
   return (
-    // follow uniswap style for swap component
-    <div className={classes.container}>
+    //  Container
+    <div className="mt-20 flex justify-center text-text-primary">
       {contextHolder}
-      <div className={classes.card}>
-        <Row
-          justify="space-between"
-          style={{ width: '100%', marginBottom: '15px' }}
-        >
-          <Col
-            style={{ fontWeight: '700', fontSize: 'large' }}
-            className="font-bold text-lg italic text-primar-default"
-          >
-            Swap
-          </Col>
-        </Row>
+      {/* Card */}
+      <div className="w-[90%] lg:w-8/12 2xl:w-1/2 p-5 border-[3px] glowing-primary-border rounded-2xl">
+        <div className="font-bold text-lg italic text-primary-default pl-4 pb-2">
+          Swap
+        </div>
 
         <ErrorBox
           showAmountError={showAmountError}
@@ -204,7 +196,8 @@ const Swap: FC = () => {
           showAmountGreaterThanBalanceError={showAmountGreaterThanBalanceError}
         />
         {/* Swap From */}
-        <div className={classes.buySellContainer}>
+        {/* Buy sell container */}
+        <BuySellContainer>
           {swapFrom.map((i, index) => (
             <CryptoSwapItem
               amount={i.amount}
@@ -220,10 +213,9 @@ const Swap: FC = () => {
               address={i.address}
             />
           ))}
-          <Row
-            justify="center"
-            align="middle"
-            className={classes.plusButtonContainer}
+          {/* Plus button container */}
+          <div
+          // justify="center" align="middle"
           >
             <UIButton
               onClick={() => onClickAddSwapState(ESWapDirection.FROM)}
@@ -232,14 +224,16 @@ const Swap: FC = () => {
             >
               <PlusCircleOutlined />
             </UIButton>
-          </Row>{' '}
+          </div>
+        </BuySellContainer>
+
+        <div className="flex justify-center my-2 text-2xl">
+          <DownCircleOutlined />
         </div>
-        <div style={{ margin: '5px' }}>
-          <DownCircleOutlined style={{ fontSize: '200%' }} />
-        </div>
+
         {/* Swap to portion */}
-        {/* <Row>You Get</Row> */}
-        <div className={classes.buySellContainer}>
+        {/* Buy sell container */}
+        <BuySellContainer>
           {swapTo.map((i, index) => (
             <CryptoSwapItem
               percent={i.amount}
@@ -257,10 +251,9 @@ const Swap: FC = () => {
             />
           ))}
 
-          <Row
-            justify="center"
-            align="middle"
-            className={classes.plusButonContainer}
+          {/* plus button container */}
+          <div
+          // justify="center" align="middle"
           >
             <UIButton
               onClick={() => onClickAddSwapState(ESWapDirection.TO)}
@@ -269,10 +262,12 @@ const Swap: FC = () => {
             >
               {<PlusCircleOutlined />}
             </UIButton>
-          </Row>
-        </div>
+          </div>
+        </BuySellContainer>
 
-        <Row style={{ width: '100%', marginTop: '15px' }}>
+        <div
+        //  style={{ width: '100%', marginTop: '15px' }}
+        >
           <UIButton
             variant="filled"
             block
@@ -291,7 +286,7 @@ const Swap: FC = () => {
               <ConnectWalletPopup placement="top" />
             )}
           </UIButton>
-        </Row>
+        </div>
       </div>
       {
         // do remove state here (maybe leave the thing in global state too, see how)
@@ -315,3 +310,11 @@ const Swap: FC = () => {
 };
 
 export default Swap;
+
+const BuySellContainer: FC<{ children: ReactNode }> = ({ children }) => {
+  return (
+    <div className="border-2 border-border-default rounded-2xl p-4">
+      {children}
+    </div>
+  );
+};
